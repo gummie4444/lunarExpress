@@ -1,11 +1,15 @@
 lunarExpress
 ============
-Lyfskammt
-=========
 
 ###To start:###
 
-Vera viss um að þið séuð með npm installað á tölvunni.
+Vera viss um að þið séuð með git, livereload, npm og node installað á tölvunni.
+
+npm og node = nodejs.org
+
+livereload efsta = https://chrome.google.com/webstore/search-extensions/livereload
+
+Muna windows menn að setja í ENV PATH
 
 Clone repo:
 `git clone https://github.com/gummie4444/lunarExpress.git`
@@ -22,8 +26,14 @@ RUN DA GAME:
 Skoðið leikinn á
 `http.//localhost:8080`
 
-To debug js code write:
+WE HAVE OURSELF LIVERELOAD
+=========
+
+DEBUGGA JAVASCRIPT KÓÐA:
 `gulp jshint` 
 
-##TODO##
+
+TODO
+=========
+BYRJA VERKEFNIÐ
 
