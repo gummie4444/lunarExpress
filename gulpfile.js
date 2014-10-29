@@ -1,37 +1,35 @@
 var gulp = require('gulp'),
-	jshint = require('gulp-jshint'),
-	stylish = require('jshint-stylish'),
-    connect = require('gulp-connect'),
-    wiredep = require('wiredep');
+  connect = require('gulp-connect'),
+  jshint = require('gulp-jshint'),
+  stylish = require('jshint-stylish');
 
 
-
-
-gulp.task('js', function() {
-	return gulp.src('public/js/*.js')
-		.pipe(jshint())
-		.pipe(jshint.reporter(stylish))
-		.pipe(connect.reload());
-});
-
-
-gulp.task('connect', function() {
+gulp.task('connect',function(){
   connect.server({
-    root: 'public',
-    livereload: true
+    root:'public',
+    livereload:true
   });
+
 });
 
-gulp.task('bower', function () {
-  wiredep({
-    src: './public/index.html',
-    directory: './public/'
-  });
+gulp.task('html',function(){
+  gulp.src('public/*.html')
+  .pipe(connect.reload());
 });
 
-gulp.task('watch', function () {
-  gulp.watch(['./public/js/*.js'], ['js']);
-  gulp.watch(['./public/img/*'], ['bower']);
+//SKOÐA BÆTA JSHINT INN
+//.pipe(jshint())
+// .pipe(jshint.reporter(stylish))
+gulp.task('js', function() {
+  return gulp.src('public/js/*.js')
+    .pipe(connect.reload());
 });
 
-gulp.task('default', ['connect', 'watch', 'js', 'bower']);
+gulp.task('watch',function(){
+  gulp.watch('public/*.html',['html'])
+  gulp.watch('public/js/*.js',['js'])
+});
+
+
+
+gulp.task('default',['connect','html','js','watch'])
