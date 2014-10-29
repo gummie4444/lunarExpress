@@ -29,9 +29,6 @@ Skoðið leikinn á
 WE HAVE OURSELF LIVERELOAD
 =========
 
-DEBUGGA JAVASCRIPT KÓÐA:
-`gulp jshint` 
-
 
 TODO
 =========
