@@ -21,7 +21,7 @@ Gera:
 `npm install --global gulp`
 
 RUN DA GAME:
-`npm gulp`
+`gulp`
 
 Skoðið leikinn á
 `http.//localhost:8080`
