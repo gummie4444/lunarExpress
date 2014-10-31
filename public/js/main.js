@@ -130,5 +130,7 @@ main.init = function () {
     //
     g_ctx.fillStyle = "white";
 
+    resizeGame();
+
     this._requestNextIteration();
 };
