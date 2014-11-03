@@ -30,6 +30,7 @@ var entityManager = {
 _rocks   : [],
 _bullets : [],
 _ships   : [],
+_landscape : [],
 
 _bShowRocks : true,
 
@@ -42,6 +43,20 @@ _generateRocks : function() {
     for (i = 0; i < NUM_ROCKS; ++i) {
         this.generateRock();
     }
+},
+
+_generateLandscape : function() {
+    // landscape is always of width 896
+    var shipWidth = g_sprites.ship.width;
+    // Each piece of land has width equal to shipWidth;
+    var numOfLandpieces = 896/shipWidth;
+    var pieceWidth = 896/numOfLandpieces; 
+    
+    for(var i = 0; i < numOfLandpieces; ++i){
+        var Xpos = i*(896/numOfLandpieces);
+        this._landscape[i] = new Landpiece(i, Xpos, pieceWidth); 
+    }
+    
 },
 
 _findNearestShip : function(posX, posY) {
@@ -87,12 +102,12 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._rocks, this._bullets, this._ships];
+    this._categories = [this._rocks, this._bullets, this._ships, this._landscape];
 },
 
 init: function() {
     this._generateRocks();
-    //this._generateShip();
+    this._generateLandscape();
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation) {
@@ -105,6 +120,7 @@ fireBullet: function(cx, cy, velX, velY, rotation) {
         rotation : rotation
     }));
 },
+
 
 generateRock : function(descr) {
     this._rocks.push(new Rock(descr));
