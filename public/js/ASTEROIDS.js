@@ -31,6 +31,7 @@ with it correctly, so that they can participate in collisions.
 
 var g_canvas = document.getElementById("myCanvas");
 var g_ctx = g_canvas.getContext("2d");
+resizeGame();
 
 /*
 0        1         2         3         4         5         6         7         8

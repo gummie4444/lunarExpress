@@ -36,10 +36,10 @@ _bShowRocks : true,
 // "PRIVATE" METHODS
 
 _generateRocks : function() {
-    var i,
-        NUM_ROCKS = 4;
+    
+    var numBirds = Math.floor(Math.random() * 2) + 1;
 
-    for (i = 0; i < NUM_ROCKS; ++i) {
+    for (var i = 0; i <= numBirds; i++) {
         this.generateRock();
     }
 },
@@ -161,8 +161,6 @@ update: function(du) {
             }
         }
     }
-    
-    if (this._rocks.length === 0) this._generateRocks();
 
 },
 
