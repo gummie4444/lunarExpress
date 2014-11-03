@@ -196,14 +196,14 @@ Ship.prototype.computeSubStep = function (du) {
     }
 };
 
-var NOMINAL_GRAVITY = 0.12;
+var NOMINAL_GRAVITY = 0.010;
 
 Ship.prototype.computeGravity = function () {
     return g_useGravity ? NOMINAL_GRAVITY : 0;
 };
 
-var NOMINAL_THRUST = +0.2;
-var NOMINAL_RETRO  = -0.1;
+var NOMINAL_THRUST = +0.015;
+var NOMINAL_RETRO  = -0.005;
 
 Ship.prototype.computeThrustMag = function () {
     
@@ -212,9 +212,9 @@ Ship.prototype.computeThrustMag = function () {
     if (keys[this.KEY_THRUST]) {
         thrust += NOMINAL_THRUST;
     }
-    if (keys[this.KEY_RETRO]) {
+    /*if (keys[this.KEY_RETRO]) {
         thrust += NOMINAL_RETRO;
-    }
+    }*/
     
     return thrust;
 };
@@ -303,7 +303,7 @@ Ship.prototype.halt = function () {
     this.velY = 0;
 };
 
-var NOMINAL_ROTATE_RATE = 0.1;
+var NOMINAL_ROTATE_RATE = 0.04;
 
 Ship.prototype.updateRotation = function (du) {
     if (keys[this.KEY_LEFT]) {
