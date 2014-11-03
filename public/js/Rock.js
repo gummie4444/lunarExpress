@@ -4,8 +4,6 @@
 
 "use strict";
 
-/* jshint browser: true, devel: true, globalstrict: true */
-
 /*
 0        1         2         3         4         5         6         7         8
 12345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -23,7 +21,7 @@ function Rock(descr) {
       
     // Default sprite and scale, if not otherwise specified
     this.sprite = this.sprite || g_sprites.rock;
-    this.scale  = this.scale  || 1;
+    this.scale  = this.scale  || 0.2;
 
 /*
     // Diagnostics to check inheritance stuff
@@ -38,25 +36,17 @@ Rock.prototype = new Entity();
 Rock.prototype.randomisePosition = function () {
     // Rock randomisation defaults (if nothing otherwise specified)
     this.cx = this.cx || Math.random() * g_canvas.width;
-    this.cy = this.cy || Math.random() * g_canvas.height;
+    this.cy = this.cy || util.randRange(50, g_canvas.height - 100);
     this.rotation = this.rotation || 0;
 };
 
 Rock.prototype.randomiseVelocity = function () {
-    var MIN_SPEED = 20,
+    var MIN_SPEED = 50,
         MAX_SPEED = 70;
 
     var speed = util.randRange(MIN_SPEED, MAX_SPEED) / SECS_TO_NOMINALS;
-    var dirn = Math.random() * consts.FULL_CIRCLE;
 
-    this.velX = this.velX || speed * Math.cos(dirn);
-    this.velY = this.velY || speed * Math.sin(dirn);
-
-    var MIN_ROT_SPEED = 0.5,
-        MAX_ROT_SPEED = 2.5;
-
-    this.velRot = this.velRot ||
-        util.randRange(MIN_ROT_SPEED, MAX_ROT_SPEED) / SECS_TO_NOMINALS;
+    this.velX = speed;
 };
 
 Rock.prototype.update = function (du) {
@@ -76,16 +66,10 @@ Rock.prototype.update = function (du) {
             this.takeBulletHit();
             hitEntity.kill();
         }
-
     }
 
-
     this.cx += this.velX * du;
-    this.cy += this.velY * du;
-
-    this.rotation += 1 * this.velRot;
-    this.rotation = util.wrapRange(this.rotation,
-                                   0, consts.FULL_CIRCLE);
+    this.cy += (Math.sin(this.cx / 2.5)) * du;
 
     this.wrapPosition();
 
@@ -94,8 +78,6 @@ Rock.prototype.update = function (du) {
         spatialManager.unregister(this);
         return entityManager.KILL_ME_NOW;
     } 
-    
-    // TODO: YOUR STUFF HERE! --- (Re-)Register
 
 };
 
@@ -111,23 +93,6 @@ Rock.prototype.evaporateSound = new Audio(
 
 Rock.prototype.takeBulletHit = function () {
     this.kill();
-    
-    if (this.scale > 0.25) {
-        this._spawnFragment();
-        this._spawnFragment();
-        
-        this.splitSound.play();
-    } else {
-        this.evaporateSound.play();
-    }
-};
-
-Rock.prototype._spawnFragment = function () {
-    entityManager.generateRock({
-        cx : this.cx,
-        cy : this.cy,
-        scale : this.scale /2
-    });
 };
 
 Rock.prototype.render = function (ctx) {
