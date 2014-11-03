@@ -24,7 +24,7 @@ function Ship(descr) {
     this.sprite = this.sprite || g_sprites.ship;
     
     // Set normal drawing scale, and warp state off
-    this._scale = 1;
+    this._scale = 0.5;
     this._isWarping = false;
 };
 
@@ -45,11 +45,11 @@ Ship.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
 Ship.prototype.KEY_FIRE   = ' '.charCodeAt(0);
 
 // Initial, inheritable, default values
-Ship.prototype.rotation = 0;
+Ship.prototype.rotation = -Math.PI/2;
 Ship.prototype.cx = 200;
 Ship.prototype.cy = 200;
-Ship.prototype.velX = 0;
-Ship.prototype.velY = 0;
+Ship.prototype.velX = 0.4;
+Ship.prototype.velY = 0.1;
 Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
 
@@ -154,8 +154,6 @@ Ship.prototype.update = function (du) {
 
     } 
 
-
-
     // Perform movement substeps
     var steps = this.numSubSteps;
     var dStep = du / steps;
@@ -196,14 +194,14 @@ Ship.prototype.computeSubStep = function (du) {
     }
 };
 
-var NOMINAL_GRAVITY = 0.010;
+var NOMINAL_GRAVITY = 0.0015;
 
 Ship.prototype.computeGravity = function () {
     return g_useGravity ? NOMINAL_GRAVITY : 0;
 };
 
-var NOMINAL_THRUST = +0.015;
-var NOMINAL_RETRO  = -0.005;
+var NOMINAL_THRUST = +0.0045;
+var NOMINAL_RETRO  = -0.0005;
 
 Ship.prototype.computeThrustMag = function () {
     
@@ -220,6 +218,7 @@ Ship.prototype.computeThrustMag = function () {
 };
 
 Ship.prototype.applyAccel = function (accelX, accelY, du) {
+
     
     // u = original velocity
     var oldVelX = this.velX;
@@ -244,7 +243,11 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     // bounce
     if (g_useGravity) {
 
-	var minY = g_sprites.ship.height / 2;
+
+    var origScale = this.sprite.scale;
+    this.sprite.scale = this._scale;
+	var minY = g_sprites.ship.getScaledHeight() / 2;
+    this.sprite.scale = origScale;
 	var maxY = g_canvas.height - minY;
 
 	// Ignore the bounce if the ship is already in
@@ -277,14 +280,18 @@ Ship.prototype.maybeFireBullet = function () {
         entityManager.fireBullet(
            this.cx + dX * launchDist, this.cy + dY * launchDist,
            this.velX + relVelX, this.velY + relVelY,
-           this.rotation);
+           this.rotation);d
            
     }
     
 };
 
 Ship.prototype.getRadius = function () {
-    return (this.sprite.width / 2) * 0.9;
+    var origScale = this.sprite.scale;
+    this.sprite.scale = this._scale;
+    var x = (this.sprite.getScaledWidth() / 2) * 0.9;
+    this.sprite.scale = origScale;
+    return x;
 };
 
 Ship.prototype.takeBulletHit = function () {
@@ -315,6 +322,7 @@ Ship.prototype.updateRotation = function (du) {
 };
 
 Ship.prototype.render = function (ctx) {
+    
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this._scale;
