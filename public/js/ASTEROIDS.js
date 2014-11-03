@@ -31,6 +31,7 @@ with it correctly, so that they can participate in collisions.
 
 var g_canvas = document.getElementById("myCanvas");
 var g_ctx = g_canvas.getContext("2d");
+resizeGame();
 
 /*
 0        1         2         3         4         5         6         7         8
@@ -50,6 +51,7 @@ function createInitialShips() {
     });
     
 }
+
 
 // =============
 // GATHER INPUTS
@@ -90,7 +92,7 @@ function updateSimulation(du) {
 var g_allowMixedActions = true;
 var g_useGravity = true;
 var g_useAveVel = true;
-var g_renderSpatialDebug = false;
+var g_renderSpatialDebug = false; 
 
 var KEY_MIXED   = keyCode('M');
 var KEY_GRAVITY = keyCode('G');
