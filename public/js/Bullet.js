@@ -50,9 +50,13 @@ Bullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 Bullet.prototype.update = function (du) {
 
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
+    spatialManager.unregister(this);
 
     this.lifeSpan -= du;
-    if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
+    if (this.lifeSpan < 0){
+        this.kill();
+        return entityManager.KILL_ME_NOW;
+    } 
 
     this.cx += this.velX * du;
     this.cy += this.velY * du;
@@ -74,6 +78,12 @@ Bullet.prototype.update = function (du) {
         return entityManager.KILL_ME_NOW;
     }
     
+
+    spatialManager.register(this);
+    if(this._isDeadNow){
+        spatialManager.unregister(this);
+        return entityManager.KILL_ME_NOW;
+    } 
     // TODO: YOUR STUFF HERE! --- (Re-)Register
 
 };

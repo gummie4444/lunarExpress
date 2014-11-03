@@ -62,6 +62,23 @@ Rock.prototype.randomiseVelocity = function () {
 Rock.prototype.update = function (du) {
 
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
+        spatialManager.unregister(this);
+    var hitEntity = this.findHitEntity();
+
+    if(hitEntity)
+    {
+        if(hitEntity instanceof Ship)
+        {
+            hitEntity.warp();
+        }
+        else if (hitEntity instanceof Bullet)
+        {
+            this.takeBulletHit();
+            hitEntity.kill();
+        }
+
+    }
+
 
     this.cx += this.velX * du;
     this.cy += this.velY * du;
@@ -71,6 +88,12 @@ Rock.prototype.update = function (du) {
                                    0, consts.FULL_CIRCLE);
 
     this.wrapPosition();
+
+    spatialManager.register(this);
+    if(this._isDeadNow){
+        spatialManager.unregister(this);
+        return entityManager.KILL_ME_NOW;
+    } 
     
     // TODO: YOUR STUFF HERE! --- (Re-)Register
 

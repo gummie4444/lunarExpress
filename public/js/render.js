@@ -14,6 +14,8 @@ var TOGGLE_UNDO_BOX = 'U'.charCodeAt(0);
 var TOGGLE_FLIPFLOP = 'F'.charCodeAt(0);
 var TOGGLE_RENDER = 'R'.charCodeAt(0);
 
+var PRINT_SPATIAL_ENTITIES = 'Z'.charCodeAt(0);
+
 function render(ctx) {
     
     // Process various option toggles
@@ -23,6 +25,8 @@ function render(ctx) {
     if (eatKey(TOGGLE_UNDO_BOX)) g_undoBox = !g_undoBox;
     if (eatKey(TOGGLE_FLIPFLOP)) g_doFlipFlop = !g_doFlipFlop;
     if (eatKey(TOGGLE_RENDER)) g_doRender = !g_doRender;
+
+    if(eatKey(PRINT_SPATIAL_ENTITIES)){console.log(spatialManager._entities);}
     
     // I've pulled the clear out of `renderSimulation()` and into
     // here, so that it becomes part of our "diagnostic" wrappers
