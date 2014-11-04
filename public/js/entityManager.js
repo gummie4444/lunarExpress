@@ -179,11 +179,7 @@ update: function(du) {
             }
         }
     }
-<<<<<<< HEAD
-    
-    //if (this._rocks.length === 0) this._generateRocks();
-=======
->>>>>>> 7b35a85280db9657e6f334dd4f0a77b42216b513
+
 
 },
 
