@@ -46,7 +46,8 @@ _generateRocks : function() {
 },
 
 _generateLandscape : function() {
-    // landscape is always of width 896
+
+    /*// landscape is always of width 896
     var landscapeWidth = 896;
 
     var shipWidth = g_sprites.ship.width;
@@ -57,6 +58,12 @@ _generateLandscape : function() {
     for(var i = 0; i < numOfLandpieces; ++i){
         var Xpos = i*(landscapeWidth/numOfLandpieces);
         this._landscape[i] = new Landpiece(i, Xpos, pieceWidth, true); 
+    */
+
+    
+    for(var i = 0; i < 16; ++i){
+        this._landscape.push( new Landscape(i));
+
     }
     
 },
