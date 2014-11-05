@@ -26,6 +26,7 @@ function Ship(descr) {
     // Set normal drawing scale, and warp state off
     this._scale = 0.5;
     this._isWarping = false;
+    this._isControllable = true;
 };
 
 Ship.prototype = new Entity();
@@ -60,7 +61,7 @@ Ship.prototype.warpSound = new Audio(
 Ship.prototype.warp = function () {
 
     this._isWarping = true;
-    this._scaleDirn = -1;
+    this._scaleDirn = -0.5;
     this.warpSound.play();
     
     // Unregister me from my old posistion
@@ -77,11 +78,11 @@ Ship.prototype._updateWarp = function (du) {
     
         this._moveToASafePlace();
         this.halt();
-        this._scaleDirn = 1;
+        this._scaleDirn = 0.5;
         
-    } else if (this._scale > 1) {
+    } else if (this._scale > 0.5) {
     
-        this._scale = 1;
+        this._scale = 0.5;
         this._isWarping = false;
         
         // Reregister me from my old posistion
@@ -131,7 +132,7 @@ Ship.prototype.update = function (du) {
         this._updateWarp(du);
         return;
     }
-    
+    if(this._isControllable){
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
     spatialManager.unregister(this);
     var hitEntity = this.findHitEntity();
@@ -150,6 +151,10 @@ Ship.prototype.update = function (du) {
         else if(hitEntity instanceof Rock)
         {
             this.warp();
+        }
+        else if(hitEntity instanceof Landpiece)
+        {
+            this.maybeLand(hitEntity);
         }
 
     } 
@@ -172,8 +177,37 @@ Ship.prototype.update = function (du) {
 
     // TODO: YOUR STUFF HERE! --- Warp if isColliding, otherwise Register
     spatialManager.register(this);
+    }
 
 };
+
+
+Ship.prototype.maybeLand = function(hitEntity){
+    var maxVel = 1;
+    var landCenterPos = hitEntity.getPos();
+    var landcx = landCenterPos.posX;
+    var landcy = landCenterPos.posY;
+    var landw = hitEntity.getWidth();
+
+    if(util.isBetween(this.cx, landcx - landw/2, landcx + landw/2) &&  util.isBetween(this.cy, landcy-15, landcy+15) /*this.cy === landcy*/) {
+        //console.log("FirstBarrier", this.rotation);
+
+        if(this.velY < maxVel && util.isBetween(this.rotation, 0.0-0.1,0.0+0.1 )){
+            //console.log("SecondBarrier");
+            this.land();
+        }
+        else{
+            //this.explode();
+        }
+    }
+};
+
+Ship.prototype.land = function(){
+    g_useGravity = !g_useGravity;
+    this.halt();
+    this._isControllable = false;
+    
+}
 
 Ship.prototype.computeSubStep = function (du) {
     
@@ -289,7 +323,7 @@ Ship.prototype.maybeFireBullet = function () {
 Ship.prototype.getRadius = function () {
     var origScale = this.sprite.scale;
     this.sprite.scale = this._scale;
-    var x = (this.sprite.getScaledWidth() / 2) * 0.9;
+    var x = (this.sprite.getScaledWidth() / 2) * 1.3;
     this.sprite.scale = origScale;
     return x;
 };
@@ -301,6 +335,8 @@ Ship.prototype.takeBulletHit = function () {
 Ship.prototype.reset = function () {
     this.setPos(this.reset_cx, this.reset_cy);
     this.rotation = this.reset_rotation;
+    this._isControllable = true;
+    g_useGravity = !g_useGravity;
     
     this.halt();
 };
