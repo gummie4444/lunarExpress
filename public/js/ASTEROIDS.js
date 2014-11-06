@@ -177,7 +177,7 @@ function requestPreloads() {
     var requiredImages = {
         ship   : "https://notendur.hi.is/~ahh19/mkdir/fin/skip.png" /*"https://notendur.hi.is/~pk/308G/images/ship.png"*/,
         ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        rock   : "https://notendur.hi.is/~pk/308G/images/rock.png"
+        rock   : "https://notendur.hi.is/~ahh19/mkdir/fin/Asteroid_01_Mb.GIF"//"https://notendur.hi.is/~pk/308G/images/rock.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);

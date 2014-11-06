@@ -60,10 +60,9 @@ _generateLandscape : function() {
         this._landscape[i] = new Landpiece(i, Xpos, pieceWidth, true); 
     */
 
-    
+
     for(var i = 0; i < 16; ++i){
         this._landscape.push( new Landscape(i));
-
     }
     
 },
@@ -130,6 +129,10 @@ fireBullet: function(cx, cy, velX, velY, rotation) {
 
         rotation : rotation
     }));
+},
+
+getLandscape: function(i) {
+    return this._landscape[i];
 },
 
 

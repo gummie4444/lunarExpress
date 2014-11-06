@@ -17,6 +17,7 @@ function Ship(descr) {
 
     // Common inherited setup logic from Entity
     this.setup(descr);
+    this.particleSetup();
 
     this.rememberResets();
     
@@ -27,10 +28,29 @@ function Ship(descr) {
     this._scale = 0.5;
     this._isWarping = false;
     this._isControllable = true;
+
+    /*this.particles = new Particles({
+    numParticles:15,
+    particleLifetime:30,
+    colour : '255, 102, 0'}, 
+    this);*/
 };
 
 Ship.prototype = new Entity();
 
+//Ship.prototype.particles = new Particles(this);
+
+Ship.prototype.particleSetup = function(){
+    this.particles = new Particles(this);
+};
+
+/*
+Ship.prototype.particles = new Particles({
+    numParticles:15,
+    particleLifetime:30,
+    colour : '255, 102, 0'} , 
+    this);
+*/
 Ship.prototype.rememberResets = function () {
     // Remember my reset positions
     this.reset_cx = this.cx;
@@ -126,8 +146,9 @@ Ship.prototype._moveToASafePlace = function () {
 };
     
 Ship.prototype.update = function (du) {
-
+    //console.log("this.particles");
     // Handle warping
+    //this.particles.print();
     if (this._isWarping) {
         this._updateWarp(du);
         return;
@@ -152,7 +173,7 @@ Ship.prototype.update = function (du) {
         {
             this.warp();
         }
-        else if(hitEntity instanceof Landpiece)
+        else if(hitEntity instanceof Landscape /*Landpiece*/)
         {
             this.maybeLand(hitEntity);
         }
@@ -179,24 +200,28 @@ Ship.prototype.update = function (du) {
     spatialManager.register(this);
     }
 
+
+    this.particles.update(du);
 };
 
 
 Ship.prototype.maybeLand = function(hitEntity){
-    var maxVel = 1;
+    var maxVel = 0.4;
     var landCenterPos = hitEntity.getPos();
     var landcx = landCenterPos.posX;
     var landcy = landCenterPos.posY;
     var landw = hitEntity.getWidth();
 
     if(util.isBetween(this.cx, landcx - landw/2, landcx + landw/2) &&  util.isBetween(this.cy, landcy-15, landcy+15) /*this.cy === landcy*/) {
-        //console.log("FirstBarrier", this.rotation);
+        //console.log("FirstBarrier", hitEntity.index, this.velY);
 
         if(this.velY < maxVel && util.isBetween(this.rotation, 0.0-0.1,0.0+0.1 )){
             //console.log("SecondBarrier");
             this.land();
         }
         else{
+            console.log("what");
+            this.reset();
             //this.explode();
         }
     }
@@ -336,9 +361,12 @@ Ship.prototype.reset = function () {
     this.setPos(this.reset_cx, this.reset_cy);
     this.rotation = this.reset_rotation;
     this._isControllable = true;
-    g_useGravity = !g_useGravity;
-    
-    this.halt();
+    if(!g_useGravity){
+        g_useGravity = !g_useGravity;
+    }
+    this.velX = 0.4;
+    this.velY = 0.1;
+    //this.halt();
 };
 
 Ship.prototype.halt = function () {
@@ -366,4 +394,6 @@ Ship.prototype.render = function (ctx) {
 	ctx, this.cx, this.cy, this.rotation
     );
     this.sprite.scale = origScale;
+
+    this.particles.render(ctx);
 };
