@@ -28,6 +28,7 @@ var entityManager = {
 // "PRIVATE" DATA
 
 _rocks   : [],
+_enemies : [],
 _bullets : [],
 _ships   : [],
 _landscape : [],
@@ -36,12 +37,20 @@ _bShowRocks : true,
 
 // "PRIVATE" METHODS
 
-_generateRocks : function() {
+_generateBirds : function() {
     
     var numBirds = Math.floor(Math.random() * 2) + 1;
 
     for (var i = 0; i <= numBirds; i++) {
-        this.generateRock();
+        this.generateBird();
+    }
+},
+
+_generateAsteroids : function() {
+    var numAsteroids = Math.floor(Math.random() * 2) + 1;
+
+    for (var i = 0; i <= numAsteroids; i++) {
+        this.generateAsteroid();
     }
 },
 
@@ -110,12 +119,13 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._rocks, this._bullets, this._ships, this._landscape];
+    this._categories = [this._rocks, this._enemies, this._bullets, this._ships, this._landscape];
 },
 
 init: function() {
 
-    this._generateRocks();
+    this._generateBirds();
+    this._generateAsteroids();
     this._generateLandscape();
 
 },
@@ -138,6 +148,14 @@ getLandscape: function(i) {
 
 generateRock : function(descr) {
     this._rocks.push(new Rock(descr));
+},
+
+generateBird : function(descr) {
+    this._enemies.push(new Bird(descr));
+},
+
+generateAsteroid : function(descr) {
+    this._enemies.push(new Asteroid(descr));
 },
 
 generateShip : function(descr) {
