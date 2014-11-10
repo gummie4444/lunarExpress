@@ -28,20 +28,52 @@ var entityManager = {
 // "PRIVATE" DATA
 
 _rocks   : [],
+_enemies : [],
 _bullets : [],
 _ships   : [],
+_landscape : [],
 
 _bShowRocks : true,
 
 // "PRIVATE" METHODS
 
-_generateRocks : function() {
-    var i,
-        NUM_ROCKS = 4;
+_generateBirds : function() {
+    
+    var numBirds = Math.floor(Math.random() * 2) + 1;
 
-    for (i = 0; i < NUM_ROCKS; ++i) {
-        this.generateRock();
+    for (var i = 0; i <= numBirds; i++) {
+        this.generateBird();
     }
+},
+
+_generateAsteroids : function() {
+    var numAsteroids = Math.floor(Math.random() * 2) + 1;
+
+    for (var i = 0; i <= numAsteroids; i++) {
+        this.generateAsteroid();
+    }
+},
+
+_generateLandscape : function() {
+
+    /*// landscape is always of width 896
+    var landscapeWidth = 896;
+
+    var shipWidth = g_sprites.ship.width;
+    // Each piece of land has width equal to shipWidth;
+    var numOfLandpieces = landscapeWidth/shipWidth;
+    var pieceWidth = landscapeWidth/numOfLandpieces; 
+    
+    for(var i = 0; i < numOfLandpieces; ++i){
+        var Xpos = i*(landscapeWidth/numOfLandpieces);
+        this._landscape[i] = new Landpiece(i, Xpos, pieceWidth, true); 
+    */
+
+
+    for(var i = 0; i < 16; ++i){
+        this._landscape.push( new Landscape(i));
+    }
+    
 },
 
 _findNearestShip : function(posX, posY) {
@@ -87,12 +119,19 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._rocks, this._bullets, this._ships];
+    this._categories = [this._rocks, this._enemies, this._bullets, this._ships, this._landscape];
 },
 
 init: function() {
+<<<<<<< HEAD
     //this._generateRocks();
     //this._generateShip();
+=======
+
+    this._generateBirds();
+    this._generateAsteroids();
+    this._generateLandscape();
+>>>>>>> aa43b1582040bf3cedf5508b7431998f28929529
 
 },
 
@@ -107,8 +146,21 @@ fireBullet: function(cx, cy, velX, velY, rotation) {
     }));
 },
 
+getLandscape: function(i) {
+    return this._landscape[i];
+},
+
+
 generateRock : function(descr) {
     this._rocks.push(new Rock(descr));
+},
+
+generateBird : function(descr) {
+    this._enemies.push(new Bird(descr));
+},
+
+generateAsteroid : function(descr) {
+    this._enemies.push(new Asteroid(descr));
 },
 
 generateShip : function(descr) {
@@ -162,8 +214,12 @@ update: function(du) {
             }
         }
     }
+<<<<<<< HEAD
     
     //if (this._rocks.length === 0) this._generateRocks();
+=======
+
+>>>>>>> aa43b1582040bf3cedf5508b7431998f28929529
 
 },
 

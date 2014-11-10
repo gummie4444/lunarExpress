@@ -71,3 +71,11 @@ Sprite.prototype.drawWrappedVerticalCentredAt = function (ctx, cx, cy, rotation)
     this.drawCentredAt(ctx, cx, cy - sh, rotation);
     this.drawCentredAt(ctx, cx, cy + sh, rotation);
 };
+
+Sprite.prototype.getScaledWidth = function(){
+    return this.width*this.scale;
+};
+
+Sprite.prototype.getScaledHeight = function(){
+    return this.height*this.scale;
+};

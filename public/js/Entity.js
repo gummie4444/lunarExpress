@@ -35,10 +35,11 @@ function Entity() {
 Entity.prototype.setup = function (descr) {
 
     // Apply all setup properies from the (optional) descriptor
-    for (var property in descr) {
-        this[property] = descr[property];
+    if(descr != undefined){
+        for (var property in descr) {
+            this[property] = descr[property];
+        }
     }
-    
     // Get my (unique) spatial ID
     this._spatialID = spatialManager.getNewSpatialID();
     
@@ -81,5 +82,5 @@ Entity.prototype.isColliding = function () {
 
 Entity.prototype.wrapPosition = function () {
     this.cx = util.wrapRange(this.cx, 0, g_canvas.width);
-    this.cy = util.wrapRange(this.cy, 0, g_canvas.height);
+    // this.cy = util.wrapRange(this.cy, 0, g_canvas.height);
 };

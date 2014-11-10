@@ -31,6 +31,7 @@ with it correctly, so that they can participate in collisions.
 
 var g_canvas = document.getElementById("myCanvas");
 var g_ctx = g_canvas.getContext("2d");
+resizeGame();
 
 /*
 0        1         2         3         4         5         6         7         8
@@ -50,6 +51,7 @@ function createInitialShips() {
     });
     
 }
+
 
 // =============
 // GATHER INPUTS
@@ -88,11 +90,11 @@ function updateSimulation(du) {
 // GAME-SPECIFIC DIAGNOSTICS
 
 var g_allowMixedActions = true;
-var g_useGravity = false;
+var g_useGravity = true;
 var g_useAveVel = true;
-var g_renderSpatialDebug = false;
+var g_renderSpatialDebug = false; 
 
-var KEY_MIXED   = keyCode('M');;
+var KEY_MIXED   = keyCode('M');
 var KEY_GRAVITY = keyCode('G');
 var KEY_AVE_VEL = keyCode('V');
 var KEY_SPATIAL = keyCode('X');
@@ -173,9 +175,9 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
-        ship   : "https://notendur.hi.is/~pk/308G/images/ship.png",
+        ship   : "https://notendur.hi.is/~ahh19/mkdir/fin/skip.png" /*"https://notendur.hi.is/~pk/308G/images/ship.png"*/,
         ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        rock   : "https://notendur.hi.is/~pk/308G/images/rock.png"
+        rock   : "https://notendur.hi.is/~ahh19/mkdir/fin/Asteroid_01_Mb.GIF"//"https://notendur.hi.is/~pk/308G/images/rock.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);

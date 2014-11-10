@@ -17,6 +17,7 @@ function Ship(descr) {
 
     // Common inherited setup logic from Entity
     this.setup(descr);
+    this.particleSetup();
 
     this.rememberResets();
     
@@ -24,12 +25,32 @@ function Ship(descr) {
     this.sprite = this.sprite || g_sprites.ship;
     
     // Set normal drawing scale, and warp state off
-    this._scale = 1;
+    this._scale = 0.5;
     this._isWarping = false;
+    this._isControllable = true;
+
+    /*this.particles = new Particles({
+    numParticles:15,
+    particleLifetime:30,
+    colour : '255, 102, 0'}, 
+    this);*/
 };
 
 Ship.prototype = new Entity();
 
+//Ship.prototype.particles = new Particles(this);
+
+Ship.prototype.particleSetup = function(){
+    this.particles = new Particles(this);
+};
+
+/*
+Ship.prototype.particles = new Particles({
+    numParticles:15,
+    particleLifetime:30,
+    colour : '255, 102, 0'} , 
+    this);
+*/
 Ship.prototype.rememberResets = function () {
     // Remember my reset positions
     this.reset_cx = this.cx;
@@ -45,11 +66,11 @@ Ship.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
 Ship.prototype.KEY_FIRE   = ' '.charCodeAt(0);
 
 // Initial, inheritable, default values
-Ship.prototype.rotation = 0;
+Ship.prototype.rotation = -Math.PI/2;
 Ship.prototype.cx = 200;
 Ship.prototype.cy = 200;
-Ship.prototype.velX = 0;
-Ship.prototype.velY = 0;
+Ship.prototype.velX = 0.4;
+Ship.prototype.velY = 0.1;
 Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
 
@@ -60,7 +81,7 @@ Ship.prototype.warpSound = new Audio(
 Ship.prototype.warp = function () {
 
     this._isWarping = true;
-    this._scaleDirn = -1;
+    this._scaleDirn = -0.5;
     this.warpSound.play();
     
     // Unregister me from my old posistion
@@ -77,11 +98,11 @@ Ship.prototype._updateWarp = function (du) {
     
         this._moveToASafePlace();
         this.halt();
-        this._scaleDirn = 1;
+        this._scaleDirn = 0.5;
         
-    } else if (this._scale > 1) {
+    } else if (this._scale > 0.5) {
     
-        this._scale = 1;
+        this._scale = 0.5;
         this._isWarping = false;
         
         // Reregister me from my old posistion
@@ -125,13 +146,14 @@ Ship.prototype._moveToASafePlace = function () {
 };
     
 Ship.prototype.update = function (du) {
-
+    //console.log("this.particles");
     // Handle warping
+    //this.particles.print();
     if (this._isWarping) {
         this._updateWarp(du);
         return;
     }
-    
+    if(this._isControllable){
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
     spatialManager.unregister(this);
     var hitEntity = this.findHitEntity();
@@ -151,10 +173,12 @@ Ship.prototype.update = function (du) {
         {
             this.warp();
         }
+        else if(hitEntity instanceof Landscape /*Landpiece*/)
+        {
+            this.maybeLand(hitEntity);
+        }
 
     } 
-
-
 
     // Perform movement substeps
     var steps = this.numSubSteps;
@@ -174,8 +198,41 @@ Ship.prototype.update = function (du) {
 
     // TODO: YOUR STUFF HERE! --- Warp if isColliding, otherwise Register
     spatialManager.register(this);
+    }
 
+
+    this.particles.update(du);
 };
+
+
+Ship.prototype.maybeLand = function(hitEntity){
+    var maxVel = 0.4;
+    var landCenterPos = hitEntity.getPos();
+    var landcx = landCenterPos.posX;
+    var landcy = landCenterPos.posY;
+    var landw = hitEntity.getWidth();
+
+    if(util.isBetween(this.cx, landcx - landw/2, landcx + landw/2) &&  util.isBetween(this.cy, landcy-15, landcy+15) /*this.cy === landcy*/) {
+        //console.log("FirstBarrier", hitEntity.index, this.velY);
+
+        if(this.velY < maxVel && util.isBetween(this.rotation, 0.0-0.1,0.0+0.1 )){
+            //console.log("SecondBarrier");
+            this.land();
+        }
+        else{
+            console.log("what");
+            this.reset();
+            //this.explode();
+        }
+    }
+};
+
+Ship.prototype.land = function(){
+    g_useGravity = !g_useGravity;
+    this.halt();
+    this._isControllable = false;
+    
+}
 
 Ship.prototype.computeSubStep = function (du) {
     
@@ -196,14 +253,14 @@ Ship.prototype.computeSubStep = function (du) {
     }
 };
 
-var NOMINAL_GRAVITY = 0.12;
+var NOMINAL_GRAVITY = 0.0015;
 
 Ship.prototype.computeGravity = function () {
     return g_useGravity ? NOMINAL_GRAVITY : 0;
 };
 
-var NOMINAL_THRUST = +0.2;
-var NOMINAL_RETRO  = -0.1;
+var NOMINAL_THRUST = +0.0045;
+var NOMINAL_RETRO  = -0.0005;
 
 Ship.prototype.computeThrustMag = function () {
     
@@ -212,14 +269,15 @@ Ship.prototype.computeThrustMag = function () {
     if (keys[this.KEY_THRUST]) {
         thrust += NOMINAL_THRUST;
     }
-    if (keys[this.KEY_RETRO]) {
+    /*if (keys[this.KEY_RETRO]) {
         thrust += NOMINAL_RETRO;
-    }
+    }*/
     
     return thrust;
 };
 
 Ship.prototype.applyAccel = function (accelX, accelY, du) {
+
     
     // u = original velocity
     var oldVelX = this.velX;
@@ -244,7 +302,11 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     // bounce
     if (g_useGravity) {
 
-	var minY = g_sprites.ship.height / 2;
+
+    var origScale = this.sprite.scale;
+    this.sprite.scale = this._scale;
+	var minY = g_sprites.ship.getScaledHeight() / 2;
+    this.sprite.scale = origScale;
 	var maxY = g_canvas.height - minY;
 
 	// Ignore the bounce if the ship is already in
@@ -284,7 +346,11 @@ Ship.prototype.maybeFireBullet = function () {
 };
 
 Ship.prototype.getRadius = function () {
-    return (this.sprite.width / 2) * 0.9;
+    var origScale = this.sprite.scale;
+    this.sprite.scale = this._scale;
+    var x = (this.sprite.getScaledWidth() / 2) * 1.3;
+    this.sprite.scale = origScale;
+    return x;
 };
 
 Ship.prototype.takeBulletHit = function () {
@@ -294,8 +360,13 @@ Ship.prototype.takeBulletHit = function () {
 Ship.prototype.reset = function () {
     this.setPos(this.reset_cx, this.reset_cy);
     this.rotation = this.reset_rotation;
-    
-    this.halt();
+    this._isControllable = true;
+    if(!g_useGravity){
+        g_useGravity = !g_useGravity;
+    }
+    this.velX = 0.4;
+    this.velY = 0.1;
+    //this.halt();
 };
 
 Ship.prototype.halt = function () {
@@ -303,7 +374,7 @@ Ship.prototype.halt = function () {
     this.velY = 0;
 };
 
-var NOMINAL_ROTATE_RATE = 0.1;
+var NOMINAL_ROTATE_RATE = 0.04;
 
 Ship.prototype.updateRotation = function (du) {
     if (keys[this.KEY_LEFT]) {
@@ -315,6 +386,7 @@ Ship.prototype.updateRotation = function (du) {
 };
 
 Ship.prototype.render = function (ctx) {
+    
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this._scale;
@@ -322,4 +394,6 @@ Ship.prototype.render = function (ctx) {
 	ctx, this.cx, this.cy, this.rotation
     );
     this.sprite.scale = origScale;
+
+    this.particles.render(ctx);
 };
