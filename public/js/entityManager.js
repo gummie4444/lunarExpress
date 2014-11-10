@@ -37,7 +37,7 @@ _bShowRocks : true,
 
 // "PRIVATE" METHODS
 
-_generateBirds : function() {
+_generateBirds : function() {   
     
     var numBirds = Math.floor(Math.random() * 2) + 1;
 
@@ -123,15 +123,12 @@ deferredSetup : function () {
 },
 
 init: function() {
-<<<<<<< HEAD
-    //this._generateRocks();
-    //this._generateShip();
-=======
 
+    console.log("hallo")
     this._generateBirds();
     this._generateAsteroids();
     this._generateLandscape();
->>>>>>> aa43b1582040bf3cedf5508b7431998f28929529
+
 
 },
 
@@ -214,12 +211,10 @@ update: function(du) {
             }
         }
     }
-<<<<<<< HEAD
+
     
     //if (this._rocks.length === 0) this._generateRocks();
-=======
 
->>>>>>> aa43b1582040bf3cedf5508b7431998f28929529
 
 },
 
