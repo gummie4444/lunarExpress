@@ -91,8 +91,9 @@ deferredSetup : function () {
 },
 
 init: function() {
-    this._generateRocks();
+    //this._generateRocks();
     //this._generateShip();
+
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation) {
@@ -162,7 +163,7 @@ update: function(du) {
         }
     }
     
-    if (this._rocks.length === 0) this._generateRocks();
+    //if (this._rocks.length === 0) this._generateRocks();
 
 },
 
