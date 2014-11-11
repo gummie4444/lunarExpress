@@ -31,7 +31,7 @@ _rocks   : [],
 _enemies : [],
 _bullets : [],
 _ships   : [],
-_landscape : [],
+_landscape : new Landscape(),
 
 _bShowRocks : true,
 
@@ -52,28 +52,6 @@ _generateAsteroids : function() {
     for (var i = 0; i <= numAsteroids; i++) {
         this.generateAsteroid();
     }
-},
-
-_generateLandscape : function() {
-
-    /*// landscape is always of width 896
-    var landscapeWidth = 896;
-
-    var shipWidth = g_sprites.ship.width;
-    // Each piece of land has width equal to shipWidth;
-    var numOfLandpieces = landscapeWidth/shipWidth;
-    var pieceWidth = landscapeWidth/numOfLandpieces; 
-    
-    for(var i = 0; i < numOfLandpieces; ++i){
-        var Xpos = i*(landscapeWidth/numOfLandpieces);
-        this._landscape[i] = new Landpiece(i, Xpos, pieceWidth, true); 
-    */
-
-
-    for(var i = 0; i < 16; ++i){
-        this._landscape.push( new Landscape(i));
-    }
-    
 },
 
 _findNearestShip : function(posX, posY) {
@@ -119,17 +97,13 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._rocks, this._enemies, this._bullets, this._ships, this._landscape];
+    this._categories = [this._rocks, this._enemies, this._bullets, this._ships];
 },
 
 init: function() {
 
-    console.log("hallo")
     this._generateBirds();
     this._generateAsteroids();
-    this._generateLandscape();
-
-
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation) {
@@ -219,6 +193,8 @@ update: function(du) {
 },
 
 render: function(ctx) {
+
+    this._landscape.render(ctx);
 
     var debugX = 10, debugY = 100;
 

@@ -6,73 +6,82 @@
 // compromised. 
 
 // Generates a new piece of land based on existing land to the left.
-function Landscape(index){
-	this.index = index;
-	this.width = 56;
-	this.cx = 28+index*56;
-
-	if(index < 1){
-		this.cy = g_canvas.height-Math.random()*200;
-		this.landable = true;
-		this.setup();
-		return;
-	}
-	else{
-		
-		this.generateLand(this.index,this.cx);
-	}
-	console.log("lol")
+function Landscape(){
+	// landscape is compromised of an array of heights.
+	this.array = [];
+	this.pieceWidth = 4;
 	this.setup();
+
+	
 }
 
-Landscape.prototype = new Entity();
-Landscape.prototype.radius = 28; 
-Landscape.prototype.landable = false;
-//Landscape.prototype._isDeadNow = false;
+Landscape.prototype.setup = function () {
+	var pieceCount = g_gameWidth / this.pieceWidth;
+	var heightVariation = 30;
 
-Landscape.prototype.generateLand = function (index,cx) {
-	var leftLand = entityManager._landscape[index-1];
-	var leftcy = leftLand.cy
-	this.cy = leftcy + (Math.random()-0.5)*50;
-	//Prevent height changes that are too small
-	if(Math.abs(this.cy-leftcy)<4){
-		this.cy = leftcy;
+	var initialHeight = util.randRange(30,200);
+	this.array[0] = initialHeight;
+	var counter=0;
+
+	for(var i = 1; i < pieceCount; i++){
+		var prevHeight = this.array[i-1];
+
+		if(Math.random() > 0.97 && counter === 0){
+			counter = 10;
+		}
+
+		if( counter > 0){
+			this.array[i] = prevHeight;
+			counter--;
+		}
+		else{
+			if(prevHeight <= 50){
+				this.array[i] = prevHeight + util.randRange(heightVariation/4,heightVariation);
+			}
+			else if(prevHeight >= 500){
+				this.array[i] = prevHeight - util.randRange(heightVariation/4,heightVariation);
+			}
+			else{
+				this.array[i] = prevHeight + util.randRange(-heightVariation,heightVariation);
+				}		
+		}
 	}
-	this.landable = true;
 }
+
+Landscape.prototype.getRandomColor =function() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 
 Landscape.prototype.render = function (ctx) {
 	var oldStyle = ctx.strokeStyle;
-	ctx.strokeStyle = "cyan";
+	ctx.strokeStyle = this.getRandomColor();
 
-	var Xoffset = 0;
-	var Xdrawloc = this.cx + Xoffset;
+	ctx.beginPath();
+	ctx.moveTo(0,g_canvas.height - this.array[0]);
 
-	while( Xdrawloc < g_canvas.width+0.5*this.radius ){
-		util.drawHorizontalLine(ctx, Xdrawloc-this.radius, Xdrawloc+this.radius,/* g_canvas.height-*/this.cy);
-		Xdrawloc += 896;
+	var xOffset = 0;
+	while(xOffset < g_canvas.width){
+		for(var i = 1; i<this.array.length; i++){
+
+			var x = i*4+xOffset;
+			var y = g_canvas.height - this.array[i];
+			
+			ctx.lineTo(x, y);
+			
+		}
+		xOffset += g_gameWidth;
 	}
-	/*this.cx = Xdrawloc;
-	this.cy = g_canvas.height-this.cy;*/
+	ctx.stroke();
+	
 	ctx.strokeStyle = oldStyle;
 }
 
 Landscape.prototype.update = function (du) {
-	spatialManager.unregister(this);
-	//Somethin
-
-	spatialManager.register(this);
-
-}
-
-Landscape.prototype.getRadius = function() {
-	return this.width/2;
-}
-
-Landscape.prototype.getWidth = function(){
-	return this.width;
-}
-
-Landscape.prototype.getPos = function() {
-	return {posX : this.cx, posY : this.cy};
+	
 }
