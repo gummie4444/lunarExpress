@@ -211,7 +211,7 @@ Ship.prototype.update = function (du) {
 
 
 Ship.prototype.maybeLand = function(){
-    var landingInfo = entityManager.landscape.doesCollide(this.cx, this.cy, this.getRadius());
+    var landingInfo = entityManager.landscape.doesCollide(this.cx, this.cy+this.getRadius(), this.getRadius());
 
     if(!landingInfo.collide){
         return;
