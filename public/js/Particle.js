@@ -24,7 +24,7 @@ Particle.prototype.respawn = function(life)
 
   var relVelX,relVelY;
 
-  if(keys[this.owner.KEY_THRUST] && relVel <= ){
+  if(keys[this.owner.KEY_THRUST] && relVel <= maxVel){
     relVelX = dX;
     relVelY = dY;
   }
@@ -65,8 +65,8 @@ Particle.prototype.update = function(particleLifetime, du)
 {
   
   var damping=0.995;
-  this.vx*=damping;//*du;
-  this.vy*=damping;//*du;
+  this.vx*=damping*du;
+  this.vy*=damping*du;
 
   this.cx+=this.vx;
   this.cy+=this.vy;
