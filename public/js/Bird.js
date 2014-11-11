@@ -4,7 +4,7 @@ function Bird(descr) {
 	this.randomisePosition();
 	this.randomiseVelocity();
 
-	this.sprite = this.sprite || g_sprites.rock;
+	this.sprite = this.sprite || g_sprites.bird_up;
 	this.scale = this.scale || 0.5;
 }
 
@@ -24,6 +24,10 @@ Bird.prototype.randomiseVelocity = function () {
 	this.velX = speed;
 };
 
+var wingdelay2 = 550;
+var wingdelay = wingdelay2 / 2;
+var wingtime = 0;
+
 Bird.prototype.update = function (du) {
 
 	spatialManager.unregister(this);
@@ -38,6 +42,18 @@ Bird.prototype.update = function (du) {
             this.takeBulletHit();
             hitEntity.kill();
         }
+    }
+
+    wingtime = wingtime + NOMINAL_UPDATE_INTERVAL;
+
+    if (wingtime < wingdelay) {
+    	this.sprite = g_sprites.bird_down;
+    } else {
+    	this.sprite = g_sprites.bird_up;
+    }
+
+    if (wingtime > wingdelay2) {
+    	wingtime = 0;
     }
 
     this.cx += this.velX * du;
