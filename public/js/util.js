@@ -108,6 +108,13 @@ drawHorizontalLine: function (ctx,ledge,redge,height){
     ctx.moveTo(ledge,height);
     ctx.lineTo(redge,height);
     ctx.stroke();
+},
+drawTextAt: function(ctx,string,width,height,color){
+    var oldStyle = ctx.fillStyle;
+    ctx.fillStyle = color;
+    ctx.fillText(string,width,height);
+
+    ctx.fillStyle = oldStyle;
 }
 
 }
