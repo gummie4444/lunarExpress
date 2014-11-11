@@ -57,11 +57,43 @@ Landscape.prototype.getRandomColor =function() {
     return color;
 }
 
+colors = {
+	r : 150,
+	g : 150,
+	b : 150
+};
+
+Landscape.prototype.changeColor = function (colors) {
+	
+	var colorVariation = 8;
+
+	if (colors.r < 210) {
+		colors.r += colorVariation / 3;
+	} else {
+		colors.r = -209;
+	}
+
+	if (colors.g < 210) {
+		colors.g += colorVariation / 2;
+	} else {
+		colors.g = -209;
+	}
+
+	if (colors.b < 210) {
+		colors.b += colorVariation;
+	} else {
+		colors.b = -209;
+	}
+
+	return colors;
+}
+
 
 Landscape.prototype.render = function (ctx) {
-	var oldStyle = ctx.strokeStyle;
-	ctx.strokeStyle = this.getRandomColor();
-
+	// var oldStyle = ctx.strokeStyle;
+	var style = "rgba(" + Math.abs(Math.floor(colors.r)) + ", " + Math.abs(Math.floor(colors.g)) + ", " + Math.abs(Math.floor(colors.b)) + ", " + 1;
+	ctx.strokeStyle = style;
+	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(0,g_canvas.height - this.array[0]);
 
@@ -79,7 +111,9 @@ Landscape.prototype.render = function (ctx) {
 	}
 	ctx.stroke();
 	
-	ctx.strokeStyle = oldStyle;
+	// ctx.strokeStyle = oldStyle;
+
+	colors = this.changeColor(colors);
 }
 
 Landscape.prototype.update = function (du) {
