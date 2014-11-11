@@ -19,7 +19,7 @@ var gameManager = {
 	finishScreen : 4,
 
 
-	currentScreen :0,
+	currentScreen :3,
 
 
 	renderScreen: function(screenIndex,ctx){
