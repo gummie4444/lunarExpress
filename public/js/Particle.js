@@ -24,7 +24,7 @@ Particle.prototype.respawn = function(life)
 
   var relVelX,relVelY;
 
-  if(keys[this.owner.KEY_THRUST] && relVel <= 1){
+  if(keys[this.owner.KEY_THRUST] && relVel <= ){
     relVelX = dX;
     relVelY = dY;
   }
