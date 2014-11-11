@@ -23,16 +23,16 @@ var gameManager = {
 
 
 	renderScreen: function(screenIndex,ctx){
-		if(screenIndex === 3){
+		if(screenIndex === this.startingScreen){
 			this._renderStartingScreen(ctx);
 		}
-		else if(screenIndex === 4){
+		else if(screenIndex === this.finishScreen){
 			this._renderFinishScreen(ctx);
 		}
-		else if(screenIndex === 1){
+		else if(screenIndex === this.highScoreScreen){
 			this._renderHighscoreScreen(ctx);
 		}
-		else if (screenIndex === 0){
+		else if (screenIndex === this.gameScreen){
 			this._renderGameScreen(ctx);
 		}
 
@@ -40,22 +40,25 @@ var gameManager = {
 	},
 
 	updateScreen: function(screenIndex,du){
-		if(screenIndex === 3){
+		if(screenIndex === this.startingScreen){
 			this._updateStartingScreen(du);
 		}
-		else if(screenIndex === 4){
+		else if(screenIndex === this.finishScreen){
 			this._updateFinishScreen(du);
 		}
-		else if(screenIndex === 1){
+		else if(screenIndex === this.highScoreScreen){
 			this._updateHighscoreScreen(du);
 		}
-		else if (screenIndex === 0){
+		else if (screenIndex === this.gameScreen){
 			this._updateGameScreen(du);
 		}
 	},
 
 	_StartingScreenChoice : 0,
+	_StartingScreenLevel :null,
 	KEY_UPP  : 38,
+	KEY_LEFT : 37,
+	KEY_RIGHT : 39,
 	KEY_DOWN : 40,
 	KEY_ENTER: 13,
 	//STARTING SCREEN -----------
@@ -63,6 +66,13 @@ var gameManager = {
 
 		//formula to let the letters be in the midle
 	
+		var oldStyle = ctx.fillStyle;
+		ctx.textAlign = "center";
+
+
+		var GameName = "Gústa Lander";
+	    ctx.font = '60pt PressStart2P';		
+	    util.drawTextAt(ctx,GameName,g_canvas.width/2,200,"white");
 
 		var Play = "Play";
 		var Highscore = "Highscore";
@@ -71,7 +81,7 @@ var gameManager = {
 		var HighscoreColor = "white";
 		var ControlsColor = "white";
 
-		var oldStyle = ctx.fillStyle;
+
 	    ctx.font = '40pt PressStart2P';
 	    console.log(Play.length/2)
 	    if(this._StartingScreenChoice === 0){
@@ -86,9 +96,25 @@ var gameManager = {
 
 	    }
 
-	    util.drawTextAt(ctx,Play,g_canvas.width/2 - Play.length/2 * 40,g_canvas.height/2-80,PlayColor);
-	    util.drawTextAt(ctx,Highscore,g_canvas.width/2 - Highscore.length/2 * 40,g_canvas.height/2,HighscoreColor);
-	    util.drawTextAt(ctx,Controls,g_canvas.width/2 - Controls.length/2 * 40,g_canvas.height/2+80,ControlsColor);
+	    util.drawTextAt(ctx,Play,g_canvas.width/2,g_canvas.height/2-80+200,PlayColor);
+	    util.drawTextAt(ctx,Highscore,g_canvas.width/2,g_canvas.height/2+200,HighscoreColor);
+	    util.drawTextAt(ctx,Controls,g_canvas.width/2,g_canvas.height/2+80+200,ControlsColor);
+
+	    //TODO MAKE THIS SPRITES
+	    var ArrowLeft = "<-";
+	    var ArrowRight ="->";
+	    var ArrowLeftColor ="white";
+	    var ArrowRightColor = "white";
+	    if(this._StartingScreenLevel === "left"){
+	    	ArrowLeftColor = "blue";
+	    }
+	    else if(this._StartingScreenLevel === "right"){
+	    	ArrowRightColor = "blue";
+	    }
+	    ctx.textAlign = "left";
+	    util.drawTextAt(ctx,ArrowLeft,0+50,g_canvas.height/2,ArrowLeftColor);
+	    ctx.textAlign = "right";
+	   	util.drawTextAt(ctx,ArrowRight,g_canvas.width+4-50,g_canvas.height/2,ArrowRightColor);
 
 	    ctx.fillStyle = oldStyle;
 		
@@ -113,6 +139,16 @@ var gameManager = {
 			else{
 			this._StartingScreenChoice += 1;
 			}
+		}
+
+		if(eatKey(this.KEY_LEFT)){
+			//settu background til vinstri
+			this._StartingScreenLevel = "left";
+
+		}
+		if(eatKey(this.KEY_RIGHT)){
+			//settu background til hægri
+			this._StartingScreenLevel = "right";
 		}
 
 		if(eatKey(this.KEY_ENTER)){
