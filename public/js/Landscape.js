@@ -27,7 +27,7 @@ Landscape.prototype.setup = function () {
 		var prevHeight = this.array[i-1];
 
 		if(Math.random() > 0.97 && counter === 0){
-			counter = 10;
+			counter = 20;
 		}
 
 		if( counter > 0){
@@ -82,6 +82,38 @@ Landscape.prototype.render = function (ctx) {
 	ctx.strokeStyle = oldStyle;
 }
 
-Landscape.prototype.update = function (du) {
-	
+Landscape.prototype.doesCollide = function (cx,cy,radius) {
+	while(cx > g_gameWidth){
+		cx -= g_gameWidth;
+	}
+
+	var leftIndex = Math.floor((cx-radius)/this.pieceWidth);
+	var rightIndex = Math.ceil((cx+radius)/this.pieceWidth);
+
+	for(var i = leftIndex; i<=rightIndex; i++){
+		if(cy > g_canvas.height-this.array[i]){
+			return {
+				collide: true,
+				leftIndex: leftIndex,
+				rightIndex: rightIndex
+			};
+		}
+	}
+	return {
+				collide: false,
+				leftIndex: leftIndex,
+				rightIndex: rightIndex
+		};
 }
+
+Landscape.prototype.landable = function(leftIndex, rightIndex){
+	
+	for(var i = leftIndex+1; i <= rightIndex; i++){
+		var prevHeight = this.array[i-1];
+		if(this.array[i] != prevHeight){
+			return false;
+		}
+	}
+	console.log("is landable");
+	return true;
+};

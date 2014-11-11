@@ -175,12 +175,15 @@ Ship.prototype.update = function (du) {
         {
             this.warp();
         }
-        else if(hitEntity instanceof Landscape /*Landpiece*/)
+        /*else if(hitEntity instanceof Landscape )
         {
             this.maybeLand(hitEntity);
-        }
+        }*/
 
     } 
+
+    
+    this.maybeLand();
 
     // Perform movement substeps
     var steps = this.numSubSteps;
@@ -207,26 +210,47 @@ Ship.prototype.update = function (du) {
 };
 
 
-Ship.prototype.maybeLand = function(hitEntity){
+Ship.prototype.maybeLand = function(){
+    var landingInfo = entityManager.landscape.doesCollide(this.cx, this.cy, this.getRadius());
+
+    if(!landingInfo.collide){
+        return;
+    }
+
+    var landable = entityManager.landscape.landable(landingInfo.leftIndex, landingInfo.rightIndex);
+    if(!landable){
+         this.reset();
+        return;
+    }
+    
+    var maxVel = 0.4;
+    var landcy = g_canvas.height -entityManager.landscape.array[landingInfo.leftIndex];
+
+    this.cy = landcy-this.getRadius();
+    this.land();
+
+
+
+    /*
     var maxVel = 0.4;
     var landCenterPos = hitEntity.getPos();
     var landcx = landCenterPos.posX;
     var landcy = landCenterPos.posY;
     var landw = hitEntity.getWidth();
 
-    if(util.isBetween(this.cx, landcx - landw/2, landcx + landw/2) &&  util.isBetween(this.cy, landcy-15, landcy+15) /*this.cy === landcy*/) {
+    if(util.isBetween(this.cx, landcx - landw/2, landcx + landw/2) &&  util.isBetween(this.cy, landcy-15, landcy+15) /*this.cy === landcy*///) {
         //console.log("FirstBarrier", hitEntity.index, this.velY);
 
-        if(this.velY < maxVel && util.isBetween(this.rotation, 0.0-0.1,0.0+0.1 )){
+        //if(this.velY < maxVel && util.isBetween(this.rotation, 0.0-0.1,0.0+0.1 )){
             //console.log("SecondBarrier");
-            this.land();
-        }
-        else{
-            console.log("what");
-            this.reset();
+            //this.land();
+        //}
+        //else{
+          //  console.log("what");
+            //this.reset();
             //this.explode();
-        }
-    }
+        //}
+    //}
 };
 
 Ship.prototype.land = function(){
