@@ -37,7 +37,7 @@ _bShowRocks : true,
 
 // "PRIVATE" METHODS
 
-_generateBirds : function() {
+_generateBirds : function() {   
     
     var numBirds = Math.floor(Math.random() * 2) + 1;
 
@@ -124,9 +124,11 @@ deferredSetup : function () {
 
 init: function() {
 
+    console.log("hallo")
     this._generateBirds();
     this._generateAsteroids();
     this._generateLandscape();
+
 
 },
 
@@ -209,6 +211,9 @@ update: function(du) {
             }
         }
     }
+
+    
+    //if (this._rocks.length === 0) this._generateRocks();
 
 
 },
