@@ -101,6 +101,7 @@ fillBox: function (ctx, x, y, w, h, style) {
     ctx.fillStyle = style;
     ctx.fillRect(x, y, w, h);
     ctx.fillStyle = oldStyle;
+
 },
 
 drawHorizontalLine: function (ctx,ledge,redge,height){
@@ -115,6 +116,7 @@ drawTextAt: function(ctx,string,width,height,color){
     ctx.fillText(string,width,height);
 
     ctx.fillStyle = oldStyle;
+
 }
 
 }

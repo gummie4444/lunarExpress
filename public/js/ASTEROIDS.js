@@ -185,7 +185,9 @@ function requestPreloads() {
     var requiredImages = {
         ship   : "https://notendur.hi.is/~ahh19/mkdir/fin/skip.png" /*"https://notendur.hi.is/~pk/308G/images/ship.png"*/,
         ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        rock   : "https://notendur.hi.is/~ahh19/mkdir/fin/Asteroid_01_Mb.GIF"//"https://notendur.hi.is/~pk/308G/images/rock.png"
+        rock   : "https://notendur.hi.is/~ahh19/mkdir/fin/Asteroid_01_Mb.GIF",//"https://notendur.hi.is/~pk/308G/images/rock.png"
+        bird_down : "https://notendur.hi.is/~ffk3/lunarlander/fuglnidur.png",
+        bird_up : "https://notendur.hi.is/~ffk3/lunarlander/fuglupp.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -198,6 +200,8 @@ function preloadDone() {
     g_sprites.ship  = new Sprite(g_images.ship);
     g_sprites.ship2 = new Sprite(g_images.ship2);
     g_sprites.rock  = new Sprite(g_images.rock);
+    g_sprites.bird_down = new Sprite(g_images.bird_down);
+    g_sprites.bird_up = new Sprite(g_images.bird_up);
 
     g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;
