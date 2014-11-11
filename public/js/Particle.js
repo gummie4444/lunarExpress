@@ -16,7 +16,7 @@ Particle.prototype.respawn = function(life)
 
   var vecVelsqr = util.square(oVelX) + util.square(oVelY);
 
-  var maxVel = 1.0;
+  var maxVel = this.owner.maxVel;
 
 
   var relVel = vecVelsqr/util.square(maxVel);

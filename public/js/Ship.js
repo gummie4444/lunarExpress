@@ -147,6 +147,7 @@ Ship.prototype._moveToASafePlace = function () {
 };
     
 Ship.prototype.update = function (du) {
+    this.maxVel = 1.0*du;
     //console.log("this.particles");
     // Handle warping
     //this.particles.print();
