@@ -5,7 +5,7 @@ function Particle(life, owner)
 }
 
 Particle.prototype.respawn = function(life)
-{ //var ownerpos = this.owner.getPos();
+{ 
   var dX = -Math.sin(this.owner.rotation);
   var dY = +Math.cos(this.owner.rotation);
 
@@ -20,16 +20,13 @@ Particle.prototype.respawn = function(life)
 
 
   var relVel = vecVelsqr/util.square(maxVel);
-
-
-
   var launchDist = 16.5;
 
   var relVelX,relVelY;
 
   if(keys[this.owner.KEY_THRUST] && relVel <= 1){
-    relVelX = dX /** relVel*/;
-    relVelY = dY /** relVel*/;
+    relVelX = dX;
+    relVelY = dY;
   }
   else{
     relVelX = 0;//dX;
@@ -43,36 +40,12 @@ Particle.prototype.respawn = function(life)
   this.vx = (oVelX + relVelX)*random;
   this.vy = (oVelY + relVelY)*random;
 
-  //this.cx = (this.owner.getPos().posX + Math.random()*0.5);
-  //this.cy = (this.owner.getPos().posY + Math.random()*0.5);
-
-  //this.vy = this.owner.velX;//*Math.random()*0.2;
-  //this.vx = this.owner.velY;//*Math.random()*0.2;
-
   //console.log("x: "+this.cx,"y: "+this.cy);
   this.life = life;
 
   this.radius = 5;
 
 }
-
-
-/*
-if (keys[this.KEY_THRUST]) {
-        thrust += NOMINAL_THRUST;
-        
-    }
-
-var relVel = this.launchVel;
-        var relVelX = dX * relVel;
-        var relVelY = dY * relVel;
-
-        entityManager.fireBullet(
-           this.cx + dX * launchDist, this.cy + dY * launchDist,
-           this.velX + relVelX, this.velY + relVelY,
-           this.rotation);
-
-*/
 
 Particle.prototype.render=function(ctx, numParticles, colour)
 {
