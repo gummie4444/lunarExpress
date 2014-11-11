@@ -31,7 +31,7 @@ _rocks   : [],
 _enemies : [],
 _bullets : [],
 _ships   : [],
-_landscape : new Landscape(),
+landscape : new Landscape(),
 
 _bShowRocks : true,
 
@@ -118,7 +118,7 @@ fireBullet: function(cx, cy, velX, velY, rotation) {
 },
 
 getLandscape: function(i) {
-    return this._landscape[i];
+    return this.landscape[i];
 },
 
 
@@ -194,7 +194,7 @@ update: function(du) {
 
 render: function(ctx) {
 
-    this._landscape.render(ctx);
+    this.landscape.render(ctx);
 
     var debugX = 10, debugY = 100;
 
