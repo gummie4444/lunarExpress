@@ -78,13 +78,16 @@ function gatherInputs() {
 // GAME-SPECIFIC UPDATE LOGIC
 
 function updateSimulation(du) {
-    
+    gameManager.updateScreen(gameManager.currentScreen,du);
+    /*
+    //go to diffrient diagnostics depending on what screen your in
     processDiagnostics();
     
     entityManager.update(du);
 
     // Prevent perpetual firing!
     eatKey(Ship.prototype.KEY_FIRE);
+    */
 }
 
 // GAME-SPECIFIC DIAGNOSTICS
@@ -160,9 +163,14 @@ function processDiagnostics() {
 
 function renderSimulation(ctx) {
 
-    entityManager.render(ctx);
+    gameManager.renderScreen(gameManager.currentScreen,ctx);
+
+
+    //move this into gameScreen
+    /*entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
+    */
 }
 
 
@@ -198,9 +206,11 @@ function preloadDone() {
     g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;
 
+    //movethis
+
     entityManager.init();
     createInitialShips();
-
+   
     main.init();
 }
 

@@ -101,7 +101,7 @@ deferredSetup : function () {
 },
 
 init: function() {
-
+    console.log("bla")
     this._generateBirds();
     this._generateAsteroids();
 },
