@@ -65,8 +65,8 @@ Particle.prototype.update = function(particleLifetime, du)
 {
   
   var damping=0.995;
-  this.vx*=damping*du;
-  this.vy*=damping*du;
+  this.vx*=damping;
+  this.vy*=damping;
 
   this.cx+=this.vx;
   this.cy+=this.vy;
