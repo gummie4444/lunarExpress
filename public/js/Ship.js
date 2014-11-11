@@ -73,6 +73,7 @@ Ship.prototype.velX = 0.4;
 Ship.prototype.velY = 0.1;
 Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
+Ship.prototype.maxVel = 1.0;
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -268,6 +269,7 @@ Ship.prototype.computeThrustMag = function () {
     
     if (keys[this.KEY_THRUST]) {
         thrust += NOMINAL_THRUST;
+        
     }
     /*if (keys[this.KEY_RETRO]) {
         thrust += NOMINAL_RETRO;
@@ -284,8 +286,11 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     var oldVelY = this.velY;
     
     // v = u + at
-    this.velX += accelX * du;
-    this.velY += accelY * du; 
+    //if(util.square(this.maxVel)> (util.square(this.velX) + util.square(this.velY)) ){
+    //if(this.velX<this.maxVel && this.velY < this.maxVel){
+        this.velX += accelX * du;
+        this.velY += accelY * du; 
+    //}
 
     // v_ave = (u + v) / 2
     var aveVelX = (oldVelX + this.velX) / 2;
@@ -311,11 +316,12 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
 
 	// Ignore the bounce if the ship is already in
 	// the "border zone" (to avoid trapping them there)
-	if (this.cy > maxY || this.cy < minY) {
-	    // do nothing
-	} else if (nextY > maxY || nextY < minY) {
-            this.velY = oldVelY * -0.9;
-            intervalVelY = this.velY;
+    	if (this.cy > maxY || this.cy < minY) {
+    	    // do nothing
+    	} 
+        else if (nextY > maxY || nextY < minY) {
+                this.velY = oldVelY * -0.9;
+                intervalVelY = this.velY;
         }
     }
     
@@ -351,6 +357,10 @@ Ship.prototype.getRadius = function () {
     var x = (this.sprite.getScaledWidth() / 2) * 1.3;
     this.sprite.scale = origScale;
     return x;
+};
+
+Ship.prototype.getVel = function() {
+    return {velX : this.velX, velY : this.velY};
 };
 
 Ship.prototype.takeBulletHit = function () {
