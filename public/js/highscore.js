@@ -21,33 +21,37 @@ function saveScore(scoreObj){
 }
 
 
+//DO THIS BETTER
 function fetchHighScore(){
 
   var query = new Parse.Query(Highscore);
 
-  query.ascending("Totalscore"); // Sorts the results in ascending order by the score field
-  query.limit(10); //only top 10 result
-
+  query.descending("Totalscore"); // Sorts the results in ascending order by the score field
 
   query.find({
   success: function(results) {
-    for(var i = 0;i<results.length;i++){
-     console.log( results[i].get("Totalscore"));
+    //return the top 10 scores in the right order
+    console.log(results);
+    var tempArray = [];
+    for(var i = 0; i<results.length;i++){
+      var object = results[i];
+      tempArray.push({name:object.get("Name"),Totalscore:object.get("Totalscore")});
     }
+    if (tempArray.length > 10){
+       tempArray= tempArray.slice(0, 10);
+
+    }
+    gameManager._highScoreList = tempArray;
+
   },
   error: function(error) {
     console.log("villa");
+    return false;
   }
 });
 
 	
 }
 
-var derp = {
-  Name:"gummi",
-  Totalscore:40,
-  Map:"Moon"
-}
 
-saveScore(derp);
-fetchHighScore();
+
