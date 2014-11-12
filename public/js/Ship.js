@@ -147,66 +147,68 @@ Ship.prototype._moveToASafePlace = function () {
 };
     
 Ship.prototype.update = function (du) {
-    this.maxVel = 1.0*du;
-    //console.log("this.particles");
-    // Handle warping
-    //this.particles.print();
-    if (this._isWarping) {
-        this._updateWarp(du);
-        return;
-    }
-    if(this._isControllable){
-    // TODO: YOUR STUFF HERE! --- Unregister and check for death
-    spatialManager.unregister(this);
-    var hitEntity = this.findHitEntity();
-
-    if(hitEntity)
-    {
-        if(hitEntity instanceof Ship)
-        {
-            this.warp();
+    if(gameManager.currentScreen === 0){
+        this.maxVel = 1.0*du;
+        //console.log("this.particles");
+        // Handle warping
+        //this.particles.print();
+        if (this._isWarping) {
+            this._updateWarp(du);
+            return;
         }
-        else if (hitEntity instanceof Bullet)
-        {
-            this.takeBulletHit();
-            hitEntity.kill();
-        }
-        else if(hitEntity instanceof Rock)
-        {
-            this.warp();
-        }
-        /*else if(hitEntity instanceof Landscape )
-        {
-            this.maybeLand(hitEntity);
-        }*/
-
-    } 
-
-    
-    this.maybeLand();
-
-    // Perform movement substeps
-    var steps = this.numSubSteps;
-    var dStep = du / steps;
-    for (var i = 0; i < steps; ++i) {
-        this.computeSubStep(dStep);
-    }
-
-    // Handle firing
-    this.maybeFireBullet();
-
-   
-    if (this._isDeadNow){
+        if(this._isControllable){
+        // TODO: YOUR STUFF HERE! --- Unregister and check for death
         spatialManager.unregister(this);
-        return entityManager.KILL_ME_NOW;
-    } 
+        var hitEntity = this.findHitEntity();
 
-    // TODO: YOUR STUFF HERE! --- Warp if isColliding, otherwise Register
-    spatialManager.register(this);
+        if(hitEntity)
+        {
+            if(hitEntity instanceof Ship)
+            {
+                this.warp();
+            }
+            else if (hitEntity instanceof Bullet)
+            {
+                this.takeBulletHit();
+                hitEntity.kill();
+            }
+            else if(hitEntity instanceof Rock)
+            {
+                this.warp();
+            }
+            /*else if(hitEntity instanceof Landscape )
+            {
+                this.maybeLand(hitEntity);
+            }*/
+
+        } 
+
+        
+        this.maybeLand();
+
+        // Perform movement substeps
+        var steps = this.numSubSteps;
+        var dStep = du / steps;
+        for (var i = 0; i < steps; ++i) {
+            this.computeSubStep(dStep);
+        }
+
+        // Handle firing
+        this.maybeFireBullet();
+
+       
+        if (this._isDeadNow){
+            spatialManager.unregister(this);
+            return entityManager.KILL_ME_NOW;
+        } 
+
+        // TODO: YOUR STUFF HERE! --- Warp if isColliding, otherwise Register
+        spatialManager.register(this);
+        }
+
+
+        this.particles.update(du);
     }
-
-
-    this.particles.update(du);
 };
 
 

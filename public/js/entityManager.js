@@ -36,7 +36,20 @@ landscape : new Landscape(),
 _bShowRocks : true,
 
 // "PRIVATE" METHODS
+reset : function(){
+    console.log(this._ships);
+    this._rocks   = [];
+    this._enemies = [];
+    this._bullets = [];
+    this.resetShips();
+    this.landscape = new Landscape();
+    
 
+    this._bShowRocks = true;
+    this.deferredSetup();
+    this.init();
+    ;
+},
 _generateBirds : function() {   
     
     var numBirds = Math.floor(Math.random() * 2) + 1;
@@ -165,7 +178,7 @@ toggleRocks: function() {
 },
 
 update: function(du) {
-
+    console.log(this._categories)
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];

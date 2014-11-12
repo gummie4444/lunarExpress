@@ -24,12 +24,15 @@ var gameManager = {
 
 	renderScreen: function(screenIndex,ctx){
 		if(screenIndex === this.startingScreen){
+			entityManager.render(ctx);
 			this._renderStartingScreen(ctx);
+			
 		}
 		else if(screenIndex === this.finishScreen){
 			this._renderFinishScreen(ctx);
 		}
 		else if(screenIndex === this.highScoreScreen){
+			entityManager.render(ctx);
 			this._renderHighscoreScreen(ctx);
 		}
 		else if (screenIndex === this.gameScreen){
@@ -42,6 +45,7 @@ var gameManager = {
 	updateScreen: function(screenIndex,du){
 		if(screenIndex === this.startingScreen){
 			this._updateStartingScreen(du);
+			entityManager.update(du);
 		}
 		else if(screenIndex === this.finishScreen){
 			this._updateFinishScreen(du);
@@ -64,13 +68,14 @@ var gameManager = {
 	//STARTING SCREEN -----------
 	_renderStartingScreen :function(ctx){
 
+
 		//formula to let the letters be in the midle
 	
 		var oldStyle = ctx.fillStyle;
 		ctx.textAlign = "center";
 
 
-		var GameName = "Gústa Lander";
+		var GameName = "Galaxy Lander";
 	    ctx.font = '60pt PressStart2P';		
 	    util.drawTextAt(ctx,GameName,g_canvas.width/2,200,"white");
 
@@ -83,7 +88,6 @@ var gameManager = {
 
 
 	    ctx.font = '40pt PressStart2P';
-	    console.log(Play.length/2)
 	    if(this._StartingScreenChoice === 0){
 	    	PlayColor = "blue";
 	    }
@@ -144,13 +148,14 @@ var gameManager = {
 		if(eatKey(this.KEY_LEFT)){
 			//settu background til vinstri
 			this._StartingScreenLevel = "left";
-
+			 entityManager.reset();
 		}
 		if(eatKey(this.KEY_RIGHT)){
 			//settu background til hægri
 			this._StartingScreenLevel = "right";
+			 entityManager.reset();
 		}
-
+ 
 		if(eatKey(this.KEY_ENTER)){
 			this.currentScreen = this._StartingScreenChoice;
 		}
