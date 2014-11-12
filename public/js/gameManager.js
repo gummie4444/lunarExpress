@@ -77,7 +77,9 @@ var gameManager = {
 
 		var GameName = "Galaxy Lander";
 	    ctx.font = '60pt PressStart2P';		
-	    util.drawTextAt(ctx,GameName,g_canvas.width/2,200,"white");
+	    var sprite = g_sprites.logo;
+	    // util.drawTextAt(ctx,GameName,g_canvas.width/2,200,"white");
+	    sprite.drawCentredAt(ctx, g_canvas.width / 2, 280, 0);
 
 		var Play = "Play";
 		var Highscore = "Highscore";

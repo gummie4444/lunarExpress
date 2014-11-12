@@ -187,7 +187,8 @@ function requestPreloads() {
         ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
         rock   : "https://notendur.hi.is/~ahh19/mkdir/fin/Asteroid_01_Mb.GIF",//"https://notendur.hi.is/~pk/308G/images/rock.png"
         bird_down : "https://notendur.hi.is/~ffk3/lunarlander/fuglnidur.png",
-        bird_up : "https://notendur.hi.is/~ffk3/lunarlander/fuglupp.png"
+        bird_up : "https://notendur.hi.is/~ffk3/lunarlander/fuglupp.png",
+        logo : "https://notendur.hi.is/~ffk3/lunarlander/logo.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -202,6 +203,7 @@ function preloadDone() {
     g_sprites.rock  = new Sprite(g_images.rock);
     g_sprites.bird_down = new Sprite(g_images.bird_down);
     g_sprites.bird_up = new Sprite(g_images.bird_up);
+    g_sprites.logo = new Sprite(g_images.logo);
 
     g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;
