@@ -38,6 +38,20 @@ function Ship(descr) {
 
 Ship.prototype = new Entity();
 
+Ship.prototype.hover1 = new Audio(
+    "sounds/export.wav");
+Ship.prototype.hover2 = new Audio(
+    "sounds/export.wav");
+
+
+Ship.prototype.sound = function() {
+    if(this.hover1.currentTime > 0.7){
+        this.hover2.play();
+    }
+    else{
+        this.hover1.play();
+    }
+}
 //Ship.prototype.particles = new Particles(this);
 
 Ship.prototype.particleSetup = function(){
@@ -58,10 +72,10 @@ Ship.prototype.rememberResets = function () {
     this.reset_rotation = this.rotation;
 };
 
-Ship.prototype.KEY_THRUST = 'W'.charCodeAt(0);
-Ship.prototype.KEY_RETRO  = 'S'.charCodeAt(0);
-Ship.prototype.KEY_LEFT   = 'A'.charCodeAt(0);
-Ship.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
+Ship.prototype.KEY_THRUST = '38';//.charCodeAt(0);
+Ship.prototype.KEY_RETRO  = '40';//.charCodeAt(0);
+Ship.prototype.KEY_LEFT   = '37';//.charCodeAt(0);
+Ship.prototype.KEY_RIGHT  = '39';//.charCodeAt(0);
 
 Ship.prototype.KEY_FIRE   = ' '.charCodeAt(0);
 
@@ -145,9 +159,18 @@ Ship.prototype._moveToASafePlace = function () {
         
     }
 };
-    
+
+Ship.prototype.explode = function(){
+    entityManager.generateExplosion(this.cx, this.cy, "#525252"); 
+    entityManager.generateExplosion(this.cx, this.cy, "#FFA318");
+}
 Ship.prototype.update = function (du) {
     this.maxVel = 1.0*du;
+    //this.hover.currentTime = 0;
+    //this.hover.play();
+    //this.sound();
+
+
     //console.log("this.particles");
     // Handle warping
     //this.particles.print();
@@ -171,14 +194,11 @@ Ship.prototype.update = function (du) {
             this.takeBulletHit();
             hitEntity.kill();
         }
-        else if(hitEntity instanceof Rock)
+        else if(hitEntity instanceof Bird)
         {
-            this.warp();
+            this.explode();
+            this.reset();
         }
-        /*else if(hitEntity instanceof Landscape )
-        {
-            this.maybeLand(hitEntity);
-        }*/
 
     } 
 
@@ -201,7 +221,7 @@ Ship.prototype.update = function (du) {
         return entityManager.KILL_ME_NOW;
     } 
 
-    // TODO: YOUR STUFF HERE! --- Warp if isColliding, otherwise Register
+    
     spatialManager.register(this);
     }
 
@@ -211,7 +231,8 @@ Ship.prototype.update = function (du) {
 
 
 Ship.prototype.maybeLand = function(){
-    var landingInfo = entityManager.landscape.doesCollide(this.cx, this.cy+this.getRadius(), this.getRadius());
+    var landingInfo = entityManager.landscape.doesCollide(this.cx,
+                         this.cy+this.getRadius(), this.getRadius());
 
     if(!landingInfo.collide){
         return;
@@ -219,7 +240,9 @@ Ship.prototype.maybeLand = function(){
 
     var landable = entityManager.landscape.landable(landingInfo.leftIndex, landingInfo.rightIndex);
     if(!landable){
-         this.reset();
+        this.explode();
+        //entityManager.generateExplosion(this.cx, this.cy, "#B20000");   
+        this.reset();
         return;
     }
     
