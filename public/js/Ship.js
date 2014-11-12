@@ -165,68 +165,69 @@ Ship.prototype.explode = function(){
     entityManager.generateExplosion(this.cx, this.cy, "#FFA318");
 }
 Ship.prototype.update = function (du) {
-    this.maxVel = 1.0*du;
-    //this.hover.currentTime = 0;
-    //this.hover.play();
-    //this.sound();
+
+    if(gameManager.currentScreen === 0){
+            this.maxVel = 1.0*du;
+            //this.sound();
+            //console.log("this.particles");
+            // Handle warping
+            //this.particles.print();
+            if (this._isWarping) {
+                this._updateWarp(du);
+                return;
+            }
+
+            if(this._isControllable){
+                // TODO: YOUR STUFF HERE! --- Unregister and check for death
+                spatialManager.unregister(this);
+                var hitEntity = this.findHitEntity();
 
 
-    //console.log("this.particles");
-    // Handle warping
-    //this.particles.print();
-    if (this._isWarping) {
-        this._updateWarp(du);
-        return;
-    }
-    if(this._isControllable){
-    // TODO: YOUR STUFF HERE! --- Unregister and check for death
-    spatialManager.unregister(this);
-    var hitEntity = this.findHitEntity();
+                if(hitEntity)
+                {
+                    if(hitEntity instanceof Ship)
+                    {
+                        this.warp();
+                    }
+                    else if (hitEntity instanceof Bullet)
+                    {
+                        this.takeBulletHit();
+                        hitEntity.kill();
+                    }
+                    else if(hitEntity instanceof Bird || hitEntity instanceof Asteroid)
+                    {
+                        this.explode();
+                        this.reset();
+                    }
+                }
+                
+                this.maybeLand();
 
-    if(hitEntity)
-    {
-        if(hitEntity instanceof Ship)
-        {
-            this.warp();
+                // Perform movement substeps
+                var steps = this.numSubSteps;
+                var dStep = du / steps;
+                for (var i = 0; i < steps; ++i) {
+                    this.computeSubStep(dStep);
+                }
+
+                // Handle firing
+                this.maybeFireBullet();
+
+               
+                if (this._isDeadNow){
+                    spatialManager.unregister(this);
+                    return entityManager.KILL_ME_NOW;
+                } 
+
+
+            
+                spatialManager.register(this);
+                this.particles.update(du);
         }
-        else if (hitEntity instanceof Bullet)
-        {
-            this.takeBulletHit();
-            hitEntity.kill();
-        }
-        else if(hitEntity instanceof Bird)
-        {
-            this.explode();
-            this.reset();
-        }
 
-    } 
 
-    
-    this.maybeLand();
-
-    // Perform movement substeps
-    var steps = this.numSubSteps;
-    var dStep = du / steps;
-    for (var i = 0; i < steps; ++i) {
-        this.computeSubStep(dStep);
+       
     }
-
-    // Handle firing
-    this.maybeFireBullet();
-
-   
-    if (this._isDeadNow){
-        spatialManager.unregister(this);
-        return entityManager.KILL_ME_NOW;
-    } 
-
-    
-    spatialManager.register(this);
-    }
-
-
-    this.particles.update(du);
 };
 
 

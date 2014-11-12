@@ -6,6 +6,8 @@ function Bird(descr) {
 
 	this.sprite = this.sprite || g_sprites.bird_up;
 	this.scale = this.scale || 0.5;
+    this.wingFlapDelay = 200;
+    this.wingFlapTime = 0;
 }
 
 Bird.prototype = new Entity();
@@ -24,10 +26,6 @@ Bird.prototype.randomiseVelocity = function () {
 	this.velX = speed;
 };
 
-var wingdelay2 = 550;
-var wingdelay = wingdelay2 / 2;
-var wingtime = 0;
-
 Bird.prototype.update = function (du) {
 
 	spatialManager.unregister(this);
@@ -44,16 +42,16 @@ Bird.prototype.update = function (du) {
         }
     }
 
-    wingtime = wingtime + NOMINAL_UPDATE_INTERVAL;
+    this.wingFlapTime = this.wingFlapTime + NOMINAL_UPDATE_INTERVAL;
 
-    if (wingtime < wingdelay) {
+    if (this.wingFlapTime < this.wingFlapDelay / 2) {
     	this.sprite = g_sprites.bird_down;
     } else {
     	this.sprite = g_sprites.bird_up;
     }
 
-    if (wingtime > wingdelay2) {
-    	wingtime = 0;
+    if (this.wingFlapTime > this.wingFlapDelay) {
+    	this.wingFlapTime = 0;
     }
 
     this.cx += this.velX * du;
