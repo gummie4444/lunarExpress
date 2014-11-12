@@ -114,7 +114,7 @@ Landscape.prototype.render = function (ctx) {
 	ctx.lineTo(g_canvas.width, g_canvas.height);
 	ctx.lineTo(0, g_canvas.height);
 	ctx.fill();
-	// ctx.stroke();
+	ctx.stroke();
 	
 	ctx.strokeStyle = oldStyle;
 	ctx.fillStyle = oldFillStyle;

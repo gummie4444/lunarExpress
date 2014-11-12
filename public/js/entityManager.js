@@ -31,6 +31,9 @@ _rocks   : [],
 _enemies : [],
 _bullets : [],
 _ships   : [],
+_birds   : [],
+_asteroids: [],
+
 landscape : new Landscape(),
 
 _bShowRocks : true,
@@ -47,10 +50,13 @@ _generateBirds : function() {
 },
 
 _generateAsteroids : function() {
-    var numAsteroids = Math.floor(Math.random() * 2) + 1;
+    this.asteroidsTime += NOMINAL_UPDATE_INTERVAL;
 
-    for (var i = 0; i <= numAsteroids; i++) {
-        this.generateAsteroid();
+    if (this.asteroidsTime > 2000) {
+        if (Math.random() < 0.4) {
+            this.generateAsteroid();
+        }
+        this.asteroidsTime = 0;
     }
 },
 
@@ -97,13 +103,12 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._rocks, this._enemies, this._bullets, this._ships];
+    this._categories = [this._rocks, this._birds, this._asteroids, this._bullets, this._ships];
 },
 
 init: function() {
     console.log("bla")
     this._generateBirds();
-    this._generateAsteroids();
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation) {
@@ -127,11 +132,11 @@ generateRock : function(descr) {
 },
 
 generateBird : function(descr) {
-    this._enemies.push(new Bird(descr));
+    this._birds.push(new Bird(descr));
 },
 
 generateAsteroid : function(descr) {
-    this._enemies.push(new Asteroid(descr));
+    this._asteroids.push(new Asteroid(descr));
 },
 
 generateShip : function(descr) {
@@ -164,6 +169,8 @@ toggleRocks: function() {
     this._bShowRocks = !this._bShowRocks;
 },
 
+asteroidsTime : 0,
+
 update: function(du) {
 
     for (var c = 0; c < this._categories.length; ++c) {
@@ -186,8 +193,7 @@ update: function(du) {
         }
     }
 
-    
-    //if (this._rocks.length === 0) this._generateRocks();
+    this._generateAsteroids();
 
 
 },
