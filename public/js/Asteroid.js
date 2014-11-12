@@ -51,13 +51,17 @@ Asteroid.prototype.update = function (du) {
         }
     }
 
+    var landingInfo = entityManager.landscape.doesCollide(this.cx, this.cy+this.getRadius(), this.getRadius());
+
+    if(landingInfo.collide){
+        this.kill();
+    }
+
     this.cx -= this.velX * du;
     this.cy += this.velY * du;
 
     this.rotation += 1 * this.velRot;
     this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);
-
-    this.wrapPosition();
 
     spatialManager.register(this);
 
@@ -79,7 +83,7 @@ Asteroid.prototype.takeBulletHit = function () {
 Asteroid.prototype.render = function (ctx) {
 	var origScale = this.sprite.scale;
 	this.sprite.scale = this.scale;
-	this.sprite.drawWrappedCentredAt(
+	this.sprite.drawCentredAt(
 		ctx, this.cx, this.cy, this.rotation
 	);
 };
