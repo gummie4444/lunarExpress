@@ -11,8 +11,8 @@ function Asteroid(descr) {
 Asteroid.prototype = new Entity();
 
 Asteroid.prototype.randomisePosition = function () {
-	this.cx = this.cx || Math.random() * g_canvas.width;
-	this.cy = this.cy || util.randRange(50, g_canvas.height - 300);
+	this.cx = this.cx || util.randRange(300, g_canvas.width + 1100);
+	this.cy = this.cy || -10;
 	this.rotation = this.rotation || 0;
 };
 
@@ -21,7 +21,7 @@ Asteroid.prototype.randomiseVelocity = function () {
 	var MAX_SPEED = 370;
 
 	var xSpeed = util.randRange(MIN_SPEED, MAX_SPEED) / SECS_TO_NOMINALS;
-	var ySpeed = util.randRange(MIN_SPEED / 3, MAX_SPEED / 3) / SECS_TO_NOMINALS;
+	var ySpeed = util.randRange(MIN_SPEED / 2, MAX_SPEED / 2) / SECS_TO_NOMINALS;
 
 	this.velX = xSpeed;
 	this.velY = ySpeed;
@@ -48,7 +48,19 @@ Asteroid.prototype.update = function (du) {
             hitEntity.kill();
         } else if (hitEntity instanceof Landscape) {
 			this.kill();
+        } else if (hitEntity instanceof Bird) {
+        	hitEntity.kill();
         }
+    }
+
+    if (this.cx < - 100 || this.cx > g_canvas.width + 1500) {
+    	this.kill();
+    } 
+
+    var landingInfo = entityManager.landscape.doesCollide(this.cx, this.cy+this.getRadius(), this.getRadius());
+
+    if(landingInfo.collide){
+        this.kill();
     }
 
     this.cx -= this.velX * du;
@@ -56,8 +68,6 @@ Asteroid.prototype.update = function (du) {
 
     this.rotation += 1 * this.velRot;
     this.rotation = util.wrapRange(this.rotation, 0, consts.FULL_CIRCLE);
-
-    this.wrapPosition();
 
     spatialManager.register(this);
 
@@ -79,7 +89,7 @@ Asteroid.prototype.takeBulletHit = function () {
 Asteroid.prototype.render = function (ctx) {
 	var origScale = this.sprite.scale;
 	this.sprite.scale = this.scale;
-	this.sprite.drawWrappedCentredAt(
+	this.sprite.drawCentredAt(
 		ctx, this.cx, this.cy, this.rotation
 	);
 };

@@ -15,6 +15,12 @@ function Landscape(){
 	
 }
 
+var colors = {
+	r : 150,
+	g : 150,
+	b : 150
+};
+
 Landscape.prototype.setup = function () {
 	var pieceCount = g_gameWidth / this.pieceWidth;
 	var heightVariation = 30;
@@ -57,15 +63,9 @@ Landscape.prototype.getRandomColor =function() {
     return color;
 }
 
-colors = {
-	r : 150,
-	g : 150,
-	b : 150
-};
-
 Landscape.prototype.changeColor = function (colors) {
 	
-	var colorVariation = 8;
+	var colorVariation = 2;
 
 	if (colors.r < 210) {
 		colors.r += colorVariation / 3;
@@ -88,11 +88,12 @@ Landscape.prototype.changeColor = function (colors) {
 	return colors;
 }
 
-
 Landscape.prototype.render = function (ctx) {
-	// var oldStyle = ctx.strokeStyle;
+	var oldStyle = ctx.strokeStyle;
+	var oldFillStyle = ctx.strokeStyle;
 	var style = "rgba(" + Math.abs(Math.floor(colors.r)) + ", " + Math.abs(Math.floor(colors.g)) + ", " + Math.abs(Math.floor(colors.b)) + ", " + 1;
 	ctx.strokeStyle = style;
+	ctx.fillStyle = style;
 	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(0,g_canvas.height - this.array[0]);
@@ -109,9 +110,14 @@ Landscape.prototype.render = function (ctx) {
 		}
 		xOffset += g_gameWidth;
 	}
+
+	ctx.lineTo(g_canvas.width, g_canvas.height);
+	ctx.lineTo(0, g_canvas.height);
+	ctx.fill();
 	ctx.stroke();
 	
-	// ctx.strokeStyle = oldStyle;
+	ctx.strokeStyle = oldStyle;
+	ctx.fillStyle = oldFillStyle;
 
 	colors = this.changeColor(colors);
 }
