@@ -23,36 +23,76 @@ var colors = {
 
 Landscape.prototype.setup = function () {
 	var pieceCount = g_gameWidth / this.pieceWidth;
-	var heightVariation = 30;
+	var heightVariation = 25;
 
 	var initialHeight = util.randRange(30,200);
 	this.array[0] = initialHeight;
 	var counter=0;
+	var platformLimit = 3;
 
 	for(var i = 1; i < pieceCount; i++){
 		var prevHeight = this.array[i-1];
 
-		if(Math.random() > 0.97 && counter === 0){
-			counter = 20;
+		if(Math.random() > 0.98 && counter === 0 && platformLimit != 0){
+			counter = 64 / this.pieceWidth;
+			platformLimit--;
 		}
 
 		if( counter > 0){
 			this.array[i] = prevHeight;
 			counter--;
-		}
-		else{
-			if(prevHeight <= 50){
+		} else {
+			if (prevHeight <= 50){
 				this.array[i] = prevHeight + util.randRange(heightVariation/4,heightVariation);
-			}
-			else if(prevHeight >= 500){
+			} else if (prevHeight >= 500){
 				this.array[i] = prevHeight - util.randRange(heightVariation/4,heightVariation);
-			}
-			else{
-				this.array[i] = prevHeight + util.randRange(-heightVariation,heightVariation);
-				}		
+			} else {
+				if (prevHeight - this.array[i-2] > 0) {
+					this.array[i] = prevHeight + util.randRange(-heightVariation/16, heightVariation - prevHeight * 0.03);
+				} else if (prevHeight - this.array[i-2] < 0) {
+					this.array[i] = prevHeight + util.randRange(-heightVariation + prevHeight * 0.03, heightVariation/16);
+				} else {
+					this.array[i] = prevHeight + util.randRange(-heightVariation, heightVariation);
+				}
+				
+			}		
 		}
 	}
 }
+
+// Áður en ég byrjaði að fikta, yo
+// Landscape.prototype.setup = function () {
+// 	var pieceCount = g_gameWidth / this.pieceWidth;
+// 	var heightVariation = 30;
+
+// 	var initialHeight = util.randRange(30,200);
+// 	this.array[0] = initialHeight;
+// 	var counter=0;
+
+// 	for(var i = 1; i < pieceCount; i++){
+// 		var prevHeight = this.array[i-1];
+
+// 		if(Math.random() > 0.97 && counter === 0){
+// 			counter = 20;
+// 		}
+
+// 		if( counter > 0){
+// 			this.array[i] = prevHeight;
+// 			counter--;
+// 		}
+// 		else{
+// 			if(prevHeight <= 50){
+// 				this.array[i] = prevHeight + util.randRange(heightVariation/4,heightVariation);
+// 			}
+// 			else if(prevHeight >= 500){
+// 				this.array[i] = prevHeight - util.randRange(heightVariation/4,heightVariation);
+// 			}
+// 			else{
+// 				this.array[i] = prevHeight + util.randRange(-heightVariation,heightVariation);
+// 				}		
+// 		}
+// 	}
+// }
 
 Landscape.prototype.getRandomColor =function() {
     var letters = '0123456789ABCDEF'.split('');
@@ -102,7 +142,7 @@ Landscape.prototype.render = function (ctx) {
 	while(xOffset < g_canvas.width){
 		for(var i = 1; i<this.array.length; i++){
 
-			var x = i*4+xOffset;
+			var x = i*this.pieceWidth+xOffset;
 			var y = g_canvas.height - this.array[i];
 			
 			ctx.lineTo(x, y);
@@ -113,8 +153,8 @@ Landscape.prototype.render = function (ctx) {
 
 	ctx.lineTo(g_canvas.width, g_canvas.height);
 	ctx.lineTo(0, g_canvas.height);
+	// ctx.stroke();
 	ctx.fill();
-	ctx.stroke();
 	
 	ctx.strokeStyle = oldStyle;
 	ctx.fillStyle = oldFillStyle;
