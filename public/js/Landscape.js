@@ -11,8 +11,6 @@ function Landscape(){
 	this.array = [];
 	this.pieceWidth = 4;
 	this.setup();
-
-	
 }
 
 var colors = {
@@ -60,67 +58,24 @@ Landscape.prototype.setup = function () {
 	}
 }
 
-// Áður en ég byrjaði að fikta, yo
-// Landscape.prototype.setup = function () {
-// 	var pieceCount = g_gameWidth / this.pieceWidth;
-// 	var heightVariation = 30;
-
-// 	var initialHeight = util.randRange(30,200);
-// 	this.array[0] = initialHeight;
-// 	var counter=0;
-
-// 	for(var i = 1; i < pieceCount; i++){
-// 		var prevHeight = this.array[i-1];
-
-// 		if(Math.random() > 0.97 && counter === 0){
-// 			counter = 20;
-// 		}
-
-// 		if( counter > 0){
-// 			this.array[i] = prevHeight;
-// 			counter--;
-// 		}
-// 		else{
-// 			if(prevHeight <= 50){
-// 				this.array[i] = prevHeight + util.randRange(heightVariation/4,heightVariation);
-// 			}
-// 			else if(prevHeight >= 500){
-// 				this.array[i] = prevHeight - util.randRange(heightVariation/4,heightVariation);
-// 			}
-// 			else{
-// 				this.array[i] = prevHeight + util.randRange(-heightVariation,heightVariation);
-// 				}		
-// 		}
-// 	}
-// }
-
-Landscape.prototype.getRandomColor =function() {
-    var letters = '0123456789ABCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-Landscape.prototype.changeColor = function (colors) {
+Landscape.prototype.changeColor = function (colors, du) {
 	
 	var colorVariation = 2;
 
 	if (colors.r < 210) {
-		colors.r += colorVariation / 3;
+		colors.r += colorVariation / 3 * du;
 	} else {
 		colors.r = -209;
 	}
 
 	if (colors.g < 210) {
-		colors.g += colorVariation / 2;
+		colors.g += colorVariation / 2 * du;
 	} else {
 		colors.g = -209;
 	}
 
 	if (colors.b < 210) {
-		colors.b += colorVariation;
+		colors.b += colorVariation * du;
 	} else {
 		colors.b = -209;
 	}
@@ -158,8 +113,10 @@ Landscape.prototype.render = function (ctx) {
 	
 	ctx.strokeStyle = oldStyle;
 	ctx.fillStyle = oldFillStyle;
+}
 
-	colors = this.changeColor(colors);
+Landscape.prototype.update = function (du) {
+	this.changeColor(colors, du);
 }
 
 Landscape.prototype.doesCollide = function (cx,cy,radius) {
