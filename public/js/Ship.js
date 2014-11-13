@@ -264,31 +264,6 @@ Ship.prototype.maybeLand = function(){
         this.reset();   
     }
 
-
-    
-
-
-
-    /*
-    var maxVel = 0.4;
-    var landCenterPos = hitEntity.getPos();
-    var landcx = landCenterPos.posX;
-    var landcy = landCenterPos.posY;
-    var landw = hitEntity.getWidth();
-
-    if(util.isBetween(this.cx, landcx - landw/2, landcx + landw/2) &&  util.isBetween(this.cy, landcy-15, landcy+15) /*this.cy === landcy*///) {
-        //console.log("FirstBarrier", hitEntity.index, this.velY);
-
-        //if(this.velY < maxVel && util.isBetween(this.rotation, 0.0-0.1,0.0+0.1 )){
-            //console.log("SecondBarrier");
-            //this.land();
-        //}
-        //else{
-          //  console.log("what");
-            //this.reset();
-            //this.explode();
-        //}
-    //}
 };
 
 Ship.prototype.land = function(){
@@ -443,9 +418,10 @@ Ship.prototype.reset = function () {
     this.setPos(this.reset_cx, this.reset_cy);
     this.rotation = this.reset_rotation;
     this._isControllable = true;
-    if(!g_useGravity){
+    this.isLanded = false;
+    /*if(!g_useGravity){
         g_useGravity = !g_useGravity;
-    }
+    }*/
     this.velX = 0.4;
     this.velY = 0.1;
     //this.halt();
