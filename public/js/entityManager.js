@@ -193,6 +193,8 @@ toggleRocks: function() {
 asteroidsTime : 0,
 
 update: function(du) {
+
+    this.landscape.update(du);
     
     for (var c = 0; c < this._categories.length; ++c) {
 
