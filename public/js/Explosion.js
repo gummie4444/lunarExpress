@@ -48,7 +48,7 @@ ExplosionParticle.prototype.render = function(ctx)
 
 function Explosion(x, y, colour){
 	this.createExplosion(x, y, colour);
-	this.explode.play();
+	//this.explode.play();
 }
 
 Explosion.prototype.explode = new Audio(

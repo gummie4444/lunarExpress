@@ -38,6 +38,8 @@ function Ship(descr) {
 
 Ship.prototype = new Entity();
 
+Ship.prototype.isLanded = false;
+
 Ship.prototype.hover1 = new Audio(
     "sounds/export.wav");
 Ship.prototype.hover2 = new Audio(
@@ -163,7 +165,8 @@ Ship.prototype._moveToASafePlace = function () {
 Ship.prototype.explode = function(){
     entityManager.generateExplosion(this.cx, this.cy, "#525252"); 
     entityManager.generateExplosion(this.cx, this.cy, "#FFA318");
-}
+};
+
 Ship.prototype.update = function (du) {
 
     if(gameManager.currentScreen === 0){
@@ -187,7 +190,7 @@ Ship.prototype.update = function (du) {
                 {
                     if(hitEntity instanceof Ship)
                     {
-                        this.warp();
+                        this.explode();
                     }
                     else if (hitEntity instanceof Bullet)
                     {
@@ -222,9 +225,9 @@ Ship.prototype.update = function (du) {
 
             
                 spatialManager.register(this);
-                this.particles.update(du);
+                
         }
-
+            this.particles.update(du);
 
        
     }
@@ -241,8 +244,7 @@ Ship.prototype.maybeLand = function(){
 
     var landable = entityManager.landscape.landable(landingInfo.leftIndex, landingInfo.rightIndex);
     if(!landable){
-        this.explode();
-        //entityManager.generateExplosion(this.cx, this.cy, "#B20000");   
+        this.explode(); 
         this.reset();
         return;
     }
@@ -250,8 +252,20 @@ Ship.prototype.maybeLand = function(){
     var maxVel = 0.4;
     var landcy = g_canvas.height -entityManager.landscape.array[landingInfo.leftIndex];
 
-    this.cy = landcy-this.getRadius();
-    this.land();
+    this.cy = landcy- this._scale * this.sprite.width/2/*this.getRadius()*/;
+
+    if(this.velY < maxVel && util.isBetween(this.rotation, 0.0-0.1,0.0+0.1 )){
+        
+        this.land();
+    }
+    else{
+        this.explode();
+        
+        this.reset();   
+    }
+
+
+    
 
 
 
@@ -278,7 +292,8 @@ Ship.prototype.maybeLand = function(){
 };
 
 Ship.prototype.land = function(){
-    g_useGravity = !g_useGravity;
+    this.isLanded = true;
+    //g_useGravity = !g_useGravity;
     this.halt();
     this._isControllable = false;
     
@@ -292,7 +307,9 @@ Ship.prototype.computeSubStep = function (du) {
     var accelX = +Math.sin(this.rotation) * thrust;
     var accelY = -Math.cos(this.rotation) * thrust;
     
+
     accelY += this.computeGravity();
+
 
     this.applyAccel(accelX, accelY, du);
     
@@ -306,7 +323,12 @@ Ship.prototype.computeSubStep = function (du) {
 var NOMINAL_GRAVITY = 0.0015;
 
 Ship.prototype.computeGravity = function () {
-    return g_useGravity ? NOMINAL_GRAVITY : 0;
+
+    if(g_useGravity && !this.isLanded){
+        return NOMINAL_GRAVITY
+    }
+    return 0;
+    //return g_useGravity ? NOMINAL_GRAVITY : 0;
 };
 
 var NOMINAL_THRUST = +0.0045;
@@ -323,6 +345,7 @@ Ship.prototype.computeThrustMag = function () {
     /*if (keys[this.KEY_RETRO]) {
         thrust += NOMINAL_RETRO;
     }*/
+    
     
     return thrust;
 };

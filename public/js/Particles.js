@@ -9,18 +9,19 @@ function Particles(owner) {
 
 	
 Particles.prototype.particles=[];
-    Particles.prototype.particleSetup=function(){
-        
-      for(var i=0; i<this.numParticles; ++i){
 
-        this.particles.push(new Particle(this.particleLifetime*i/this.numParticles, this.owner));
-        }
-    };
+Particles.prototype.particleSetup=function(){
+    
+  for(var i=0; i<this.numParticles; ++i){
 
-    Particles.prototype.render = function(ctx){
-        var curCol;
-        
+    this.particles.push(new Particle(this.particleLifetime*i/this.numParticles, this.owner));
+    }
+};
 
+Particles.prototype.render = function(ctx){
+    var curCol;
+    
+    if(!this.owner.isLanded){
     	for(var i = 0; i< this.numParticles; i++){
             if(i%2 === 0 || i>6){
             curCol = this.colour1;
@@ -30,11 +31,17 @@ Particles.prototype.particles=[];
             }
     		this.particles[i].render(ctx, this.numParticles, curCol);
     	}
-    };
+    }
+};
 
-    Particles.prototype.update = function(du){
-        for(var i = 0; i< this.numParticles; i++){
-            this.particles[i].update(this.particleLifetime,du);
-        }
+Particles.prototype.update = function(du){
 
-   };  
+    for(var i = 0; i< this.numParticles; i++){
+        this.particles[i].update(this.particleLifetime,du);
+    }
+
+};  
+
+Particles.prototype.landed = function() {
+
+};
