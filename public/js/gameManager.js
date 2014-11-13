@@ -151,11 +151,13 @@ var gameManager = {
 			//settu background til vinstri
 			this._StartingScreenLevel = "left";
 			 entityManager.reset();
+			 spatialManager.reset();
 		}
 		if(eatKey(this.KEY_RIGHT)){
 			//settu background til hægri
 			this._StartingScreenLevel = "right";
 			 entityManager.reset();
+			 spatialManager.reset();
 		}
  
 		if(eatKey(this.KEY_ENTER)){
