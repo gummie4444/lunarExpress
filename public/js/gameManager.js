@@ -75,7 +75,7 @@ var gameManager = {
 		ctx.textAlign = "center";
 
 
-		var GameName = "Galaxy Lander";
+		var GameName = "Galaxy3 Lander";
 	    ctx.font = '60pt PressStart2P';		
 	    var sprite = g_sprites.logo;
 	    // util.drawTextAt(ctx,GameName,g_canvas.width/2,200,"white");
@@ -102,9 +102,9 @@ var gameManager = {
 
 	    }
 
-	    util.drawTextAt(ctx,Play,g_canvas.width/2,g_canvas.height/2-80+200,PlayColor);
-	    util.drawTextAt(ctx,Highscore,g_canvas.width/2,g_canvas.height/2+200,HighscoreColor);
-	    util.drawTextAt(ctx,Controls,g_canvas.width/2,g_canvas.height/2+80+200,ControlsColor);
+	    util.drawTextAt(ctx,Play,g_canvas.width/2,g_canvas.height/2-80+240,PlayColor);
+	    util.drawTextAt(ctx,Highscore,g_canvas.width/2,g_canvas.height/2+240,HighscoreColor);
+	    util.drawTextAt(ctx,Controls,g_canvas.width/2,g_canvas.height/2+80+240,ControlsColor);
 
 	    //TODO MAKE THIS SPRITES
 	    var ArrowLeft = "<-";
