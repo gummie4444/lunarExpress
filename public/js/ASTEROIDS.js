@@ -182,7 +182,9 @@ function preloadDone() {
     g_sprites.bird_down = new Sprite(g_images.bird_down);
     g_sprites.bird_up = new Sprite(g_images.bird_up);
     g_sprites.logo = new Sprite(g_images.logo);
-    if (g_canvas.height < 1000) g_sprites.logo.scale = 0.85;
+    if (g_canvas.height < 850) {
+        g_sprites.logo.scale = 0.85;
+    } 
 
     g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;

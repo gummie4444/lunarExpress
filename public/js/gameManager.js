@@ -155,14 +155,11 @@ var gameManager = {
 			//settu background til vinstri
 			this._StartingScreenLevel = "left";
 			
-			
 			if (currentLevel > 0) {
 				currentLevel--;
 			} else {
 				currentLevel = 2;
 			}
-
-			console.log(currentLevel);
 
 			 entityManager.reset();
 			 spatialManager.reset();
@@ -176,7 +173,6 @@ var gameManager = {
 			} else {
 				currentLevel = 0;
 			}
-			console.log(currentLevel);
 
 			 entityManager.reset();
 			 spatialManager.reset();
