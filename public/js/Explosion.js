@@ -48,11 +48,32 @@ ExplosionParticle.prototype.render = function(ctx)
 
 function Explosion(x, y, colour){
 	this.createExplosion(x, y, colour);
-	this.explode.play();
+	if(g_soundOn){
+
+
+		var aud = new Audio("sounds/hitexplosion.wav");
+		aud.volume = 0.5;
+		this.explode.volume = 0.5;
+		this.explode2.volume = 0.5;
+		if(this.explode.currentTime != 0){
+			this.explode2.play();
+		}
+		else if(this.explode2.currentTime != 0){
+			this.explode.play();
+		}
+		else{
+			aud.play();
+		}
+		//this.explode.currentTime = 0;
+		//this.explode.play();
+	}
 }
 
 Explosion.prototype.explode = new Audio(
     "sounds/hitexplosion.wav");
+
+Explosion.prototype.explode2 = new Audio(
+	"sounds/hitexplosion.wav");
 
 Explosion.prototype.createExplosion = function(x, y, colour)
 {

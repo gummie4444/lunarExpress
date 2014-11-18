@@ -7,6 +7,10 @@ To handle all the diffirent states of the game
 */
 
 "use strict";
+var g_theme = new Audio("sounds/Deeper.ogg");
+	g_theme.loop = true;
+	g_theme.volume = 0.8;
+	
 
 var gameManager = {
 
@@ -60,6 +64,7 @@ var gameManager = {
 
 	_StartingScreenChoice : 0,
 	_StartingScreenLevel :null,
+
 	KEY_UPP  : 38,
 	KEY_LEFT : 37,
 	KEY_RIGHT : 39,
@@ -76,10 +81,9 @@ var gameManager = {
 
 
 		var GameName = "Galaxy3 Lander";
-	    ctx.font = '60pt PressStart2P';		
+	    ctx.font = '60pt PressStart2P';
 	    var sprite = g_sprites.logo;
-	    // util.drawTextAt(ctx,GameName,g_canvas.width/2,200,"white");
-	    sprite.drawCentredAt(ctx, g_canvas.width / 2, 280, 0);
+	    sprite.drawCentredAt(ctx, g_canvas.width / 2, 260, 0);
 
 		var Play = "Play";
 		var Highscore = "Highscore";
@@ -150,12 +154,30 @@ var gameManager = {
 		if(eatKey(this.KEY_LEFT)){
 			//settu background til vinstri
 			this._StartingScreenLevel = "left";
+			
+			
+			if (currentLevel > 0) {
+				currentLevel--;
+			} else {
+				currentLevel = 2;
+			}
+
+			console.log(currentLevel);
+
 			 entityManager.reset();
 			 spatialManager.reset();
 		}
 		if(eatKey(this.KEY_RIGHT)){
 			//settu background til hægri
 			this._StartingScreenLevel = "right";
+
+			if (currentLevel < 2) {
+				currentLevel++;
+			} else {
+				currentLevel = 0;
+			}
+			console.log(currentLevel);
+
 			 entityManager.reset();
 			 spatialManager.reset();
 		}
@@ -249,7 +271,9 @@ var gameManager = {
 		scoreManager.render(ctx);
 	},
 	_updateGameScreen: function(du){
-
+		//g_theme.src = "audio/Deeper.ogg";
+		g_theme.play();
+		
 
 	    processDiagnostics();
 	    

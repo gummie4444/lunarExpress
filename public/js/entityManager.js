@@ -34,16 +34,15 @@ _ships   : [],
 _explosions : [],
 _birds   : [],
 _asteroids: [],
+
 landscape : new Landscape(),
 
 _bShowRocks : true,
 
 // "PRIVATE" METHODS
-reset : function(){
-    console.log(this._ships);
-    this._rocks   = [];
-    this._enemies = [];
+reset : function() {
     this._birds = [];
+    this._asteroids = [];
     this._bullets = [];
     this.resetShips();
     this.landscape = new Landscape();
@@ -52,8 +51,8 @@ reset : function(){
     this._bShowRocks = true;
     this.deferredSetup();
     this.init();
-    ;
 },
+
 _generateBirds : function() {   
     
     var numBirds = Math.floor(Math.random() * 2) + 1;
@@ -123,8 +122,7 @@ deferredSetup : function () {
 },
 
 init: function() {
-    
-    this._generateBirds();
+    if (currentLevel === 2) this._generateBirds();
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation) {
@@ -194,7 +192,16 @@ asteroidsTime : 0,
 
 update: function(du) {
 
-    this.landscape.update(du);
+
+   
+
+    if(g_theme && g_soundOn){
+        g_theme.play();
+    }
+    else{
+        g_theme.pause();
+    }
+
     
     for (var c = 0; c < this._categories.length; ++c) {
 
@@ -216,7 +223,7 @@ update: function(du) {
         }
     }
 
-    this._generateAsteroids();
+    if (currentLevel != 0) this._generateAsteroids();
 
 
 },
