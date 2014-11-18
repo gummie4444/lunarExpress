@@ -18,7 +18,7 @@ function Ship(descr) {
     // Common inherited setup logic from Entity
     this.setup(descr);
     this.particleSetup();
-
+    this.hover1.loop = true;
     this.rememberResets();
     
     // Default sprite, if not otherwise specified
@@ -42,17 +42,20 @@ Ship.prototype.isLanded = false;
 
 Ship.prototype.hover1 = new Audio(
     "sounds/export.wav");
+
 Ship.prototype.hover2 = new Audio(
     "sounds/export.wav");
 
 
 Ship.prototype.sound = function() {
-    if(this.hover1.currentTime > 0.7){
+    /*if(this.hover1.currentTime != 0){
         this.hover2.play();
-    }
-    else{
+    }*/
+    /*else{
         this.hover1.play();
-    }
+    }*/
+    //this.hover1.loop = true;
+    //this.hover1.play();
 }
 //Ship.prototype.particles = new Particles(this);
 
@@ -171,17 +174,15 @@ Ship.prototype.update = function (du) {
 
     if(gameManager.currentScreen === 0){
             this.maxVel = 1.0*du;
-            //this.sound();
-            //console.log("this.particles");
-            // Handle warping
-            //this.particles.print();
+            this.sound();
+            
             if (this._isWarping) {
                 this._updateWarp(du);
                 return;
             }
 
             if(this._isControllable){
-                // TODO: YOUR STUFF HERE! --- Unregister and check for death
+
                 spatialManager.unregister(this);
                 var hitEntity = this.findHitEntity();
 
@@ -245,22 +246,23 @@ Ship.prototype.maybeLand = function(){
     var landable = entityManager.landscape.landable(landingInfo.leftIndex, landingInfo.rightIndex);
     if(!landable){
         this.explode(); 
+        entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
         this.reset();
         return;
     }
     
-    var maxVel = 0.4;
+    var maxVel = 0.6;
     var landcy = g_canvas.height -entityManager.landscape.array[landingInfo.leftIndex];
 
-    this.cy = landcy- this._scale * this.sprite.width/2/*this.getRadius()*/;
+    this.cy = landcy- this._scale * this.sprite.width/2;
 
-    if(this.velY < maxVel && util.isBetween(this.rotation, 0.0-0.1,0.0+0.1 )){
+    if(this.velY < maxVel && util.isBetween(this.rotation, 0.0-0.12,0.0+0.12 )){
         
         this.land();
     }
     else{
         this.explode();
-        
+        entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
         this.reset();   
     }
 
@@ -313,9 +315,14 @@ Ship.prototype.computeThrustMag = function () {
     
     var thrust = 0;
     
-    if (keys[this.KEY_THRUST]) {
-        thrust += NOMINAL_THRUST;
-        
+     if(scoreManager.fuel >= 0){
+        if (keys[this.KEY_THRUST]) {
+            thrust += NOMINAL_THRUST;
+           
+               scoreManager.fuel -= 0.1;
+             
+            
+        }
     }
     /*if (keys[this.KEY_RETRO]) {
         thrust += NOMINAL_RETRO;

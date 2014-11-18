@@ -46,14 +46,19 @@ Asteroid.prototype.update = function (du) {
 
     if(hitEntity) {
         if(hitEntity instanceof Ship) {
-            hitEntity.warp();
+            //Þarf kannski að skoða þetta eitthvað :
+            //ÞARF AÐ SKOÐA ÞETTA EITTHVAÐ!!!
+            hitEntity.explode();
+            //hitEntity.reset();
+            //this.spawnFragment();
+            this.kill();
+
         }
         else if (hitEntity instanceof Bullet) {
             this.takeBulletHit();
             hitEntity.kill();
-        } else if (hitEntity instanceof Landscape) {
-			this.kill();
-        } else if (hitEntity instanceof Bird) {
+        } 
+        else if (hitEntity instanceof Bird) {
         	hitEntity.kill();
         }
     }
@@ -66,6 +71,7 @@ Asteroid.prototype.update = function (du) {
 
     if(landingInfo.collide){
         this.explode();
+        entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
         this.kill();
     }
 
@@ -90,6 +96,14 @@ Asteroid.prototype.getRadius = function () {
 
 Asteroid.prototype.takeBulletHit = function () {
 	this.kill();
+};
+
+Asteroid.prototype.spawnFragment = function () {
+    entityManager.generateAsteroid({
+        cx : this.cx,
+        cy : this.cy,
+        scale : this.scale /20
+    });
 };
 
 Asteroid.prototype.render = function (ctx) {
