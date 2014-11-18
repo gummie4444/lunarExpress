@@ -181,7 +181,6 @@ Ship.prototype.update = function (du) {
             }
 
             if(this._isControllable){
-                // TODO: YOUR STUFF HERE! --- Unregister and check for death
                 spatialManager.unregister(this);
                 var hitEntity = this.findHitEntity();
 
@@ -245,6 +244,7 @@ Ship.prototype.maybeLand = function(){
     var landable = entityManager.landscape.landable(landingInfo.leftIndex, landingInfo.rightIndex);
     if(!landable){
         this.explode(); 
+        entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
         this.reset();
         return;
     }
@@ -252,7 +252,7 @@ Ship.prototype.maybeLand = function(){
     var maxVel = 0.4;
     var landcy = g_canvas.height -entityManager.landscape.array[landingInfo.leftIndex];
 
-    this.cy = landcy- this._scale * this.sprite.width/2/*this.getRadius()*/;
+    this.cy = landcy- this._scale * this.sprite.width/2;
 
     if(this.velY < maxVel && util.isBetween(this.rotation, 0.0-0.1,0.0+0.1 )){
         
@@ -260,7 +260,7 @@ Ship.prototype.maybeLand = function(){
     }
     else{
         this.explode();
-        
+        entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
         this.reset();   
     }
 
