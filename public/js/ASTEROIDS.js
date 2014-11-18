@@ -99,16 +99,16 @@ var g_renderSpatialDebug = false;
 
 var KEY_MIXED   = keyCode('M');
 var KEY_GRAVITY = keyCode('G');
-var KEY_AVE_VEL = keyCode('V');
+//var KEY_AVE_VEL = keyCode('V');
 var KEY_SPATIAL = keyCode('X');
 
 var KEY_HALT  = keyCode('H');
 var KEY_RESET = keyCode('R');
 
-var KEY_0 = keyCode('0');
+//var KEY_0 = keyCode('0');
 
-var KEY_1 = keyCode('1');
-var KEY_2 = keyCode('2');
+//var KEY_1 = keyCode('1');
+//var KEY_2 = keyCode('2');
 
 var KEY_K = keyCode('K');
 
@@ -119,7 +119,7 @@ function processDiagnostics() {
 
     if (eatKey(KEY_GRAVITY)) g_useGravity = !g_useGravity;
 
-    if (eatKey(KEY_AVE_VEL)) g_useAveVel = !g_useAveVel;
+    //if (eatKey(KEY_AVE_VEL)) g_useAveVel = !g_useAveVel;
 
     if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
 
@@ -127,9 +127,9 @@ function processDiagnostics() {
 
     if (eatKey(KEY_RESET)) entityManager.resetShips();
 
-    if (eatKey(KEY_0)) entityManager.toggleRocks();
+    //if (eatKey(KEY_0)) entityManager.toggleRocks();
 
-    if (eatKey(KEY_1)) entityManager.generateShip({
+    /*if (eatKey(KEY_1)) entityManager.generateShip({
         cx : g_mouseX,
         cy : g_mouseY,
         
@@ -144,6 +144,7 @@ function processDiagnostics() {
 
     if (eatKey(KEY_K)) entityManager.killNearestShip(
         g_mouseX, g_mouseY);
+    */
 }
 
 
@@ -179,13 +180,14 @@ function renderSimulation(ctx) {
 // =============
 
 var g_images = {};
+var g_sounds = {};
 
 function requestPreloads() {
 
     var requiredImages = {
-        ship   : "https://notendur.hi.is/~ahh19/mkdir/fin/skip.png" /*"https://notendur.hi.is/~pk/308G/images/ship.png"*/,
+        ship   : "https://notendur.hi.is/~ahh19/mkdir/fin/skip.png" ,
         ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        rock   : "https://notendur.hi.is/~ahh19/mkdir/fin/Asteroid_01_Mb.GIF",//"https://notendur.hi.is/~pk/308G/images/rock.png"
+        rock   : "https://notendur.hi.is/~ahh19/mkdir/fin/Asteroid_01_Mb.GIF",
         bird_down : "https://notendur.hi.is/~ffk3/lunarlander/fuglnidur.png",
         bird_up : "https://notendur.hi.is/~ffk3/lunarlander/fuglupp.png",
         logo : "https://notendur.hi.is/~ffk3/lunarlander/logo.png"
