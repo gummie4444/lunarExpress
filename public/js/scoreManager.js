@@ -14,8 +14,15 @@ var scoreManager ={
 	score : 0,
 	fuel :200,
 	time : 0,
-	level : "Earth",
+	level : "",
 
+	reset : function(){
+		this.score = 0;
+		this.fuel =200;
+		this.time =0;
+		this.level = "";
+	},
+	
 	render : function(ctx){
 	//score
 	var oldStyle = ctx.fillStyle;
