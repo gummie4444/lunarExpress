@@ -131,6 +131,7 @@ main.init = function () {
     g_ctx.fillStyle = "white";
 
     resizeGame();
+    g_gameWidth = g_canvas.width;
 
     this._requestNextIteration();
 };

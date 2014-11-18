@@ -34,12 +34,17 @@ function Landscape() {
 		this.color = "#999999";
 	}
 
+
+	this.platformLength = 64 / this.pieceWidth;
+	this.minHeight = 50;
+	this.maxHeight = 500;
 	this.setup();
 }
 
 Landscape.prototype.setup = function () {
-	var pieceCount = g_gameWidth / this.pieceWidth;
 
+	resizeGame();
+	var pieceCount = Math.ceil(g_canvas.width / this.pieceWidth);
 	var initialHeight = util.randRange(30,200);
 	this.array[0] = initialHeight;
 	var counter=0;
@@ -50,7 +55,7 @@ Landscape.prototype.setup = function () {
 		var prevHeight = this.array[i-1];
 
 		if(Math.random() > platformChance && counter === 0 && platformLimit != 0){
-			counter = 64 / this.pieceWidth;
+			counter = this.platformLength;
 			platformLimit--;
 		}
 
@@ -58,9 +63,9 @@ Landscape.prototype.setup = function () {
 			this.array[i] = prevHeight;
 			counter--;
 		} else {
-			if (prevHeight <= 50){
+			if (prevHeight <= this.minHeight){
 				this.array[i] = prevHeight + util.randRange(this.heightVariation/4,this.heightVariation);
-			} else if (prevHeight >= 500){
+			} else if (prevHeight >= this.maxHeight){
 				this.array[i] = prevHeight - util.randRange(this.heightVariation/4,this.heightVariation);
 			} else {
 				if (prevHeight - this.array[i-2] > 0) {
@@ -136,4 +141,30 @@ Landscape.prototype.landable = function(leftIndex, rightIndex){
 	}
 	console.log("is landable");
 	return true;
+};
+
+Landscape.prototype.destroy = function(cx,cy,radius){
+	// radius is blast damage radius, not radius of entity colliding.
+	// pieceRadius is blast radius in count of landpieces.
+	var pieceRadius = Math.floor(radius / this.pieceWidth);
+	// Blast radius (in pieceWidths) should not be smaller than platformLength.
+	if(pieceRadius < this.platformLength){
+		pieceRadius = this.platformLength;
+		radius = pieceRadius * this.pieceWidth;
+	}
+	var pieceCx = Math.floor(cx/this.pieceWidth);
+	
+	for(var i = -pieceRadius+pieceCx; i < pieceRadius+pieceCx; i++){
+		var y = g_canvas.height-this.array[i];
+		var x = i*this.pieceWidth;
+		var dist = Math.sqrt(util.distSq(x,y,cx,cy));
+		if(dist < radius){		
+			this.array[i] -= (radius - dist);
+		}
+		if(this.array[i] < this.minHeight){
+			this.array[i] = this.minHeight;
+		}
+		
+	}
+
 };

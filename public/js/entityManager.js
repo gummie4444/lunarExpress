@@ -34,6 +34,7 @@ _ships   : [],
 _explosions : [],
 _birds   : [],
 _asteroids: [],
+
 landscape : new Landscape(),
 
 _bShowRocks : true,
