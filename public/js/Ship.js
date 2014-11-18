@@ -313,9 +313,14 @@ Ship.prototype.computeThrustMag = function () {
     
     var thrust = 0;
     
-    if (keys[this.KEY_THRUST]) {
-        thrust += NOMINAL_THRUST;
-        
+     if(scoreManager.fuel >= 0){
+        if (keys[this.KEY_THRUST]) {
+            thrust += NOMINAL_THRUST;
+           
+               scoreManager.fuel -= 0.1;
+             
+            
+        }
     }
     /*if (keys[this.KEY_RETRO]) {
         thrust += NOMINAL_RETRO;

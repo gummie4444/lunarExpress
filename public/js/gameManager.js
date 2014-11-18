@@ -246,6 +246,7 @@ var gameManager = {
 		entityManager.render(ctx);
     	if (g_renderSpatialDebug) spatialManager.render(ctx);
 		
+		scoreManager.render(ctx);
 	},
 	_updateGameScreen: function(du){
 
@@ -253,6 +254,7 @@ var gameManager = {
 	    processDiagnostics();
 	    
 	    entityManager.update(du);
+	    scoreManager.update(du);
 
 	    // Prevent perpetual firing!
 	    eatKey(Ship.prototype.KEY_FIRE);

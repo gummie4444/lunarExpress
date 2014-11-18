@@ -21,7 +21,7 @@ Particles.prototype.particleSetup=function(){
 Particles.prototype.render = function(ctx){
     var curCol;
     
-    if(!this.owner.isLanded){
+    if(!this.owner.isLanded && scoreManager.fuel > 0){
     	for(var i = 0; i< this.numParticles; i++){
             if(i%2 === 0 || i>6){
             curCol = this.colour1;
