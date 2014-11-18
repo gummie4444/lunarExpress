@@ -168,7 +168,8 @@ function requestPreloads() {
         rock   : "https://notendur.hi.is/~ahh19/mkdir/fin/Asteroid_01_Mb.GIF",
         bird_down : "https://notendur.hi.is/~ffk3/lunarlander/fuglnidur.png",
         bird_up : "https://notendur.hi.is/~ffk3/lunarlander/fuglupp.png",
-        logo : "https://notendur.hi.is/~ffk3/lunarlander/logo.png"
+        logo : "https://notendur.hi.is/~ffk3/lunarlander/logo.png",
+        moonTest : "https://www.komar.de/fileadmin/media/Fototapeten_Bilder/8-019_Earth_Moon_hd.jpg"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -184,9 +185,14 @@ function preloadDone() {
     g_sprites.bird_down = new Sprite(g_images.bird_down);
     g_sprites.bird_up = new Sprite(g_images.bird_up);
     g_sprites.logo = new Sprite(g_images.logo);
+
+    g_sprites.moon = new Sprite(g_images.moonTest);
+    if (g_canvas.height < 1000) g_sprites.logo.scale = 0.85;
+
     if (g_canvas.height < 850) {
         g_sprites.logo.scale = 0.85;
     } 
+
 
     g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;

@@ -11,6 +11,9 @@ var g_theme = new Audio("sounds/Deeper.ogg");
 	g_theme.loop = true;
 	g_theme.volume = 0.8;
 	
+	//LAGA
+var g_moveBackground_x = 0;
+var g_moveBackground_y = 0;
 
 var gameManager = {
 
@@ -21,7 +24,7 @@ var gameManager = {
 	controlsScreen : 2,
 	startingScreen : 3,
 	finishScreen : 4,
-
+	level_array :["Moon","Mars","Earth"],
 
 	currentScreen :3,
 
@@ -180,6 +183,8 @@ var gameManager = {
  
 		if(eatKey(this.KEY_ENTER)){
 			this.currentScreen = this._StartingScreenChoice;
+			scoreManager.reset();
+			scoreManager.level = this.level_array[currentLevel];
 		}
 
 
@@ -259,7 +264,13 @@ var gameManager = {
 
 	},
 	//GAME SCREEN -----------
+	moveTemp_x :0,
+	moveTemp_y :0,
 	_renderGameScreen :function(ctx){
+		
+		g_sprites.moon.scale = 1.5;
+		g_sprites.moon.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x,g_canvas.width/2+this.moveTemp_y,0);
+
 
 		entityManager.render(ctx);
     	if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -268,6 +279,10 @@ var gameManager = {
 	},
 	_updateGameScreen: function(du){
 		//g_theme.src = "audio/Deeper.ogg";
+
+		this.moveTemp_x += g_moveBackground_x;
+		this.moveTemp_y += g_moveBackground_y;
+
 		g_theme.play();
 		
 

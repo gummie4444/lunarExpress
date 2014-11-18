@@ -12,6 +12,7 @@
 */
 
 
+
 // A generic contructor which accepts an arbitrary descriptor object
 function Ship(descr) {
 
@@ -353,6 +354,11 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     // Decide whether to use the average or not (average is best!)
     var intervalVelX = g_useAveVel ? aveVelX : this.velX;
     var intervalVelY = g_useAveVel ? aveVelY : this.velY;
+
+    //EGIJEORGHAERHGAO
+    //TODO
+    g_moveBackground_x =intervalVelX/4;
+    g_moveBackground_y =intervalVelY/4;
     
     // s = s + v_ave * t
     var nextX = this.cx + intervalVelX * du;
