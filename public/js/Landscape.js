@@ -30,7 +30,7 @@ function Landscape() {
 	// Moon
 	if (currentLevel === 0) {
 		this.pieceWidth = 16;
-		this.heightVariation = 16;
+		this.heightVariation = 20;
 		this.color = "#999999";
 	}
 
@@ -48,15 +48,19 @@ Landscape.prototype.setup = function () {
 	var initialHeight = util.randRange(30,200);
 	this.array[0] = initialHeight;
 	var counter=0;
-	var platformLimit = 3;
-	var platformChance = 1 - ((this.pieceWidth * 0.01) / 2);
+	var platformLimit = 4;
+	var platformChance = 1 - ((this.pieceWidth * 0.01) / 4);
+	// var minPlatformDistance = 100 / this.pieceWidth;
+	var maxPlatformDistance = 500 / this.pieceWidth;
+	var platformDistance = 0;
 
 	for(var i = 1; i < pieceCount; i++){
 		var prevHeight = this.array[i-1];
 
-		if(Math.random() > platformChance && counter === 0 && platformLimit != 0){
+		if(((Math.random() > platformChance && counter === 0) || platformDistance > maxPlatformDistance) && platformLimit != 0){
 			counter = this.platformLength;
 			platformLimit--;
+			platformDistance = 0;
 		}
 
 		if( counter > 0){
@@ -78,6 +82,7 @@ Landscape.prototype.setup = function () {
 				
 			}		
 		}
+		platformDistance++;
 	}
 }
 
