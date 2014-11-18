@@ -195,6 +195,13 @@ asteroidsTime : 0,
 update: function(du) {
 
     this.landscape.update(du);
+
+    if(g_theme && g_soundOn){
+        g_theme.play();
+    }
+    else{
+        g_theme.pause();
+    }
     
     for (var c = 0; c < this._categories.length; ++c) {
 

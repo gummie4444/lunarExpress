@@ -7,6 +7,10 @@ To handle all the diffirent states of the game
 */
 
 "use strict";
+var g_theme = new Audio("sounds/Deeper.ogg");
+	g_theme.loop = true;
+	g_theme.volume = 0.8;
+	
 
 var gameManager = {
 
@@ -248,7 +252,9 @@ var gameManager = {
 		
 	},
 	_updateGameScreen: function(du){
-
+		//g_theme.src = "audio/Deeper.ogg";
+		g_theme.play();
+		
 
 	    processDiagnostics();
 	    

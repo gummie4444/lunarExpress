@@ -46,7 +46,8 @@ Asteroid.prototype.update = function (du) {
 
     if(hitEntity) {
         if(hitEntity instanceof Ship) {
-            hitEntity.warp();
+            hitEntity.explode();
+            hitEntity.reset();
         }
         else if (hitEntity instanceof Bullet) {
             this.takeBulletHit();
