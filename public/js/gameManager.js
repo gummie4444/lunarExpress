@@ -47,6 +47,9 @@ var gameManager = {
 
 			this._renderGameScreen(ctx);
 		}
+		else if (screenIndex === this.controlsScreen) {
+			this._renderControlsScreen(ctx);
+		}
 
 
 	},
@@ -66,6 +69,9 @@ var gameManager = {
 		}
 		else if (screenIndex === this.gameScreen){
 			this._updateGameScreen(du);
+		}
+		else if (screenIndex === this.controlsScreen) {
+			this._updateControlsScreen(du);
 		}
 	},
 
@@ -317,6 +323,32 @@ var gameManager = {
 	    // Prevent perpetual firing!
 	    eatKey(Ship.prototype.KEY_FIRE);
 
+	},
+
+	// controlMenuShip : new Ship({
+	// 	cx : 400,
+	// 	cy : 400,
+ //    	sprite : g_sprites.ship}),
+
+	_renderControlsScreen : function(ctx) {
+		
+		var textWidth = g_canvas.width / 2;
+		var textHeight = g_canvas.height / 2;
+		ctx.textAlign = "center";
+		ctx.font = '40pt PressStart2P';
+		util.drawTextAt(ctx, "Up: Thrust", textWidth, textHeight - 85,"white");
+		util.drawTextAt(ctx, "Left: Rotate left", textWidth, textHeight - 15,"white");
+		util.drawTextAt(ctx, "Right: Rotate right", textWidth, textHeight + 55,"white");
+		util.drawTextAt(ctx, "T: mute", textWidth, textHeight + 125,"white");
+
+
+	},
+
+	_updateControlsScreen : function (du) {
+
+		if(eatKey(this.KEY_ENTER)){
+			this.currentScreen = this.startingScreen;
+		}
 	},
 
 

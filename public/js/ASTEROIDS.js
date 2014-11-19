@@ -168,7 +168,8 @@ function requestPreloads() {
         bird_up : "https://notendur.hi.is/~ffk3/lunarlander/fuglupp.png",
         logo : "https://notendur.hi.is/~ffk3/lunarlander/logo.png",
         galaxy : "http://apod.nasa.gov/apod/image/1005/comacluster_rowe_big.jpg",
-        earth: "jord.png"
+        earth: "jord.png",
+        flag: "merica.gif"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -187,8 +188,8 @@ function preloadDone() {
 
     g_sprites.galaxy = new Sprite(g_images.galaxy);
     g_sprites.earth = new Sprite(g_images.earth);
-
-    if (g_canvas.height < 1000) g_sprites.logo.scale = 0.85;
+    g_sprites.flag = new Sprite(g_images.flag);
+    
 
     if (g_canvas.height < 850) {
         g_sprites.logo.scale = 0.85;
