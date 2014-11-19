@@ -96,6 +96,7 @@ fillCircle: function (ctx, x, y, r) {
     ctx.fill();
 },
 
+
 strokeBox: function (ctx, x, y, w, h, style, lineWidth) {
     var oldStyle = ctx.strokeStyle;
     var oldLineWidth = ctx.lineWidth;
