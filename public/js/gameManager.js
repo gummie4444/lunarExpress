@@ -314,6 +314,14 @@ var gameManager = {
 	_drawEarthBackground : function(ctx) {
 		g_sprites.sky.scale = 1.01;
 		g_sprites.sky.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		g_sprites.cloud1.scale = 0.5;
+		g_sprites.cloud1.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -350,g_canvas.height/2-this.moveTemp_y/5 -100,0);
+		var oldStyle = ctx.fillStyle;
+		ctx.fillStyle = "#FFD000";
+		util.fillCircle(ctx, g_canvas.width - 200, g_canvas.height - 500, 80);
+		ctx.fillStyle = oldStyle;
+		g_sprites.cloud2.scale = 0.5;
+		g_sprites.cloud2.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 +150,g_canvas.height/2-this.moveTemp_y/5 -50,0);
 	},
 
 	_drawMarsBackground : function(ctx){

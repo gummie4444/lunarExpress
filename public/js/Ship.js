@@ -55,6 +55,8 @@ Ship.prototype.hover1.addEventListener('timeupdate', function() {
 
 }, false);
 
+Ship.prototype.hover1.volume = 0;
+
 Ship.prototype.hover2 = new Audio(
     "sounds/export.wav");
 
@@ -67,7 +69,6 @@ Ship.prototype.sound = function() {
         this.hover1.play();
     }*/
     this.hover1.loop = true;
-    this.hover1.volume = 0;
     this.hover1.play();
 }
 //Ship.prototype.particles = new Particles(this);
@@ -357,20 +358,30 @@ Ship.prototype.computeGravity = function () {
 
 var NOMINAL_THRUST = +0.0045;
 var NOMINAL_RETRO  = -0.0005;
+var thrusterSoundIncrement = 0.025;
+var thrusterSoundDecrement = 0.07
 
 Ship.prototype.computeThrustMag = function () {
     
     var thrust = 0;
-    
+
      if(scoreManager.fuel >= 0){
         if (keys[this.KEY_THRUST]) {
             thrust += NOMINAL_THRUST;
-            this.hover1.volume = 1;
+            
+            if (this.hover1.volume < 0.9) {
+                this.hover1.volume += thrusterSoundIncrement
+            }
+            
                scoreManager.fuel -= 0.1;
              
             
         } else {
-            this.hover1.volume = 0;
+            if (this.hover1.volume > 0.11) {
+                this.hover1.volume -= thrusterSoundDecrement;
+            } else {
+                this.hover1.volume = 0;
+            }
         }
     }
     /*if (keys[this.KEY_RETRO]) {
@@ -524,7 +535,7 @@ Ship.prototype.render = function (ctx) {
         this.sprite.scale = origScale;
     }
 
-    console.log(this.cx, this.cy);
+    
     // pass my scale into the sprite, for drawing
     /*this.sprite.scale = this._scale;
     this.sprite.drawWrappedCentredAt(

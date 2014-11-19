@@ -38,6 +38,7 @@ function Landscape() {
 	this.platformLength = 64 / this.pieceWidth;
 	this.minHeight = 50;
 	this.maxHeight = 500;
+	this.trees = [];
 	this.setup();
 }
 
@@ -82,6 +83,13 @@ Landscape.prototype.setup = function () {
 				
 			}		
 		}
+
+		if (g_currentLevel === 2) {
+			if (Math.random() > 0.65) {
+				this.trees[i] = this.array[i];
+			}
+		}
+
 		platformDistance++;
 	}
 }
@@ -100,6 +108,10 @@ Landscape.prototype.render = function (ctx) {
 			var y = g_canvas.height - this.array[i];
 			
 			ctx.lineTo(x, y);
+
+			if (this.trees[i]) {
+				g_sprites.tree.drawCentredAt(ctx, i * this.pieceWidth, g_canvas.height - this.array[i] - g_sprites.tree.height / 2, 0);
+			}
 			
 		}
 		xOffset += g_gameWidth;
