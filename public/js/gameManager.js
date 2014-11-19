@@ -34,12 +34,18 @@ var gameManager = {
 		this._drawCurrentLevelBackground(ctx);
 	
 		if(screenIndex === this.startingScreen){
+			if(entityManager.timeBetweenAst === 0){
+				entityManager.reset();
+				spatialManager.reset();
+				entityManager.timeBetweenAst = 2000;
+			}
 			entityManager.render(ctx);
 			this._renderStartingScreen(ctx);
 			
 		}
 		else if(screenIndex === this.finishScreen){
-			//entityManager.render(ctx);
+			entityManager.render(ctx);
+			entityManager.timeBetweenAst = 0;
 			this._renderFinishScreen(ctx);
 		}
 		else if(screenIndex === this.highScoreScreen){
@@ -47,7 +53,7 @@ var gameManager = {
 			this._renderHighscoreScreen(ctx);
 		}
 		else if (screenIndex === this.gameScreen){
-
+			//entityManager.timeBetweenAst = 2000;
 			this._renderGameScreen(ctx);
 		}
 

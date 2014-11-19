@@ -49,13 +49,13 @@ Particle.prototype.respawn = function(life)
 
 Particle.prototype.render=function(ctx, numParticles, colour)
 {
-  for(var i = 0; i< numParticles; i++){
-    ctx.save();
-    
-    ctx.fillStyle =  'rgba(' + colour +', '+this.alpha+ ')';
-    util.fillCircle(ctx, this.cx, this.cy, this.radius);
-
-    ctx.restore();
+  if(gameManager.currentScreen === 0){
+    for(var i = 0; i< numParticles; i++){
+      ctx.save();
+      ctx.fillStyle =  'rgba(' + colour +', '+this.alpha+ ')';
+      util.fillCircle(ctx, this.cx, this.cy, this.radius);
+      ctx.restore();
+    }
   }
 
   
@@ -63,18 +63,19 @@ Particle.prototype.render=function(ctx, numParticles, colour)
 
 Particle.prototype.update = function(particleLifetime, du)
 {
-  
-  var damping=0.995;
-  this.vx*=damping;
-  this.vy*=damping;
+  if(gameManager.currentScreen === 0){
+    var damping = 0.995;
+    this.vx *= damping;
+    this.vy *= damping;
 
-  this.cx+=this.vx;
-  this.cy+=this.vy;
-  this.radius *= 0.95;
+    this.cx += this.vx;
+    this.cy += this.vy;
+    this.radius *= 0.95;
 
-  //skoða þetta :
-  this.life-=1;
-  if (this.life<=0) this.respawn(particleLifetime);
+    //skoða þetta :
+    this.life -= 1;
+    if (this.life <= 0) this.respawn(particleLifetime);
 
-  this.alpha=this.life/particleLifetime;
+    this.alpha=this.life/particleLifetime;
+  }
 }

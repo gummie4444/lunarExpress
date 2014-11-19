@@ -65,8 +65,11 @@ _generateBirds : function() {
 _generateAsteroids : function() {
     this.asteroidsTime += NOMINAL_UPDATE_INTERVAL;
 
-    if (this.asteroidsTime > 2000) {
-        if (Math.random() < 0.4) {
+    if (this.asteroidsTime > this.timeBetweenAst) {
+        if (Math.random() < 0.4 && this.timeBetweenAst != 0) {
+            this.generateAsteroid();
+        }
+        else{
             this.generateAsteroid();
         }
         this.asteroidsTime = 0;
@@ -189,6 +192,7 @@ toggleRocks: function() {
 },
 
 asteroidsTime : 0,
+timeBetweenAst : 2000,
 
 update: function(du) {
 
