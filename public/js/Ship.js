@@ -41,8 +41,19 @@ Ship.prototype = new Entity();
 
 Ship.prototype.isLanded = false;
 
-Ship.prototype.hover1 = new Audio(
-    "sounds/export.wav");
+
+
+Ship.prototype.hover1 = new Audio("sounds/rocketthruster.wav");
+
+Ship.prototype.hover1.addEventListener('timeupdate', function() {
+
+    var buffer = .64;
+    if(this.currentTime > this.duration - buffer){
+        this.currentTime = 0
+        this.play()
+    }
+
+}, false);
 
 Ship.prototype.hover2 = new Audio(
     "sounds/export.wav");
@@ -55,8 +66,9 @@ Ship.prototype.sound = function() {
     /*else{
         this.hover1.play();
     }*/
-    //this.hover1.loop = true;
-    //this.hover1.play();
+    this.hover1.loop = true;
+    this.hover1.volume = 0;
+    this.hover1.play();
 }
 //Ship.prototype.particles = new Particles(this);
 
@@ -353,10 +365,12 @@ Ship.prototype.computeThrustMag = function () {
      if(scoreManager.fuel >= 0){
         if (keys[this.KEY_THRUST]) {
             thrust += NOMINAL_THRUST;
-           
+            this.hover1.volume = 1;
                scoreManager.fuel -= 0.1;
              
             
+        } else {
+            this.hover1.volume = 0;
         }
     }
     /*if (keys[this.KEY_RETRO]) {
