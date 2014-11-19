@@ -11,7 +11,7 @@ To handle the score and fuel of the bro
 
 var scoreManager ={
 	
-	score : 0,
+	score : 600,
 	fuel :200,
 	time : 0,
 	level : "",
@@ -19,7 +19,7 @@ var scoreManager ={
 	otherExplode : 15,
 
 	reset : function(){
-		this.score = 0;
+		this.score = 600;
 		this.fuel =200;
 		this.time =0;
 		this.level = "";
@@ -53,7 +53,7 @@ var scoreManager ={
 	if(this.fuel<0){
 		this.fuel = 0;
 	}
-	
+
 	util.fillBox(ctx,70,55,this.fuel/2,15,color);
 	util.strokeBox(ctx, 69, 54, 100, 17, "white", 2);
 

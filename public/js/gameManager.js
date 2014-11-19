@@ -24,6 +24,7 @@ var gameManager = {
 	controlsScreen : 2,
 	startingScreen : 3,
 	finishScreen : 4,
+	nameInputScreen :5,
 	level_array :["Moon","Mars","Earth"],
 
 	currentScreen :3,
@@ -47,6 +48,10 @@ var gameManager = {
 
 			this._renderGameScreen(ctx);
 		}
+		else if (screenIndex === this.nameInputScreen){
+
+			this._renderNameInputScreen(ctx);
+		}
 
 
 	},
@@ -67,6 +72,9 @@ var gameManager = {
 		else if (screenIndex === this.gameScreen){
 			this._updateGameScreen(du);
 		}
+		else if (screenIndex === this.nameInputScreen){
+			this._updateNameInputScreen(du);
+		}
 	},
 
 	_StartingScreenChoice : 0,
@@ -77,6 +85,213 @@ var gameManager = {
 	KEY_RIGHT : 39,
 	KEY_DOWN : 40,
 	KEY_ENTER: 13,
+
+
+	_letter1 : alphabet[0],
+	_letter2 : alphabet[0],
+	_letter3 : alphabet[0],
+	_currentLetter : 0,
+	_arrowMove : 0,
+	_arrowColor :true,
+
+	_renderNameInputScreen:function(ctx){
+
+			var letter1Color = "white";
+			var letter2Color = "white";
+			var letter3Color = "white";
+
+			util.drawTextAt(ctx,"YOU MADE IT TO THE HIGHSCORE",g_canvas.width/2,g_canvas.height/2-150,letter2Color);
+			util.drawTextAt(ctx,"WRITE YOUR INITIALS",g_canvas.width/2,g_canvas.height/2-50,letter2Color)
+		 
+
+		   	    if(this._currentLetter === 0){
+			    	letter1Color = "purple";
+			    }
+			    else if (this._currentLetter=== 1){
+			    	letter2Color = "purple";
+
+			    }
+			    else if (this._currentLetter === 2){
+			    	letter3Color = "purple";
+
+			    }
+
+			    //triangle
+
+			    var point1_x = g_canvas.width/2 -57 + this._arrowMove;
+			    var point1_y = g_canvas.height/2 -20;
+			    var point2_x = g_canvas.width/2 -47 + this._arrowMove;
+			    var point2_y = g_canvas.height/2 -20;
+			    var point3_x = g_canvas.width/2 -52 +this._arrowMove;
+			    var point3_y = g_canvas.height/2 -30;
+			    ctx.beginPath();
+				ctx.moveTo(point1_x,point1_y);
+				ctx.lineTo(point2_x,point2_y);
+				ctx.lineTo(point3_x,point3_y);
+				if(!this._arrowColor){
+					ctx.fillStyle= "purple";
+				}
+				else{
+					ctx.fillStyle= "white";
+				}
+				ctx.fill();
+
+
+			    var point1_x = g_canvas.width/2 -57 +this._arrowMove;
+			    var point1_y = g_canvas.height/2 +60;
+			    var point2_x = g_canvas.width/2 -47 + this._arrowMove;
+			    var point2_y = g_canvas.height/2 +60;
+			    var point3_x = g_canvas.width/2 -52+ this._arrowMove;
+			    var point3_y = g_canvas.height/2 +70;
+			    ctx.beginPath();
+				ctx.moveTo(point1_x,point1_y);
+				ctx.lineTo(point2_x,point2_y);
+				ctx.lineTo(point3_x,point3_y);
+
+				if(this._arrowColor){
+					ctx.fillStyle= "purple";
+				}
+				else{
+					ctx.fillStyle= "white";
+				}
+				ctx.fill();
+
+
+
+
+
+
+		   util.drawTextAt(ctx,this._letter1,g_canvas.width/2-50,g_canvas.height/2+50,letter1Color);
+		   util.drawTextAt(ctx,this._letter2,g_canvas.width/2,g_canvas.height/2+50,letter2Color);
+		   util.drawTextAt(ctx,this._letter3,g_canvas.width/2+50,g_canvas.height/2+50,letter3Color);
+
+
+	},
+
+	_updateNameInputScreen :function(du){
+		//SETJA ÞENNAN SKÍT Í EITTHVAÐ FALL
+		///--------------------
+		if(eatKey(this.KEY_DOWN)){
+			this._arrowColor = true;
+
+			if(this._currentLetter === 0){
+				var tempIndex = alphabet.indexOf(this._letter1);
+
+				if(tempIndex != 25){
+					this._letter1 = alphabet[++tempIndex];
+				}
+				else{
+					this._letter1 = alphabet[0];
+				}
+			}
+
+			else if(this._currentLetter === 1){
+				var tempIndex = alphabet.indexOf(this._letter2);
+
+				if(tempIndex != 25){
+					this._letter2 = alphabet[++tempIndex];
+				}
+				else{
+					this._letter2 = alphabet[0];
+				}
+			}
+
+			else if(this._currentLetter === 2){
+				var tempIndex = alphabet.indexOf(this._letter3);
+
+				if(tempIndex != 25){
+					this._letter3 = alphabet[++tempIndex];
+				}
+				else{
+					this._letter3 = alphabet[0];
+				}
+			}
+
+		}
+		///------------------------------
+
+		if(eatKey(this.KEY_UPP)){
+
+			this._arrowColor = false;
+
+			if(this._currentLetter === 0){
+				var tempIndex = alphabet.indexOf(this._letter1);
+
+				if(tempIndex != 0){
+					this._letter1 = alphabet[--tempIndex];
+				}
+				else{
+					this._letter1 = alphabet[25];
+				}
+			}
+
+			else if(this._currentLetter === 1){
+				var tempIndex = alphabet.indexOf(this._letter2);
+
+				if(tempIndex != 0){
+					this._letter2 = alphabet[--tempIndex];
+				}
+				else{
+					this._letter2 = alphabet[25];
+				}
+			}
+
+			else if(this._currentLetter === 2){
+				var tempIndex = alphabet.indexOf(this._letter3);
+
+				if(tempIndex != 0){
+					this._letter3 = alphabet[--tempIndex];
+				}
+				else{
+					this._letter3 = alphabet[25];
+				}
+			}
+
+		}
+		///------------------------------
+
+
+		///------------------------------
+		if(eatKey(this.KEY_LEFT)){
+			if(this._currentLetter === 0){
+				this._currentLetter = 2;
+			}
+			else{
+				this._currentLetter --;
+
+			}
+			this._arrowMove = this._currentLetter * 48;
+			
+		}
+		///------------------------------
+		///------------------------------
+
+		if(eatKey(this.KEY_RIGHT)){
+			if(this._currentLetter === 2){
+				this._currentLetter = 0;
+			}
+			else{
+				this._currentLetter ++;
+			}
+			this._arrowMove = this._currentLetter * 48;
+		}
+		///------------------------------
+
+		if(eatKey(this.KEY_ENTER)){
+			console.log(scoreManager.score);
+			updateHighScore({name:this._letter1 + this._letter2 + this._letter3,score : scoreManager.score});
+
+			this.currentScreen = this.highScoreScreen;
+			//scoreManager.reset();
+
+		}
+
+
+
+	},
+
+
+	
 	//STARTING SCREEN -----------
 	_renderStartingScreen :function(ctx){
 
@@ -186,6 +401,7 @@ var gameManager = {
 		}
  
 		if(eatKey(this.KEY_ENTER)){
+			console.log("hallo")
 			this.currentScreen = this._StartingScreenChoice;
 			scoreManager.reset();
 			scoreManager.level = this.level_array[currentLevel];
@@ -211,9 +427,18 @@ var gameManager = {
 	},
 	_updateFinishScreen: function(du){
 			if(eatKey(this.KEY_ENTER)){
+
+				if(isInHighScore(scoreManager.score)){
+					this.currentScreen = this.nameInputScreen;
+				}
+				else{
+
+
 				this.currentScreen = this.highScoreScreen;
 				entityManager.reset();
-				scoreManager.reset();
+				//scoreManager.reset();
+
+				}
 
 		}
 
@@ -228,7 +453,7 @@ var gameManager = {
 
 		//every time we lounch it for the first time get the highscores
 		if(this._firstReload){
-			fetchHighScore();
+			getHighScores();
 			this._firstReload = false;
 
 		}
@@ -254,21 +479,21 @@ var gameManager = {
 		for(var i = 0;i<this._highScoreList.length;i++){
 			if(i === 0){
 			util.drawTextAt(ctx,this._highScoreList[i].name,g_canvas.width/2 ,290,"white");
-			util.drawTextAt(ctx,this._highScoreList[i].Totalscore,g_canvas.width/2,330,"white");
+			util.drawTextAt(ctx,this._highScoreList[i].score,g_canvas.width/2,330,"white");
 			}
 			else if (i === 1){
 			util.drawTextAt(ctx,this._highScoreList[i].name,g_canvas.width/2-179,320,"white");
-			util.drawTextAt(ctx,this._highScoreList[i].Totalscore,g_canvas.width/2-179,360,"white");
+			util.drawTextAt(ctx,this._highScoreList[i].score,g_canvas.width/2-179,360,"white");
 
 			}
 			else if (i === 2){
 			util.drawTextAt(ctx,this._highScoreList[i].name,g_canvas.width/2+179,340,"white");
-			util.drawTextAt(ctx,this._highScoreList[i].Totalscore,g_canvas.width/2+179,380,"white");
+			util.drawTextAt(ctx,this._highScoreList[i].score,g_canvas.width/2+179,380,"white");
 
 			}
 			else{
 			ctx.textAlign = "left";
-			util.drawTextAt(ctx,i+1 + " " + this._highScoreList[i].name + " " +this._highScoreList[i].Totalscore,g_canvas.width/2-120 ,400+(i*40),"white");
+			util.drawTextAt(ctx,i+1 + " " + this._highScoreList[i].name + " " +this._highScoreList[i].score,g_canvas.width/2-120 ,400+(i*40),"white");
 			}
 		}
 
