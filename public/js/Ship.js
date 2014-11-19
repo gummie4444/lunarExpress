@@ -379,10 +379,10 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     	if (this.cy > maxY || this.cy < minY) {
     	    // do nothing
     	} 
-        else if (nextY > maxY || nextY < minY) {
+        /*else if (nextY > maxY || nextY < minY) {
                 this.velY = oldVelY * -0.9;
                 intervalVelY = this.velY;
-        }
+        }*/
     }
     
     // s = s + v_ave * t
@@ -414,7 +414,7 @@ Ship.prototype.maybeFireBullet = function () {
 Ship.prototype.getRadius = function () {
     var origScale = this.sprite.scale;
     this.sprite.scale = this._scale;
-    var x = (this.sprite.getScaledWidth() / 2) * 1.3;
+    var x = (this.sprite.getScaledWidth() / 2) * 0.9;
     this.sprite.scale = origScale;
     return x;
 };
@@ -459,12 +459,30 @@ Ship.prototype.updateRotation = function (du) {
 Ship.prototype.render = function (ctx) {
     
     var origScale = this.sprite.scale;
+    var over = this.cy - this.getRadius();
+    var drawy;
+    if(over < 0){
+        this.sprite.scale = this._scale;
+        this.sprite.drawCentredAt(
+        ctx, this.cx, this.cy, this.rotation
+        );
+        this.sprite.scale = origScale; 
+    }
+    else{
+        this.sprite.scale = this._scale;
+        this.sprite.drawWrappedCentredAt(
+        ctx, this.cx, this.cy, this.rotation
+        );
+        this.sprite.scale = origScale;
+    }
+
+    console.log(this.cx, this.cy);
     // pass my scale into the sprite, for drawing
-    this.sprite.scale = this._scale;
+    /*this.sprite.scale = this._scale;
     this.sprite.drawWrappedCentredAt(
 	ctx, this.cx, this.cy, this.rotation
     );
     this.sprite.scale = origScale;
-
+    */
     this.particles.render(ctx);
 };

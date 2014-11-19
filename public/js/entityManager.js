@@ -122,7 +122,7 @@ deferredSetup : function () {
 },
 
 init: function() {
-    if (currentLevel === 2) this._generateBirds();
+    if (g_currentLevel === 2) this._generateBirds();
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation) {
@@ -223,7 +223,7 @@ update: function(du) {
         }
     }
 
-    if (currentLevel != 0) this._generateAsteroids();
+    if (g_currentLevel != 0) this._generateAsteroids();
 
 
 },

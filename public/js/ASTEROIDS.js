@@ -161,14 +161,15 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
-        ship   : "https://notendur.hi.is/~ahh19/mkdir/fin/skip.png" /*"https://notendur.hi.is/~pk/308G/images/ship.png"*/,
-        ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        rock   : "https://notendur.hi.is/~ahh19/mkdir/fin/Asteroid_01_Mb.GIF",//"https://notendur.hi.is/~pk/308G/images/rock.png"
-        bird_down : "https://notendur.hi.is/~ffk3/lunarlander/fuglnidur.png",
-        bird_up : "https://notendur.hi.is/~ffk3/lunarlander/fuglupp.png",
-        logo : "https://notendur.hi.is/~ffk3/lunarlander/logo.png",
-        galaxy : "http://apod.nasa.gov/apod/image/1005/comacluster_rowe_big.jpg",
-        earth: "jord.png"
+        ship   : "sprites/skip.png" /*"https://notendur.hi.is/~pk/308G/images/ship.png"*/,
+        ship2  : "sprites/skip.png",
+        rock   : "sprites/patrock.png",//"https://notendur.hi.is/~pk/308G/images/rock.png"
+        bird_down : "sprites/fuglnidur.png",
+        bird_up : "sprites/fuglupp.png",
+        logo : "sprites/logo.png",
+        galaxy :"sprites/starbackground.png" /*"sprites/stars.jpg"*/,
+        earth: "sprites/earth.png",
+        sky : "sprites/earthbackground.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -187,6 +188,7 @@ function preloadDone() {
 
     g_sprites.galaxy = new Sprite(g_images.galaxy);
     g_sprites.earth = new Sprite(g_images.earth);
+    g_sprites.sky = new Sprite(g_images.sky);
 
     if (g_canvas.height < 1000) g_sprites.logo.scale = 0.85;
 
@@ -198,7 +200,6 @@ function preloadDone() {
     g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;
 
-    //movethis
 
     entityManager.init();
     createInitialShips();
