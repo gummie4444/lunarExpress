@@ -7,28 +7,28 @@
 
 // Generates a new piece of land based on existing land to the left.
 
-var currentLevel = 0;
+var g_currentLevel = 0;
 
 function Landscape() {
 	// landscape is comprised of an array of heights.
 	this.array = [];
 
 	// Earth
-	if (currentLevel === 2) {
+	if (g_currentLevel === 2) {
 		this.pieceWidth = 8;
 		this.heightVariation = 40;
 		this.color = "#5FD102";
 	} 
 
 	// Mars
-	if (currentLevel === 1) {
+	if (g_currentLevel === 1) {
 		this.pieceWidth = 16;
 		this.heightVariation = 30;
 		this.color = "#FF1E00";
 	}
 
 	// Moon
-	if (currentLevel === 0) {
+	if (g_currentLevel === 0) {
 		this.pieceWidth = 16;
 		this.heightVariation = 20;
 		this.color = "#999999";
@@ -108,9 +108,27 @@ Landscape.prototype.render = function (ctx) {
 	ctx.lineTo(g_canvas.width, g_canvas.height);
 	ctx.lineTo(0, g_canvas.height);
 	ctx.fill();
+
+	if (g_currentLevel === 0) {
+		g_sprites.flag.scale = 0.3;
+		g_sprites.flag.drawCentredAt(ctx, 10 * this.pieceWidth, g_canvas.height - this.array[10] - g_sprites.flag.height / 2 * g_sprites.flag.scale + 5, 0);
+	} 
 	
 	ctx.fillStyle = oldStyle;
 }
+
+/*
+
+drawHorizontalLine: function (ctx,ledge,redge,height){
+    ctx.beginPath();
+    ctx.moveTo(ledge,height);
+    ctx.lineTo(redge,height);
+    ctx.stroke();
+},
+
+
+*/
+
 
 Landscape.prototype.doesCollide = function (cx,cy,radius) {
 	while(cx > g_gameWidth){
@@ -120,8 +138,11 @@ Landscape.prototype.doesCollide = function (cx,cy,radius) {
 	var leftIndex = Math.floor((cx-radius)/this.pieceWidth);
 	var rightIndex = Math.ceil((cx+radius)/this.pieceWidth);
 
+	//console.log("leftIndex " + leftIndex, "rightIndex " + rightIndex);
+	//util.drawHorizontalLine(g_ctx, leftIndex, rightIndex, g_canvas.height- cy);
+
 	for(var i = leftIndex; i<=rightIndex; i++){
-		if(cy > g_canvas.height-this.array[i]){
+		if(cy > (g_canvas.height-this.array[i])){
 			return {
 				collide: true,
 				leftIndex: leftIndex,

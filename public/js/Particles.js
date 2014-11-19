@@ -35,10 +35,11 @@ Particles.prototype.render = function(ctx){
 };
 
 Particles.prototype.update = function(du){
-
+if(!this.owner.isLanded && scoreManager.fuel > 0){
     for(var i = 0; i< this.numParticles; i++){
         this.particles[i].update(this.particleLifetime,du);
     }
+}
 
 };  
 

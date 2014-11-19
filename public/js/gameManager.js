@@ -31,26 +31,35 @@ var gameManager = {
 
 
 	renderScreen: function(screenIndex,ctx){
+		this._drawCurrentLevelBackground(ctx);
+	
 		if(screenIndex === this.startingScreen){
 			entityManager.render(ctx);
 			this._renderStartingScreen(ctx);
 			
 		}
 		else if(screenIndex === this.finishScreen){
-			entityManager.render(ctx);
+			//entityManager.render(ctx);
 			this._renderFinishScreen(ctx);
 		}
 		else if(screenIndex === this.highScoreScreen){
-			entityManager.render(ctx);
+			//entityManager.render(ctx);
 			this._renderHighscoreScreen(ctx);
 		}
 		else if (screenIndex === this.gameScreen){
 
 			this._renderGameScreen(ctx);
 		}
+
 		else if (screenIndex === this.nameInputScreen){
 
 			this._renderNameInputScreen(ctx);
+
+		}
+
+		else if (screenIndex === this.controlsScreen) {
+			this._renderControlsScreen(ctx);
+
 		}
 
 
@@ -72,8 +81,14 @@ var gameManager = {
 		else if (screenIndex === this.gameScreen){
 			this._updateGameScreen(du);
 		}
+
 		else if (screenIndex === this.nameInputScreen){
 			this._updateNameInputScreen(du);
+
+		}	
+		else if (screenIndex === this.controlsScreen) {
+			this._updateControlsScreen(du);
+
 		}
 	},
 
@@ -297,7 +312,9 @@ var gameManager = {
 
 
 		//formula to let the letters be in the midle
-	
+
+		//this._drawCurrentLevelBackground(ctx);
+
 		var oldStyle = ctx.fillStyle;
 		ctx.textAlign = "center";
 
@@ -313,18 +330,19 @@ var gameManager = {
 		var PlayColor = "white";
 		var HighscoreColor = "white";
 		var ControlsColor = "white";
+		var selectedColor = "purple";
 
 
 	    ctx.font = '40pt PressStart2P';
 	    if(this._StartingScreenChoice === 0){
-	    	PlayColor = "blue";
+	    	PlayColor = selectedColor;
 	    }
 	    else if (this._StartingScreenChoice === 1){
-	    	HighscoreColor = "blue";
+	    	HighscoreColor = selectedColor;
 
 	    }
 	    else if (this._StartingScreenChoice === 2){
-	    	ControlsColor = "blue";
+	    	ControlsColor = selectedColor;
 
 	    }
 
@@ -338,10 +356,10 @@ var gameManager = {
 	    var ArrowLeftColor ="white";
 	    var ArrowRightColor = "white";
 	    if(this._StartingScreenLevel === "left"){
-	    	ArrowLeftColor = "blue";
+	    	ArrowLeftColor = selectedColor;
 	    }
 	    else if(this._StartingScreenLevel === "right"){
-	    	ArrowRightColor = "blue";
+	    	ArrowRightColor = selectedColor;
 	    }
 	    ctx.textAlign = "left";
 	    util.drawTextAt(ctx,ArrowLeft,0+50,g_canvas.height/2,ArrowLeftColor);
@@ -377,10 +395,10 @@ var gameManager = {
 			//settu background til vinstri
 			this._StartingScreenLevel = "left";
 			
-			if (currentLevel > 0) {
-				currentLevel--;
+			if (g_currentLevel > 0) {
+				g_currentLevel--;
 			} else {
-				currentLevel = 2;
+				g_currentLevel = 2;
 			}
 
 			 entityManager.reset();
@@ -390,10 +408,10 @@ var gameManager = {
 			//settu background til hægri
 			this._StartingScreenLevel = "right";
 
-			if (currentLevel < 2) {
-				currentLevel++;
+			if (g_currentLevel < 2) {
+				g_currentLevel++;
 			} else {
-				currentLevel = 0;
+				g_currentLevel = 0;
 			}
 
 			 entityManager.reset();
@@ -404,7 +422,7 @@ var gameManager = {
 			console.log("hallo")
 			this.currentScreen = this._StartingScreenChoice;
 			scoreManager.reset();
-			scoreManager.level = this.level_array[currentLevel];
+			scoreManager.level = this.level_array[g_currentLevel];
 		}
 
 
@@ -509,24 +527,55 @@ var gameManager = {
 		}
 
 	},
+
+	_drawCurrentLevelBackground : function(ctx){
+		switch(g_currentLevel){
+			case 0:
+				this._drawMoonBackground(ctx);
+				break;
+			case 1:
+				this._drawMarsBackground(ctx);
+				break;
+			case 2:
+				this._drawEarthBackground(ctx);
+				break;
+		}
+	},
+
+
+	_drawEarthBackground : function(ctx) {
+		g_sprites.sky.scale = 1.01;
+		g_sprites.sky.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+	},
+
+	_drawMarsBackground : function(ctx){
+		g_sprites.galaxy.scale = 1.01;
+		g_sprites.galaxy.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		g_sprites.earth.scale = 0.12;
+		g_sprites.earth.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -350,g_canvas.height/2-this.moveTemp_y/5 -100,0);
+	},
+
+	_drawMoonBackground : function(ctx){
+		g_sprites.galaxy.scale = 1.01;
+		g_sprites.galaxy.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		g_sprites.earth.scale = 1.01;
+		g_sprites.earth.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/10 -250,g_canvas.height/2-this.moveTemp_y/10 +200,0);
+	},
+
+
 	//GAME SCREEN -----------
 	moveTemp_x :0,
 	moveTemp_y :0,
 	_renderGameScreen :function(ctx){
-		
-	//	g_sprites.galaxy.scale = 1.01;
-		g_sprites.galaxy.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x/2,g_canvas.width/2+this.moveTemp_y/2,0);
-		g_sprites.earth.scale = 1.01;
-		g_sprites.earth.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x,g_canvas.width/2+this.moveTemp_y -100,0);
 
 
+		//this._drawCurrentLevelBackground(ctx);
 		entityManager.render(ctx);
     	if (g_renderSpatialDebug) spatialManager.render(ctx);
 		
 		scoreManager.render(ctx);
 	},
 	_updateGameScreen: function(du){
-		//g_theme.src = "audio/Deeper.ogg";
 
 		this.moveTemp_x += g_moveBackground_x;
 		this.moveTemp_y += g_moveBackground_y;
@@ -542,6 +591,32 @@ var gameManager = {
 	    // Prevent perpetual firing!
 	    eatKey(Ship.prototype.KEY_FIRE);
 
+	},
+
+	// controlMenuShip : new Ship({
+	// 	cx : 400,
+	// 	cy : 400,
+ //    	sprite : g_sprites.ship}),
+
+	_renderControlsScreen : function(ctx) {
+		
+		var textWidth = g_canvas.width / 2;
+		var textHeight = g_canvas.height / 2;
+		ctx.textAlign = "center";
+		ctx.font = '40pt PressStart2P';
+		util.drawTextAt(ctx, "Up: Thrust", textWidth, textHeight - 85,"white");
+		util.drawTextAt(ctx, "Left: Rotate left", textWidth, textHeight - 15,"white");
+		util.drawTextAt(ctx, "Right: Rotate right", textWidth, textHeight + 55,"white");
+		util.drawTextAt(ctx, "T: mute", textWidth, textHeight + 125,"white");
+
+
+	},
+
+	_updateControlsScreen : function (du) {
+
+		if(eatKey(this.KEY_ENTER)){
+			this.currentScreen = this.startingScreen;
+		}
 	},
 
 
