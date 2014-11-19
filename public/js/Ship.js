@@ -41,8 +41,19 @@ Ship.prototype = new Entity();
 
 Ship.prototype.isLanded = false;
 
-Ship.prototype.hover1 = new Audio(
-    "sounds/export.wav");
+
+
+Ship.prototype.hover1 = new Audio("sounds/rocketthruster.wav");
+
+Ship.prototype.hover1.addEventListener('timeupdate', function() {
+
+    var buffer = .64;
+    if(this.currentTime > this.duration - buffer){
+        this.currentTime = 0
+        this.play()
+    }
+
+}, false);
 
 Ship.prototype.hover2 = new Audio(
     "sounds/export.wav");
@@ -55,8 +66,9 @@ Ship.prototype.sound = function() {
     /*else{
         this.hover1.play();
     }*/
-    //this.hover1.loop = true;
-    //this.hover1.play();
+    this.hover1.loop = true;
+    this.hover1.volume = 0;
+    this.hover1.play();
 }
 //Ship.prototype.particles = new Particles(this);
 
@@ -173,7 +185,13 @@ Ship.prototype.explode = function(){
 
 Ship.prototype.update = function (du) {
 
+
     if(gameManager.currentScreen === 0){
+        //IS IT GAME OVER BRAH
+            if(scoreManager.fuel <= 0){
+               gameManager.currentScreen = gameManager.finishScreen;
+            }
+            
             this.maxVel = 1.0*du;
             this.sound();
             
@@ -183,25 +201,27 @@ Ship.prototype.update = function (du) {
             }
 
             if(this._isControllable){
-
                 spatialManager.unregister(this);
                 var hitEntity = this.findHitEntity();
 
 
                 if(hitEntity)
                 {
-                    if(hitEntity instanceof Ship)
+
+                    if(hitEntity instanceof Bird || hitEntity instanceof Asteroid)
                     {
+                        
                         this.explode();
-                    }
-                    else if (hitEntity instanceof Bullet)
-                    {
-                        this.takeBulletHit();
-                        hitEntity.kill();
-                    }
-                    else if(hitEntity instanceof Bird || hitEntity instanceof Asteroid)
-                    {
-                        this.explode();
+
+                        scoreManager.fuel -= scoreManager.otherExplode;
+
+                        //maby check here if its game over?
+                        if(scoreManager.fuel <= 0){
+                            scoreManager.currentScreen = scoreManager.finishScreen;
+                        }
+
+
+                        //////
                         this.reset();
                     }
                 }
@@ -248,6 +268,20 @@ Ship.prototype.maybeLand = function(){
     if(!landable){
         this.explode(); 
         entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
+
+        //make the fuel drop and kill the dude
+
+
+        var currentVel = (this.velY+this.velX)/2;
+        // TODOchange to 50 to var every where
+        scoreManager.fuel -= scoreManager.landScapeExplode * currentVel;
+
+
+
+
+        //maby check here if its game over?
+
+
         this.reset();
         return;
     }
@@ -264,6 +298,18 @@ Ship.prototype.maybeLand = function(){
     else{
         this.explode();
         entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
+
+        //make the fuel drop and kill the dude
+
+
+        currentVel = (this.velY+this.velX)/2;
+        scoreManager.fuel -= scoreManager.landScapeExplode * currentVel;
+
+
+
+
+        //maby check here if its game over?
+
         this.reset();   
     }
 
@@ -319,10 +365,12 @@ Ship.prototype.computeThrustMag = function () {
      if(scoreManager.fuel >= 0){
         if (keys[this.KEY_THRUST]) {
             thrust += NOMINAL_THRUST;
-           
+            this.hover1.volume = 1;
                scoreManager.fuel -= 0.1;
              
             
+        } else {
+            this.hover1.volume = 0;
         }
     }
     /*if (keys[this.KEY_RETRO]) {

@@ -108,6 +108,11 @@ Landscape.prototype.render = function (ctx) {
 	ctx.lineTo(g_canvas.width, g_canvas.height);
 	ctx.lineTo(0, g_canvas.height);
 	ctx.fill();
+
+	if (currentLevel === 0) {
+		g_sprites.flag.scale = 0.3;
+		g_sprites.flag.drawCentredAt(ctx, 10 * this.pieceWidth, g_canvas.height - this.array[10] - g_sprites.flag.height / 2 * g_sprites.flag.scale + 5, 0);
+	} 
 	
 	ctx.fillStyle = oldStyle;
 }

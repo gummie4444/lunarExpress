@@ -169,7 +169,9 @@ function requestPreloads() {
         logo : "sprites/logo.png",
         galaxy :"sprites/starbackground.png" /*"sprites/stars.jpg"*/,
         earth: "sprites/earth.png",
-        sky : "sprites/earthbackground.png"
+        sky : "sprites/earthbackground.png",
+        flag: "merica.gif"
+
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -189,8 +191,8 @@ function preloadDone() {
     g_sprites.galaxy = new Sprite(g_images.galaxy);
     g_sprites.earth = new Sprite(g_images.earth);
     g_sprites.sky = new Sprite(g_images.sky);
+    g_sprites.flag = new Sprite(g_images.flag);
 
-    if (g_canvas.height < 1000) g_sprites.logo.scale = 0.85;
 
     if (g_canvas.height < 850) {
         g_sprites.logo.scale = 0.85;

@@ -51,15 +51,20 @@ Asteroid.prototype.update = function (du) {
             hitEntity.explode();
             //hitEntity.reset();
             //this.spawnFragment();
+            this.explode();
+
+            scoreManager.fuel -= scoreManager.otherExplode;
+
+            //maby check here if its game over?
+
+            //////
             this.kill();
 
         }
-        else if (hitEntity instanceof Bullet) {
-            this.takeBulletHit();
-            hitEntity.kill();
-        } 
+
         else if (hitEntity instanceof Bird) {
         	hitEntity.kill();
+            
         }
     }
 
