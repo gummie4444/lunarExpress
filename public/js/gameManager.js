@@ -268,8 +268,10 @@ var gameManager = {
 	moveTemp_y :0,
 	_renderGameScreen :function(ctx){
 		
-		g_sprites.moon.scale = 1.5;
-		g_sprites.moon.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x,g_canvas.width/2+this.moveTemp_y,0);
+		g_sprites.galaxy.scale = 1.01;
+		g_sprites.galaxy.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x/2,g_canvas.width/2+this.moveTemp_y/2,0);
+		g_sprites.earth.scale = 1.01;
+		g_sprites.earth.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x,g_canvas.width/2+this.moveTemp_y -100,0);
 
 
 		entityManager.render(ctx);

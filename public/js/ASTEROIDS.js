@@ -167,7 +167,8 @@ function requestPreloads() {
         bird_down : "https://notendur.hi.is/~ffk3/lunarlander/fuglnidur.png",
         bird_up : "https://notendur.hi.is/~ffk3/lunarlander/fuglupp.png",
         logo : "https://notendur.hi.is/~ffk3/lunarlander/logo.png",
-        moonTest : "https://www.komar.de/fileadmin/media/Fototapeten_Bilder/8-019_Earth_Moon_hd.jpg"
+        galaxy : "http://apod.nasa.gov/apod/image/1005/comacluster_rowe_big.jpg",
+        earth: "jord.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -184,7 +185,9 @@ function preloadDone() {
     g_sprites.bird_up = new Sprite(g_images.bird_up);
     g_sprites.logo = new Sprite(g_images.logo);
 
-    g_sprites.moon = new Sprite(g_images.moonTest);
+    g_sprites.galaxy = new Sprite(g_images.galaxy);
+    g_sprites.earth = new Sprite(g_images.earth);
+
     if (g_canvas.height < 1000) g_sprites.logo.scale = 0.85;
 
     if (g_canvas.height < 850) {

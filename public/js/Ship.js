@@ -357,8 +357,8 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
 
     //EGIJEORGHAERHGAO
     //TODO
-    g_moveBackground_x =intervalVelX/4;
-    g_moveBackground_y =intervalVelY/4;
+    g_moveBackground_x =intervalVelX/8;
+    g_moveBackground_y =intervalVelY/8;
     
     // s = s + v_ave * t
     var nextX = this.cx + intervalVelX * du;
