@@ -35,12 +35,20 @@ Bird.prototype.update = function (du) {
     if(hitEntity) {
         if(hitEntity instanceof Ship) {
             hitEntity.explode();
+            this.explode();
+            scoreManager.fuel -= scoreManager.otherExplode;
+
+            //maby check here if its game over?
+
+        if(scoreManager.fuel <= 0){
+           gameManager.currentScreen = gameManager.finishScreen;
+        }
+
+
+            //////
             hitEntity.reset();
         }
-        else if (hitEntity instanceof Bullet) {
-            this.takeBulletHit();
-            hitEntity.kill();
-        }
+
     }
 
     this.wingFlapTime = this.wingFlapTime + NOMINAL_UPDATE_INTERVAL;

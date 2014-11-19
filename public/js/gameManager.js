@@ -36,6 +36,7 @@ var gameManager = {
 			
 		}
 		else if(screenIndex === this.finishScreen){
+			entityManager.render(ctx);
 			this._renderFinishScreen(ctx);
 		}
 		else if(screenIndex === this.highScoreScreen){
@@ -43,6 +44,7 @@ var gameManager = {
 			this._renderHighscoreScreen(ctx);
 		}
 		else if (screenIndex === this.gameScreen){
+
 			this._renderGameScreen(ctx);
 		}
 
@@ -56,9 +58,11 @@ var gameManager = {
 		}
 		else if(screenIndex === this.finishScreen){
 			this._updateFinishScreen(du);
+			entityManager.update(du);
 		}
 		else if(screenIndex === this.highScoreScreen){
 			this._updateHighscoreScreen(du);
+			entityManager.update(du);
 		}
 		else if (screenIndex === this.gameScreen){
 			this._updateGameScreen(du);
@@ -192,9 +196,26 @@ var gameManager = {
 
 	//FINISH SCREEN -----------
 	_renderFinishScreen :function(ctx){
+		var oldStyle = ctx.fillStyle;
+
+		ctx.textAlign = "center";
+		ctx.font = '60pt PressStart2P';
+		util.drawTextAt(ctx,"GAME OVER",g_canvas.width/2,g_canvas.height/2,"white");
+		ctx.font = '40pt PressStart2P';
+	    util.drawTextAt(ctx,"score:" + scoreManager.score,g_canvas.width/2,g_canvas.height/2+50,"white");
+
+	    ctx.fillStyle = oldStyle;
+
+
 		
 	},
 	_updateFinishScreen: function(du){
+			if(eatKey(this.KEY_ENTER)){
+				this.currentScreen = this.highScoreScreen;
+				entityManager.reset();
+				scoreManager.reset();
+
+		}
 
 	},
 	//TODOOOOOOOOO
@@ -268,7 +289,7 @@ var gameManager = {
 	moveTemp_y :0,
 	_renderGameScreen :function(ctx){
 		
-		g_sprites.galaxy.scale = 1.01;
+	//	g_sprites.galaxy.scale = 1.01;
 		g_sprites.galaxy.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x/2,g_canvas.width/2+this.moveTemp_y/2,0);
 		g_sprites.earth.scale = 1.01;
 		g_sprites.earth.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x,g_canvas.width/2+this.moveTemp_y -100,0);

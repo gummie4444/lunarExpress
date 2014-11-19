@@ -15,6 +15,8 @@ var scoreManager ={
 	fuel :200,
 	time : 0,
 	level : "",
+	landScapeExplode :50,
+	otherExplode : 15,
 
 	reset : function(){
 		this.score = 0;
@@ -47,6 +49,11 @@ var scoreManager ={
 		color = "red";
 	}
 	util.drawTextAt(ctx,"Fuel:",0,70,"white");
+
+	if(this.fuel<0){
+		this.fuel = 0;
+	}
+	
 	util.fillBox(ctx,70,55,this.fuel/2,15,color);
 	util.strokeBox(ctx, 69, 54, 100, 17, "white", 2);
 
