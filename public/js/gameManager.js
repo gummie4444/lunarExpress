@@ -91,6 +91,8 @@ var gameManager = {
 
 		//formula to let the letters be in the midle
 
+		//this._drawCurrentLevelBackground(ctx);
+
 		var oldStyle = ctx.fillStyle;
 		ctx.textAlign = "center";
 
@@ -333,17 +335,9 @@ var gameManager = {
 	moveTemp_x :0,
 	moveTemp_y :0,
 	_renderGameScreen :function(ctx){
-<<<<<<< HEAD
-=======
-		
-	//	g_sprites.galaxy.scale = 1.01;
-		g_sprites.galaxy.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x/2,g_canvas.width/2+this.moveTemp_y/2,0);
-		g_sprites.earth.scale = 1.01;
-		g_sprites.earth.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x,g_canvas.width/2+this.moveTemp_y -100,0);
 
->>>>>>> a2cf95934b8f87cf5f1abe3b25e7d30c38b6da9f
 
-		this._drawCurrentLevelBackground(ctx);
+		//this._drawCurrentLevelBackground(ctx);
 		entityManager.render(ctx);
     	if (g_renderSpatialDebug) spatialManager.render(ctx);
 		
