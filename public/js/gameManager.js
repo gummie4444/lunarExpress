@@ -213,7 +213,7 @@ var gameManager = {
 		ctx.font = '60pt PressStart2P';
 		util.drawTextAt(ctx,"GAME OVER",g_canvas.width/2,g_canvas.height/2,"white");
 		ctx.font = '40pt PressStart2P';
-	    util.drawTextAt(ctx,"score:" + scoreManager.score,g_canvas.width/2,g_canvas.height/2+50,"white");
+	    util.drawTextAt(ctx,"score:" + Math.floor(scoreManager.score),g_canvas.width/2,g_canvas.height/2+50,"white");
 
 	    ctx.fillStyle = oldStyle;
 

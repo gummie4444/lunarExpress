@@ -39,8 +39,6 @@ function Ship(descr) {
 
 Ship.prototype = new Entity();
 
-Ship.prototype.isLanded = false;
-
 
 
 Ship.prototype.hover1 = new Audio("sounds/rocketthruster.wav");
@@ -106,6 +104,10 @@ Ship.prototype.velY = 0.1;
 Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.maxVel = 1.0;
+Ship.prototype.invulnerable = true;
+Ship.prototype.invulnTimer = 0;
+Ship.prototype.landTimer = 0;
+Ship.prototype.isLanded = false;
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -185,6 +187,13 @@ Ship.prototype.explode = function(){
 
 Ship.prototype.update = function (du) {
 
+    if(gameManager.currentScreen === 0 ){
+        this.invulnTimer += du*NOMINAL_UPDATE_INTERVAL;
+    }
+    if(this.invulnTimer > 3000) this.invulnerable = false;
+
+    this.landTimer += du*NOMINAL_UPDATE_INTERVAL;
+    if(this.landTimer >0 && this.isLanded) this.reset();
 
     if(gameManager.currentScreen === 0){
         //IS IT GAME OVER BRAH
@@ -210,19 +219,21 @@ Ship.prototype.update = function (du) {
 
                     if(hitEntity instanceof Bird || hitEntity instanceof Asteroid)
                     {
-                        
-                        this.explode();
+                        if(!this.invulnerable){
+                            this.explode();
+                            this.invulnTimer = 0;
+                            scoreManager.fuel -= scoreManager.otherExplode;
+                            hitEntity.kill();
 
-                        scoreManager.fuel -= scoreManager.otherExplode;
+                            //maybe check here if its game over?
+                            if(scoreManager.fuel <= 0){
+                                scoreManager.currentScreen = scoreManager.finishScreen;
+                            }
 
-                        //maby check here if its game over?
-                        if(scoreManager.fuel <= 0){
-                            scoreManager.currentScreen = scoreManager.finishScreen;
+
+                            //////
+                            this.reset();
                         }
-
-
-                        //////
-                        this.reset();
                     }
                 }
                 
@@ -318,8 +329,10 @@ Ship.prototype.maybeLand = function(){
 Ship.prototype.land = function(){
     this.isLanded = true;
     //g_useGravity = !g_useGravity;
+    scoreManager.score += 100+scoreManager.timeBonus();
+    this.landTimer = -2000;
     this.halt();
-    this._isControllable = false;
+    this._isControllable= false;
     
 }
 
@@ -476,6 +489,8 @@ Ship.prototype.takeBulletHit = function () {
 };
 
 Ship.prototype.reset = function () {
+    this.invulnTimer = 0;
+    this.invulnerable = true;
     this.setPos(this.reset_cx, this.reset_cy);
     this.rotation = this.reset_rotation;
     this._isControllable = true;
@@ -486,6 +501,7 @@ Ship.prototype.reset = function () {
     this.velX = 0.4;
     this.velY = 0.1;
     //this.halt();
+
 };
 
 Ship.prototype.halt = function () {
@@ -522,6 +538,17 @@ Ship.prototype.render = function (ctx) {
         ctx, this.cx, this.cy, this.rotation
         );
         this.sprite.scale = origScale;
+    }
+    if(this.invulnerable){
+        var oldStyle = ctx.fillStyle;
+        ctx.globalAlpha = 0.5;
+        var grd = ctx.createRadialGradient(this.cx, this.cy, 5, this.cx, this.cy, this.getRadius()*2);
+        grd.addColorStop(0, "cyan");
+        grd.addColorStop(1, "blue");
+        ctx.fillStyle = grd;
+        util.fillCircle(ctx, this.cx, this.cy, 2*this.getRadius());
+        ctx.fillStyle = oldStyle;
+        ctx.globalAlpha = 1.0;
     }
 
     console.log(this.cx, this.cy);

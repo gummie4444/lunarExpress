@@ -5,7 +5,7 @@ function Bird(descr) {
 	this.randomiseVelocity();
 
 	this.sprite = this.sprite || g_sprites.bird_up;
-	this.scale = this.scale || 0.5;
+	this.scale = this.scale || util.randRange(0.4,0.7);
     this.wingFlapDelay = 200;
     this.wingFlapTime = 0;
 }
@@ -33,12 +33,12 @@ Bird.prototype.update = function (du) {
 	var hitEntity = this.findHitEntity();
 
     if(hitEntity) {
-        if(hitEntity instanceof Ship) {
+        if(hitEntity instanceof Ship && !hitEntity.invulnerable) {
             hitEntity.explode();
-            this.explode();
+            this.kill();
             scoreManager.fuel -= scoreManager.otherExplode;
 
-            //maby check here if its game over?
+            //maybe check here if its game over?
 
         if(scoreManager.fuel <= 0){
            gameManager.currentScreen = gameManager.finishScreen;
