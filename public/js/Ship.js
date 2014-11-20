@@ -19,7 +19,7 @@ function Ship(descr) {
     // Common inherited setup logic from Entity
     this.setup(descr);
     this.particleSetup();
-    this.hover1.loop = true;
+    this.thrusterSound.loop = true;
     this.rememberResets();
     
     // Default sprite, if not otherwise specified
@@ -39,11 +39,9 @@ function Ship(descr) {
 
 Ship.prototype = new Entity();
 
+Ship.prototype.thrusterSound = new Audio("sounds/rocketthruster.wav");
 
-
-Ship.prototype.hover1 = new Audio("sounds/rocketthruster.wav");
-
-Ship.prototype.hover1.addEventListener('timeupdate', function() {
+Ship.prototype.thrusterSound.addEventListener('timeupdate', function() {
 
     var buffer = .64;
     if(this.currentTime > this.duration - buffer){
@@ -53,21 +51,13 @@ Ship.prototype.hover1.addEventListener('timeupdate', function() {
 
 }, false);
 
-Ship.prototype.hover1.volume = 0;
-
-Ship.prototype.hover2 = new Audio(
-    "sounds/export.wav");
-
-
 Ship.prototype.sound = function() {
-    /*if(this.hover1.currentTime != 0){
-        this.hover2.play();
-    }*/
-    /*else{
-        this.hover1.play();
-    }*/
-    this.hover1.loop = true;
-    this.hover1.play();
+        if (g_soundOn) {
+            this.thrusterSound.loop = true;
+            this.thrusterSound.play();
+        } else {
+            this.thrusterSound.pause();
+        }
 }
 //Ship.prototype.particles = new Particles(this);
 
@@ -109,6 +99,7 @@ Ship.prototype.invulnerable = true;
 Ship.prototype.invulnTimer = 0;
 Ship.prototype.landTimer = 0;
 Ship.prototype.isLanded = false;
+Ship.prototype.thrusterSound.volume = 0;
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -204,7 +195,7 @@ Ship.prototype.update = function (du) {
             
             this.maxVel = 1.0*du;
             this.sound();
-            
+
             if (this._isWarping) {
                 this._updateWarp(du);
                 return;
@@ -334,6 +325,7 @@ Ship.prototype.land = function(){
     this.landTimer = -2000;
     this.halt();
     this._isControllable= false;
+    this.thrusterSound.volume = 0;
     
 }
 
@@ -372,7 +364,7 @@ Ship.prototype.computeGravity = function () {
 var NOMINAL_THRUST = +0.0045;
 var NOMINAL_RETRO  = -0.0005;
 var thrusterSoundIncrement = 0.025;
-var thrusterSoundDecrement = 0.07
+var thrusterSoundDecrement = 0.07;
 
 Ship.prototype.computeThrustMag = function () {
     
@@ -381,19 +373,16 @@ Ship.prototype.computeThrustMag = function () {
      if(scoreManager.fuel >= 0){
         if (keys[this.KEY_THRUST]) {
             thrust += NOMINAL_THRUST;
+            scoreManager.fuel -= 0.1;
             
-            if (this.hover1.volume < 0.9) {
-                this.hover1.volume += thrusterSoundIncrement
+            if (this.thrusterSound.volume < 0.9) {
+                this.thrusterSound.volume += thrusterSoundIncrement
             }
-            
-               scoreManager.fuel -= 0.1;
-             
-            
         } else {
-            if (this.hover1.volume > 0.11) {
-                this.hover1.volume -= thrusterSoundDecrement;
+            if (this.thrusterSound.volume > 0.11) {
+                this.thrusterSound.volume -= thrusterSoundDecrement;
             } else {
-                this.hover1.volume = 0;
+                this.thrusterSound.volume = 0;
             }
         }
     }
