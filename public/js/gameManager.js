@@ -521,7 +521,7 @@ var gameManager = {
 			}
 			else{
 			ctx.textAlign = "left";
-			util.drawTextAt(ctx,i+1 + " " + this._highScoreList[i].name + " " +this._highScoreList[i].score,g_canvas.width/2-120 ,400+(i*40),"white");
+			util.drawTextAt(ctx,i+1 + " " + this._highScoreList[i].name + " " +Math.floor(this._highScoreList[i].score),g_canvas.width/2-120 ,400+(i*40),"white");
 			}
 		}
 
