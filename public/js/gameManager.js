@@ -488,10 +488,11 @@ var gameManager = {
 
 		//every time we launch it for the first time get the highscores
 		if(this._firstReload){
-			getHighScores();
+			
 			this._firstReload = false;
 
 		}
+		getHighScores();
 
 
 		var oldStyle = ctx.fillStyle;
@@ -618,11 +619,12 @@ var gameManager = {
     	if (g_renderSpatialDebug) spatialManager.render(ctx);
 
     	//ROVER-----------------
-    	g_sprites.rover.scale = 0.7;
+    	g_sprites.ship.scale = 0.2;
 
     	//TODO DRAW THIS FROM RIGHT CORNEr
-    	g_sprites.rover.drawCentredAt(ctx,this.rover_x, this.rover_y-g_sprites.rover.height / 4,this.rover_angle);
-
+    	if(g_currentLevel === 1){
+    		g_sprites.ship.drawCentredAt(ctx,this.rover_x, this.rover_y-g_sprites.ship.height/10,this.rover_angle);
+    	}
 		
 		scoreManager.render(ctx);
 	},

@@ -99,8 +99,8 @@ Landscape.prototype.setup = function () {
 
 		// Generate trees if this is earth.
 		if (g_currentLevel === 2) {
-			if (Math.random() > 0.65) {
-				this.trees[i] = this.array[i];
+			if (Math.random() > 0.75) {
+				this.trees[i] = [1, util.randRange(0.6, 1.25)];
 			}
 		}
 
@@ -129,7 +129,8 @@ Landscape.prototype.render = function (ctx) {
 			ctx.lineTo(x, y);
 
 			if (this.trees[i]) {
-				g_sprites.tree.drawCentredAt(ctx, i * this.pieceWidth, g_canvas.height - this.array[i] - g_sprites.tree.height / 2, 0);
+				g_sprites.tree.scale = this.trees[i][1];
+				g_sprites.tree.drawCentredAt(ctx, i * this.pieceWidth, g_canvas.height - this.array[i] - ((g_sprites.tree.height * this.trees[i][1]) / 2), 0);
 			}
 			
 		}

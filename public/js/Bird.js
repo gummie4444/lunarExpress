@@ -38,19 +38,16 @@ Bird.prototype.update = function (du) {
             this.kill();
             scoreManager.fuel -= scoreManager.otherExplode;
 
-            //maybe check here if its game over?
-
-        if(scoreManager.fuel <= 0){
-           gameManager.currentScreen = gameManager.finishScreen;
-        }
-
-
-            //////
+            if(scoreManager.fuel <= 0){
+               gameManager.currentScreen = gameManager.finishScreen;
+            }
+            
             hitEntity.reset();
         }
 
     }
 
+    // Make the wings flap by changing the sprite frequently.
     this.wingFlapTime = this.wingFlapTime + NOMINAL_UPDATE_INTERVAL;
 
     if (this.wingFlapTime < this.wingFlapDelay / 2) {
@@ -79,10 +76,6 @@ Bird.prototype.update = function (du) {
 
 Bird.prototype.getRadius = function () {
 	return this.scale * (this.sprite.width / 2) * 0.9;
-};
-
-Bird.prototype.takeBulletHit = function () {
-	this.kill();
 };
 
 Bird.prototype.render = function (ctx) {

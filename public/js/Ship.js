@@ -150,10 +150,6 @@ Ship.prototype.update = function (du) {
                 for (var i = 0; i < steps; ++i) {
                     this.computeSubStep(dStep);
                 }
-
-                // Handle firing
-                this.maybeFireBullet();
-
                
                 if (this._isDeadNow){
                     spatialManager.unregister(this);
@@ -394,10 +390,6 @@ Ship.prototype.getRadius = function () {
 
 Ship.prototype.getVel = function() {
     return {velX : this.velX, velY : this.velY};
-};
-
-Ship.prototype.takeBulletHit = function () {
-    this.warp();
 };
 
 Ship.prototype.reset = function () {
