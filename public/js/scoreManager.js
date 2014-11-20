@@ -14,6 +14,8 @@ var scoreManager ={
 	score : 0,
 	fuel :200,
 	time : 0,
+	verS : 0.1,
+	horS : 0.4,
 	level : "",
 	landScapeExplode :50,
 	otherExplode : 15,
@@ -34,6 +36,22 @@ var scoreManager ={
 	},
 	
 	render : function(ctx){
+
+	//horizotnal speed:
+	var oldStyle = ctx.fillStyle;
+	ctx.font = '10pt PressStart2P';
+	ctx.textAlign = "left";
+	util.drawTextAt(ctx,"Horizontal: " + Math.floor(this.horS*100),g_canvas.width-200,50,"white");
+	ctx.fillStyle = oldStyle;
+
+	//vertical speed:
+	var oldStyle = ctx.fillStyle;
+	ctx.font = '10pt PressStart2P';
+	ctx.textAlign = "left";
+	util.drawTextAt(ctx,"Vertical: " + Math.floor(this.verS*100),g_canvas.width-200,70,"white");
+	ctx.fillStyle = oldStyle;
+
+
 	//score
 	var oldStyle = ctx.fillStyle;
 	ctx.font = '10pt PressStart2P';

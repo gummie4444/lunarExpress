@@ -189,7 +189,8 @@ Ship.prototype.update = function (du) {
 
     if(gameManager.currentScreen === 0){
         
-            
+            scoreManager.verS = this.velY;
+            scoreManager.horS = this.velX;
             this.maxVel = 1.0*du;
             this.sound();
 
@@ -275,6 +276,7 @@ Ship.prototype.maybeLand = function(){
         var currentVel = (this.velY+this.velX)/2;
         // TODOchange to 50 to var every where
         scoreManager.fuel -= scoreManager.landScapeExplode * currentVel;
+
 
 
 
@@ -415,8 +417,8 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
 
     //EGIJEORGHAERHGAO
     //TODO
-    g_moveBackground_x =intervalVelX/8;
-    g_moveBackground_y =intervalVelY/8;
+    g_moveBackground_x = intervalVelX/8;
+    g_moveBackground_y = intervalVelY/8;
     
     // s = s + v_ave * t
     var nextX = this.cx + intervalVelX * du;
