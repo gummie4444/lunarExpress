@@ -70,7 +70,9 @@ _generateAsteroids : function() {
             this.generateAsteroid();
         }
         else{
+            
             this.generateAsteroid();
+
         }
         this.asteroidsTime = 0;
     }
@@ -199,7 +201,7 @@ update: function(du) {
 
    
 
-    if(g_theme && g_soundOn){
+    if(g_theme && g_musicOn){
         g_theme.play();
     }
     else{

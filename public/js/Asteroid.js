@@ -52,8 +52,10 @@ Asteroid.prototype.update = function (du) {
             //hitEntity.reset();
             //this.spawnFragment();
             this.explode();
-
-            scoreManager.fuel -= scoreManager.otherExplode;
+            if(!hitEntity.invulnerable){
+                scoreManager.fuel -= scoreManager.otherExplode;
+            }
+            
 
             //maby check here if its game over?
 
