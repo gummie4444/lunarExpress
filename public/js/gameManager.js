@@ -47,9 +47,13 @@ var gameManager = {
 			
 		}
 		else if(screenIndex === this.finishScreen){
+			if(g_soundOn){
+				g_soundOn = false;
+			}
 			entityManager.render(ctx);
 			entityManager.timeBetweenAst = 0;
 			this._renderFinishScreen(ctx);
+			//g_soundOn
 		}
 		else if(screenIndex === this.highScoreScreen){
 			//entityManager.render(ctx);
@@ -482,7 +486,7 @@ var gameManager = {
 	//HIGHSCORE SCREEN -----------
 	_renderHighscoreScreen :function(ctx){
 
-		//every time we lounch it for the first time get the highscores
+		//every time we launch it for the first time get the highscores
 		if(this._firstReload){
 			getHighScores();
 			this._firstReload = false;
@@ -510,21 +514,21 @@ var gameManager = {
 		for(var i = 0;i<this._highScoreList.length;i++){
 			if(i === 0){
 			util.drawTextAt(ctx,this._highScoreList[i].name,g_canvas.width/2 ,290,"white");
-			util.drawTextAt(ctx,this._highScoreList[i].score,g_canvas.width/2,330,"white");
+			util.drawTextAt(ctx,Math.floor(this._highScoreList[i].score),g_canvas.width/2,330,"white");
 			}
 			else if (i === 1){
 			util.drawTextAt(ctx,this._highScoreList[i].name,g_canvas.width/2-179,320,"white");
-			util.drawTextAt(ctx,this._highScoreList[i].score,g_canvas.width/2-179,360,"white");
+			util.drawTextAt(ctx,Math.floor(this._highScoreList[i].score),g_canvas.width/2-179,360,"white");
 
 			}
 			else if (i === 2){
 			util.drawTextAt(ctx,this._highScoreList[i].name,g_canvas.width/2+179,340,"white");
-			util.drawTextAt(ctx,this._highScoreList[i].score,g_canvas.width/2+179,380,"white");
+			util.drawTextAt(ctx,Math.floor(this._highScoreList[i].score),g_canvas.width/2+179,380,"white");
 
 			}
 			else{
 			ctx.textAlign = "left";
-			util.drawTextAt(ctx,i+1 + " " + this._highScoreList[i].name + " " +this._highScoreList[i].score,g_canvas.width/2-120 ,400+(i*40),"white");
+			util.drawTextAt(ctx,i+1 + " " + this._highScoreList[i].name + " " +Math.floor(this._highScoreList[i].score),g_canvas.width/2-120 ,400+(i*40),"white");
 			}
 		}
 
@@ -557,11 +561,18 @@ var gameManager = {
 
 
 	_drawEarthBackground : function(ctx) {
-		g_sprites.sky.scale = 1.01;
-		g_sprites.sky.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		//g_sprites.sky.scale = 1.01;
+		//g_sprites.sky.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		
+		var oldStyle = ctx.fillStyle;
+		ctx.fillStyle = "#5CADFF";
+		util.fillBox(ctx, 0, 0, g_canvas.width, g_canvas.height);
+		ctx.fillStyle = oldStyle;
+
+
 		g_sprites.cloud1.scale = 0.5;
 		g_sprites.cloud1.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -350,g_canvas.height/2-this.moveTemp_y/5 -100,0);
-		var oldStyle = ctx.fillStyle;
+		oldStyle = ctx.fillStyle;
 		ctx.fillStyle = "#FFD000";
 		util.fillCircle(ctx, g_canvas.width - 200, g_canvas.height - 500, 80);
 		ctx.fillStyle = oldStyle;
