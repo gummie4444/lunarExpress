@@ -11,18 +11,26 @@ To handle the score and fuel of the bro
 
 var scoreManager ={
 	
-	score : 600,
+	score : 0,
 	fuel :200,
 	time : 0,
 	level : "",
 	landScapeExplode :50,
 	otherExplode : 15,
+	lastLandTime: 0,
 
 	reset : function(){
-		this.score = 600;
+		this.score = 0;
 		this.fuel =200;
 		this.time =0;
 		this.level = "";
+		this.lastLandTime = 0;
+	},
+
+	timeBonus: function(){
+		var landTimeDifference = this.time - this.lastLandTime;
+		this.lastLandTime = this.time;
+		return -1*landTimeDifference;
 	},
 	
 	render : function(ctx){
@@ -30,7 +38,7 @@ var scoreManager ={
 	var oldStyle = ctx.fillStyle;
 	ctx.font = '10pt PressStart2P';
 	ctx.textAlign = "left";
-	util.drawTextAt(ctx,"Score:" + this.score,0,50,"white");
+	util.drawTextAt(ctx,"Score:" + Math.floor(this.score),0,50,"white");
 	ctx.fillStyle = oldStyle;
 
 	//fuel
@@ -81,9 +89,9 @@ var scoreManager ={
 
 	},
 
-	update : function(dx){
+	update : function(du){
 
-	this.time += NOMINAL_UPDATE_INTERVAL*0.001;
+	this.time += du*NOMINAL_UPDATE_INTERVAL*0.001;
 	
 
 	},

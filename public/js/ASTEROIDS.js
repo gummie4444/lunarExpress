@@ -170,7 +170,10 @@ function requestPreloads() {
         galaxy :"sprites/starbackground.png" /*"sprites/stars.jpg"*/,
         earth: "sprites/earth.png",
         sky : "sprites/earthbackground.png",
-        flag: "merica.gif"
+        flag: "merica.gif",
+        tree: "sprites/tree.png",
+        cloud1: "sprites/cloud1.png",
+        cloud2: "sprites/cloud2.png"
 
     };
 
@@ -192,6 +195,10 @@ function preloadDone() {
     g_sprites.earth = new Sprite(g_images.earth);
     g_sprites.sky = new Sprite(g_images.sky);
     g_sprites.flag = new Sprite(g_images.flag);
+    g_sprites.tree = new Sprite (g_images.tree);
+    g_sprites.cloud1 = new Sprite (g_images.cloud1);
+    g_sprites.cloud2 = new Sprite (g_images.cloud2);
+
 
 
     if (g_canvas.height < 850) {

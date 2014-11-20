@@ -17,38 +17,39 @@ function Landscape() {
 	if (g_currentLevel === 2) {
 		this.pieceWidth = 8;
 		this.heightVariation = 40;
-		this.color = "#5FD102";
+		this.fillStyle = "#5FD102";
 	} 
 
 	// Mars
 	if (g_currentLevel === 1) {
 		this.pieceWidth = 16;
 		this.heightVariation = 30;
-		this.color = "#FF1E00";
+		this.fillStyle = "#FF1E00";
 	}
 
 	// Moon
 	if (g_currentLevel === 0) {
 		this.pieceWidth = 16;
 		this.heightVariation = 20;
-		this.color = "#999999";
+		this.fillStyle = "#999999";
 	}
 
 
 	this.platformLength = 64 / this.pieceWidth;
 	this.minHeight = 50;
 	this.maxHeight = 500;
+	this.trees = [];
 	this.setup();
 }
 
 Landscape.prototype.setup = function () {
 
 	resizeGame();
-	var pieceCount = Math.ceil(g_canvas.width / this.pieceWidth);
 
+	g_gameWidth = g_canvas.width;
+	var pieceCount = Math.ceil(g_gameWidth / this.pieceWidth)+1;
+	var initialHeight = util.randRange(50,250);
 
-
-	var initialHeight = util.randRange(30,200);
 	this.array[0] = initialHeight;
 	var counter=0;
 	var platformLimit = 4;
@@ -85,24 +86,37 @@ Landscape.prototype.setup = function () {
 				
 			}		
 		}
+
+		if (g_currentLevel === 2) {
+			if (Math.random() > 0.65) {
+				this.trees[i] = this.array[i];
+			}
+		}
+
 		platformDistance++;
 	}
 }
 
 Landscape.prototype.render = function (ctx) {
 	var oldStyle = ctx.fillStyle;
-	ctx.fillStyle = this.color;
+	ctx.fillStyle = this.fillStyle;
+	var x = 0;
+	var y = g_canvas.height - this.array[0];
 	ctx.beginPath();
-	ctx.moveTo(0,g_canvas.height - this.array[0]);
+	ctx.moveTo(x,y);
 
 	var xOffset = 0;
 	while(xOffset < g_canvas.width){
 		for(var i = 1; i<this.array.length; i++){
 
-			var x = i*this.pieceWidth+xOffset;
-			var y = g_canvas.height - this.array[i];
+			x = i*this.pieceWidth+xOffset;
+			y = g_canvas.height - this.array[i];
 			
 			ctx.lineTo(x, y);
+
+			if (this.trees[i]) {
+				g_sprites.tree.drawCentredAt(ctx, i * this.pieceWidth, g_canvas.height - this.array[i] - g_sprites.tree.height / 2, 0);
+			}
 			
 		}
 		xOffset += g_gameWidth;
@@ -119,18 +133,6 @@ Landscape.prototype.render = function (ctx) {
 	
 	ctx.fillStyle = oldStyle;
 }
-
-/*
-
-drawHorizontalLine: function (ctx,ledge,redge,height){
-    ctx.beginPath();
-    ctx.moveTo(ledge,height);
-    ctx.lineTo(redge,height);
-    ctx.stroke();
-},
-
-
-*/
 
 
 Landscape.prototype.doesCollide = function (cx,cy,radius) {

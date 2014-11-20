@@ -37,12 +37,18 @@ var gameManager = {
 
 	
 		if(screenIndex === this.startingScreen){
+			if(entityManager.timeBetweenAst === 0){
+				entityManager.reset();
+				spatialManager.reset();
+				entityManager.timeBetweenAst = 2000;
+			}
 			entityManager.render(ctx);
 			this._renderStartingScreen(ctx);
 			
 		}
 		else if(screenIndex === this.finishScreen){
-			//entityManager.render(ctx);
+			entityManager.render(ctx);
+			entityManager.timeBetweenAst = 0;
 			this._renderFinishScreen(ctx);
 		}
 		else if(screenIndex === this.highScoreScreen){
@@ -50,7 +56,7 @@ var gameManager = {
 			this._renderHighscoreScreen(ctx);
 		}
 		else if (screenIndex === this.gameScreen){
-
+			//entityManager.timeBetweenAst = 2000;
 			this._renderGameScreen(ctx);
 		}
 
@@ -443,7 +449,7 @@ var gameManager = {
 		ctx.font = '60pt PressStart2P';
 		util.drawTextAt(ctx,"GAME OVER",g_canvas.width/2,g_canvas.height/2,"white");
 		ctx.font = '40pt PressStart2P';
-	    util.drawTextAt(ctx,"score:" + scoreManager.score,g_canvas.width/2,g_canvas.height/2+50,"white");
+	    util.drawTextAt(ctx,"score:" + Math.floor(scoreManager.score),g_canvas.width/2,g_canvas.height/2+50,"white");
 
 	    ctx.fillStyle = oldStyle;
 
@@ -553,6 +559,14 @@ var gameManager = {
 	_drawEarthBackground : function(ctx) {
 		g_sprites.sky.scale = 1.01;
 		g_sprites.sky.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		g_sprites.cloud1.scale = 0.5;
+		g_sprites.cloud1.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -350,g_canvas.height/2-this.moveTemp_y/5 -100,0);
+		var oldStyle = ctx.fillStyle;
+		ctx.fillStyle = "#FFD000";
+		util.fillCircle(ctx, g_canvas.width - 200, g_canvas.height - 500, 80);
+		ctx.fillStyle = oldStyle;
+		g_sprites.cloud2.scale = 0.5;
+		g_sprites.cloud2.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 +150,g_canvas.height/2-this.moveTemp_y/5 -50,0);
 	},
 
 	_drawMarsBackground : function(ctx){
