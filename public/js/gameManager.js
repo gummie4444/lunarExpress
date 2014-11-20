@@ -7,19 +7,20 @@ To handle all the diffirent states of the game
 */
 
 "use strict";
+//Volume
 var g_theme = new Audio("sounds/Deeper.ogg");
 	g_theme.loop = true;
 	g_theme.volume = 0.8;
 var moonEarthX, moonEarthY;
 var explosion1,explosion2;
 	
-	//LAGA
+// Background movement
 var g_moveBackground_x = 0;
 var g_moveBackground_y = 0;
 
 var gameManager = {
 
-	//
+	//screens
 
 	gameScreen : 0,
 	highScoreScreen : 1,
@@ -33,7 +34,7 @@ var gameManager = {
 
 
 
-
+	//the renderScrenn function that take cares of the game
 	renderScreen: function(screenIndex,ctx){
 		this._drawCurrentLevelBackground(ctx);
 
@@ -81,7 +82,7 @@ var gameManager = {
 
 	},
 
-
+	//updatescreen of the game
 	updateScreen: function(screenIndex,du){
 
 
@@ -112,9 +113,11 @@ var gameManager = {
 		}
 	},
 
+	//var for the startingScreen
 	_StartingScreenChoice : 0,
 	_StartingScreenLevel :null,
 
+	//key vars
 	KEY_UPP  : 38,
 	KEY_LEFT : 37,
 	KEY_RIGHT : 39,
@@ -122,6 +125,7 @@ var gameManager = {
 	KEY_ENTER: 13,
 
 
+	//vars for the Highscoreinput name
 	_letter1 : alphabet[0],
 	_letter2 : alphabet[0],
 	_letter3 : alphabet[0],
@@ -131,81 +135,81 @@ var gameManager = {
 
 	_renderNameInputScreen:function(ctx){
 
-			var letter1Color = "white";
-			var letter2Color = "white";
-			var letter3Color = "white";
+		var letter1Color = "white";
+		var letter2Color = "white";
+		var letter3Color = "white";
 
-			util.drawTextAt(ctx,"YOU MADE IT TO THE HIGHSCORE",g_canvas.width/2,g_canvas.height/2-150,letter2Color);
-			util.drawTextAt(ctx,"WRITE YOUR INITIALS",g_canvas.width/2,g_canvas.height/2-50,letter2Color)
-		 
+		//text
+		ctx.font = '40pt PressStart2P';
+		util.drawTextAt(ctx,"YOU MADE IT TO THE HIGHSCORE",g_canvas.width/2,g_canvas.height/2-150,letter2Color);
+		util.drawTextAt(ctx,"WRITE YOUR INITIALS",g_canvas.width/2,g_canvas.height/2-50,letter2Color)
+	 
+		//letter color is selected
+   	    if(this._currentLetter === 0){
+	    	letter1Color = "purple";
+	    }
+	    else if (this._currentLetter=== 1){
+	    	letter2Color = "purple";
 
-		   	    if(this._currentLetter === 0){
-			    	letter1Color = "purple";
-			    }
-			    else if (this._currentLetter=== 1){
-			    	letter2Color = "purple";
+	    }
+	    else if (this._currentLetter === 2){
+	    	letter3Color = "purple";
 
-			    }
-			    else if (this._currentLetter === 2){
-			    	letter3Color = "purple";
+	    }
 
-			    }
+	    //triangle selected upp
+	    var point1_x = g_canvas.width/2 -57 + this._arrowMove;
+	    var point1_y = g_canvas.height/2 -20;
+	    var point2_x = g_canvas.width/2 -47 + this._arrowMove;
+	    var point2_y = g_canvas.height/2 -20;
+	    var point3_x = g_canvas.width/2 -52 +this._arrowMove;
+	    var point3_y = g_canvas.height/2 -30;
+	    ctx.beginPath();
+		ctx.moveTo(point1_x,point1_y);
+		ctx.lineTo(point2_x,point2_y);
+		ctx.lineTo(point3_x,point3_y);
+		if(!this._arrowColor){
+			ctx.fillStyle= "purple";
+		}
+		else{
+			ctx.fillStyle= "white";
+		}
+		ctx.fill();
 
-			    //triangle
+		//triangle selected down
+	    var point1_x = g_canvas.width/2 -57 +this._arrowMove;
+	    var point1_y = g_canvas.height/2 +60;
+	    var point2_x = g_canvas.width/2 -47 + this._arrowMove;
+	    var point2_y = g_canvas.height/2 +60;
+	    var point3_x = g_canvas.width/2 -52+ this._arrowMove;
+	    var point3_y = g_canvas.height/2 +70;
+	    ctx.beginPath();
+		ctx.moveTo(point1_x,point1_y);
+		ctx.lineTo(point2_x,point2_y);
+		ctx.lineTo(point3_x,point3_y);
 
-			    var point1_x = g_canvas.width/2 -57 + this._arrowMove;
-			    var point1_y = g_canvas.height/2 -20;
-			    var point2_x = g_canvas.width/2 -47 + this._arrowMove;
-			    var point2_y = g_canvas.height/2 -20;
-			    var point3_x = g_canvas.width/2 -52 +this._arrowMove;
-			    var point3_y = g_canvas.height/2 -30;
-			    ctx.beginPath();
-				ctx.moveTo(point1_x,point1_y);
-				ctx.lineTo(point2_x,point2_y);
-				ctx.lineTo(point3_x,point3_y);
-				if(!this._arrowColor){
-					ctx.fillStyle= "purple";
-				}
-				else{
-					ctx.fillStyle= "white";
-				}
-				ctx.fill();
-
-
-			    var point1_x = g_canvas.width/2 -57 +this._arrowMove;
-			    var point1_y = g_canvas.height/2 +60;
-			    var point2_x = g_canvas.width/2 -47 + this._arrowMove;
-			    var point2_y = g_canvas.height/2 +60;
-			    var point3_x = g_canvas.width/2 -52+ this._arrowMove;
-			    var point3_y = g_canvas.height/2 +70;
-			    ctx.beginPath();
-				ctx.moveTo(point1_x,point1_y);
-				ctx.lineTo(point2_x,point2_y);
-				ctx.lineTo(point3_x,point3_y);
-
-				if(this._arrowColor){
-					ctx.fillStyle= "purple";
-				}
-				else{
-					ctx.fillStyle= "white";
-				}
-				ctx.fill();
-
-
-
-
+		//arrow colors
+		if(this._arrowColor){
+			ctx.fillStyle= "purple";
+		}
+		else{
+			ctx.fillStyle= "white";
+		}
+		ctx.fill();
 
 
-		   util.drawTextAt(ctx,this._letter1,g_canvas.width/2-50,g_canvas.height/2+50,letter1Color);
-		   util.drawTextAt(ctx,this._letter2,g_canvas.width/2,g_canvas.height/2+50,letter2Color);
-		   util.drawTextAt(ctx,this._letter3,g_canvas.width/2+50,g_canvas.height/2+50,letter3Color);
+		//draw letters
+		util.drawTextAt(ctx,this._letter1,g_canvas.width/2-50,g_canvas.height/2+50,letter1Color);
+		util.drawTextAt(ctx,this._letter2,g_canvas.width/2,g_canvas.height/2+50,letter2Color);
+		util.drawTextAt(ctx,this._letter3,g_canvas.width/2+50,g_canvas.height/2+50,letter3Color);
 
 
 	},
 
 	_updateNameInputScreen :function(du){
-		//SETJA ÞENNAN SKÍT Í EITTHVAÐ FALL
-		///--------------------
+		//logic for the pick a name for highscore
+
+		////////////////////////////////////////////////////////////////////////
 		if(eatKey(this.KEY_DOWN)){
 			this._arrowColor = true;
 
@@ -243,7 +247,7 @@ var gameManager = {
 			}
 
 		}
-		///------------------------------
+		////////////////////////////////////////////////////////////////////////
 
 		if(eatKey(this.KEY_UPP)){
 
@@ -283,10 +287,8 @@ var gameManager = {
 			}
 
 		}
-		///------------------------------
-
-
-		///------------------------------
+		//////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////
 		if(eatKey(this.KEY_LEFT)){
 			if(this._currentLetter === 0){
 				this._currentLetter = 2;
@@ -298,8 +300,8 @@ var gameManager = {
 			this._arrowMove = this._currentLetter * 48;
 			
 		}
-		///------------------------------
-		///------------------------------
+		/////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////
 
 		if(eatKey(this.KEY_RIGHT)){
 			if(this._currentLetter === 2){
@@ -310,17 +312,18 @@ var gameManager = {
 			}
 			this._arrowMove = this._currentLetter * 48;
 		}
-		///------------------------------
+		/////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////
 
 		if(eatKey(this.KEY_ENTER)){
 			console.log(scoreManager.score);
 			updateHighScore({name:this._letter1 + this._letter2 + this._letter3,score : scoreManager.score});
 
 			this.currentScreen = this.highScoreScreen;
-			//scoreManager.reset();
-
+			scoreManager.reset();
 		}
 
+		/////////////////////////////////////////////////////////////////////////
 
 
 	},
@@ -330,10 +333,7 @@ var gameManager = {
 	//STARTING SCREEN -----------
 	_renderStartingScreen :function(ctx){
 
-
-		//formula to let the letters be in the midle
-
-		//this._drawCurrentLevelBackground(ctx);
+		//text and other things on the starting screen
 
 		var oldStyle = ctx.fillStyle;
 		ctx.textAlign = "center";
@@ -366,11 +366,12 @@ var gameManager = {
 
 	    }
 
+	    // draw the choicess
 	    util.drawTextAt(ctx,Play,g_canvas.width/2,g_canvas.height/2-80+240,PlayColor);
 	    util.drawTextAt(ctx,Highscore,g_canvas.width/2,g_canvas.height/2+240,HighscoreColor);
 	    util.drawTextAt(ctx,Controls,g_canvas.width/2,g_canvas.height/2+80+240,ControlsColor);
 
-	    //TODO MAKE THIS SPRITES
+	    //right and left arrows to select level
 	    var ArrowLeft = "<-";
 	    var ArrowRight ="->";
 	    var ArrowLeftColor ="white";
@@ -392,10 +393,13 @@ var gameManager = {
 	},
 
 	_updateStartingScreen: function(du){
-		//ef arrowkey upp
+
 		if(!g_earthIsAlive){
 			g_earthIsAlive = true;
 		}
+
+		//logic for the starting screen arrow clicks and enter
+
 		if (eatKey(this.KEY_UPP)){
 			if (this._StartingScreenChoice === 0){
 				this._StartingScreenChoice = 2;
@@ -404,7 +408,7 @@ var gameManager = {
 			this._StartingScreenChoice -= 1;
 			}
 		}
-		//ef arrowkey niður
+		
 		if (eatKey(this.KEY_DOWN)){
 			if (this._StartingScreenChoice === 2){
 				this._StartingScreenChoice = 0;
@@ -415,7 +419,6 @@ var gameManager = {
 		}
 
 		if(eatKey(this.KEY_LEFT)){
-			//settu background til vinstri
 			this._StartingScreenLevel = "left";
 			
 			if (g_currentLevel > 0) {
@@ -423,12 +426,13 @@ var gameManager = {
 			} else {
 				g_currentLevel = 2;
 			}
-
+			 //reset the level
 			 entityManager.reset();
 			 spatialManager.reset();
 		}
+
+
 		if(eatKey(this.KEY_RIGHT)){
-			//settu background til hægri
 			this._StartingScreenLevel = "right";
 
 			if (g_currentLevel < 2) {
@@ -436,13 +440,13 @@ var gameManager = {
 			} else {
 				g_currentLevel = 0;
 			}
-
+			 //reset the level
 			 entityManager.reset();
 			 spatialManager.reset();
 		}
- 
+
+ 		//go to the selected screen
 		if(eatKey(this.KEY_ENTER)){
-			console.log("hallo")
 			this.currentScreen = this._StartingScreenChoice;
 			scoreManager.reset();
 			scoreManager.level = this.level_array[g_currentLevel];
@@ -462,8 +466,6 @@ var gameManager = {
 	    util.drawTextAt(ctx,"Score:" + Math.floor(scoreManager.score),g_canvas.width/2,g_canvas.height/2+50,"white");
 
 	    ctx.fillStyle = oldStyle;
-
-
 		
 	},
 	_updateFinishScreen: function(du){
@@ -488,21 +490,19 @@ var gameManager = {
 		}
 
 	},
-	//TODOOOOOOOOO
-	//DO THIS BETTER DERP SOLUTION
+
+	//init the highscorescreen
 	_highScoreList : [],
-	_firstReload : true,
+
 
 	//HIGHSCORE SCREEN -----------
 	_renderHighscoreScreen :function(ctx){
 
-		//every time we launch it for the first time get the highscores
-		if(this._firstReload){
-			getHighScores();
-			this._firstReload = false;
+		// Here we get the highscore from localstorage and
+		// draw it in t he order it came
 
-		}
-
+		//every time we launch it get the highscores
+		getHighScores();
 
 		var oldStyle = ctx.fillStyle;
 		ctx.textAlign = "center";
@@ -520,7 +520,8 @@ var gameManager = {
 		util.drawTextAt(ctx,"2",g_canvas.width/2 -179,430,"black");
 		ctx.font = '40pt PressStart2P';	
 		util.drawTextAt(ctx,"3",g_canvas.width/2 +179,440,"black");
-		ctx.font = '25pt PressStart2P';	
+		ctx.font = '25pt PressStart2P';
+
 		for(var i = 0;i<this._highScoreList.length;i++){
 			if(i === 0){
 			util.drawTextAt(ctx,this._highScoreList[i].name,g_canvas.width/2 ,290,"white");
@@ -546,15 +547,14 @@ var gameManager = {
 	},
 	_updateHighscoreScreen: function(du){
 
-		//maby do this
-		//this._firstrealod = true;
-
 		if(eatKey(this.KEY_ENTER)){
 			this.currentScreen = this.startingScreen;
 		}
 
 	},
+	//--------------------------------------------------------
 
+	//diffrent backgrounds on diffrent levels
 	_drawCurrentLevelBackground : function(ctx){
 		switch(g_currentLevel){
 			case 0:
@@ -569,7 +569,9 @@ var gameManager = {
 		}
 	},
 
-	
+
+	//DIFFRENT BACKGROUNDS
+
 	_drawEarthBackground : function(ctx) {
 		//g_sprites.sky.scale = 1.01;
 		//g_sprites.sky.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
@@ -629,8 +631,10 @@ var gameManager = {
 		
 	},
 
+	//----------------------------------------------------------------
 
 	//GAME SCREEN -----------
+	// vars for the rover
 	moveTemp_y : 0,
 	moveTemp_x : 0,
 
@@ -652,21 +656,24 @@ var gameManager = {
 		entityManager.render(ctx);
     	if (g_renderSpatialDebug) spatialManager.render(ctx);
 
-    	//ROVER-----------------
-    	g_sprites.rover.scale = 0.7;
 
-    	//TODO DRAW THIS FROM RIGHT CORNEr
-    	g_sprites.rover.drawCentredAt(ctx,this.rover_x, this.rover_y-g_sprites.rover.height / 4,this.rover_angle);
 
+
+    	//only draw the rover on mars
+    	if(g_currentLevel === 1){
+
+    		//ROVER-----------------
+    		g_sprites.rover.scale = 0.7;
+    		g_sprites.rover.drawCentredAt(ctx,this.rover_x, this.rover_y-g_sprites.ship.height / 5 + 3,this.rover_angle);
+    	}
 		
 		scoreManager.render(ctx);
 	},
 
+	//is rover out of bounce
 	_rover_bound :false,
 	_updateGameScreen: function(du){
-
-
-
+		//move the current background
 		this.moveTemp_x += g_moveBackground_x;
 		this.moveTemp_y += g_moveBackground_y;
 
@@ -678,32 +685,37 @@ var gameManager = {
 	    entityManager.update(du);
 	    scoreManager.update(du);
 
-	    //ROVER-------------
-	    //MOVE THIS SOMWHERE 
+	    //ROVER-------------E 
 	    if(g_currentLevel === 1){
+	    	//if we are on the right_bound
 			if(this.counter+1 === entityManager.landscape.array-1){
 				this._rover_bound = true;
 
 			}
+			//if we are on the left_bound
 			else if(this.counter -1 === 0){
 				this._rover_bound = false;
 			}
 
+			//change the rover y if we are at a new point
 		    if (this.counter2 === 0){
 		    	this.rover_y =g_canvas.height - entityManager.landscape.array[this.counter];
 		    }
 
+		    //calc the angle of the rover
 		    this.rover_angle = (entityManager.landscape.array[this.counter]-entityManager.landscape.array[this.counter+1])/entityManager.landscape.pieceWidth;
+		    //calculate the speed of the rover in x and y direction
 		    this.x_speed = entityManager.landscape.pieceWidth/100;
 			this.y_speed =(entityManager.landscape.array[this.counter] -entityManager.landscape.array[this.counter+1])/100;
+
+			//the counter2 takes care of if we are at a new point
 			this.counter2 += this.x_speed;
+
+			//change the rover dest
 			this.rover_x += this.x_speed;
 			this.rover_y += this.y_speed;
-
-
-
-		
-
+	
+			//If we are at a new point
 			if(this.counter2 >= entityManager.landscape.pieceWidth){
 
 				if(this._rover_bound){
@@ -711,6 +723,7 @@ var gameManager = {
 					this.counter--;
 
 				}
+				//go to the right
 				else{
 					this.counter++;
 				}
@@ -721,16 +734,8 @@ var gameManager = {
 		 }
 
 		//ROOOOOOOOOOOOVEEERR---------------
-
-	    // Prevent perpetual firing!
-	    eatKey(Ship.prototype.KEY_FIRE);
-
 	},
 
-	// controlMenuShip : new Ship({
-	// 	cx : 400,
-	// 	cy : 400,
- //    	sprite : g_sprites.ship}),
 
 	_renderControlsScreen : function(ctx) {
 		

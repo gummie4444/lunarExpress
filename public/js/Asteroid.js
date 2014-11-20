@@ -43,7 +43,7 @@ Asteroid.prototype.randomiseVelocity = function () {
 Asteroid.prototype.explode = function(){
     entityManager.generateExplosion(this.cx, this.cy, "#525252"); 
     entityManager.generateExplosion(this.cx, this.cy, "#FFA318");
-}
+};
 
 Asteroid.prototype.update = function (du) {
 
@@ -53,22 +53,13 @@ Asteroid.prototype.update = function (du) {
 
     if(hitEntity) {
         if(hitEntity instanceof Ship) {
-            //Þarf kannski að skoða þetta eitthvað :
-            //ÞARF AÐ SKOÐA ÞETTA EITTHVAÐ!!!
             hitEntity.explode();
-            //hitEntity.reset();
-            //this.spawnFragment();
             this.explode();
             if(!hitEntity.invulnerable){
+                // The player takes a penalty to fuel if asteroids hit it.
                 scoreManager.fuel -= scoreManager.otherExplode;
             }
-            
-
-            //maby check here if its game over?
-
-            //////
             this.kill();
-
         }
 
         else if (hitEntity instanceof Bird) {
@@ -106,10 +97,6 @@ Asteroid.prototype.update = function (du) {
 
 Asteroid.prototype.getRadius = function () {
 	return this.scale * (this.sprite.width / 2) * 0.9;
-};
-
-Asteroid.prototype.takeBulletHit = function () {
-	this.kill();
 };
 
 Asteroid.prototype.spawnFragment = function () {

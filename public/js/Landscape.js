@@ -78,15 +78,19 @@ Landscape.prototype.setup = function () {
 			counter--;
 		} else { // Else generate a random height.
 			if (prevHeight <= this.minHeight){
+				// Don't go below mininum height.
 				this.array[i] = prevHeight + util.randRange(this.heightVariation/4,this.heightVariation);
 			} else if (prevHeight >= this.maxHeight){
+				// Don't go above max height.
 				this.array[i] = prevHeight - util.randRange(this.heightVariation/4,this.heightVariation);
-			} else {
+			} else { // If last height change was upwards, increased chance of upwards change again. 
+					 // also, the higher the smaller the change.
 				if (prevHeight - this.array[i-2] > 0) {
 					this.array[i] = prevHeight + util.randRange(-this.heightVariation/12, this.heightVariation - prevHeight * 0.06);
 				} else if (prevHeight - this.array[i-2] < 0) {
+					// Same as before, but for downward height change.
 					this.array[i] = prevHeight + util.randRange(-this.heightVariation + prevHeight * 0.06, this.heightVariation/12);
-				} else {
+				} else { // If last height change was zero, generate random height.
 					this.array[i] = prevHeight + util.randRange(-this.heightVariation, this.heightVariation);
 				}
 				
@@ -95,8 +99,8 @@ Landscape.prototype.setup = function () {
 
 		// Generate trees if this is earth.
 		if (g_currentLevel === 2) {
-			if (Math.random() > 0.65) {
-				this.trees[i] = this.array[i];
+			if (Math.random() > 0.75) {
+				this.trees[i] = [1, util.randRange(0.6, 1.25)];
 			}
 		}
 
@@ -108,11 +112,14 @@ Landscape.prototype.render = function (ctx) {
 	var oldStyle = ctx.fillStyle;
 	ctx.fillStyle = this.fillStyle;
 	var x = 0;
+	// Height values of landscape are stored in distance from bottom, therefore drawing
+	// height is g_canvas.height - current height value.
 	var y = g_canvas.height - this.array[0];
 	ctx.beginPath();
 	ctx.moveTo(x,y);
 
 	var xOffset = 0;
+	// xOffset is used to wrap landscape if window is resized while game is playing.
 	while(xOffset < g_canvas.width){
 		for(var i = 1; i<this.array.length; i++){
 
@@ -122,7 +129,8 @@ Landscape.prototype.render = function (ctx) {
 			ctx.lineTo(x, y);
 
 			if (this.trees[i]) {
-				g_sprites.tree.drawCentredAt(ctx, i * this.pieceWidth, g_canvas.height - this.array[i] - g_sprites.tree.height / 2, 0);
+				g_sprites.tree.scale = this.trees[i][1];
+				g_sprites.tree.drawCentredAt(ctx, i * this.pieceWidth, g_canvas.height - this.array[i] - ((g_sprites.tree.height * this.trees[i][1]) / 2), 0);
 			}
 			
 		}
@@ -134,6 +142,7 @@ Landscape.prototype.render = function (ctx) {
 	ctx.fill();
 
 	if (g_currentLevel === 0) {
+		// If on moon, render flag.
 		g_sprites.flag.scale = 0.3;
 		g_sprites.flag.drawCentredAt(ctx, 10 * this.pieceWidth, g_canvas.height - this.array[10] - g_sprites.flag.height / 2 * g_sprites.flag.scale + 5, 0);
 	} 
@@ -143,15 +152,14 @@ Landscape.prototype.render = function (ctx) {
 
 
 Landscape.prototype.doesCollide = function (cx,cy,radius) {
+	// Handle landscape wrapping for collisions.
 	while(cx > g_gameWidth){
 		cx -= g_gameWidth;
 	}
 
+	// Indices of height values relevant to collision check.
 	var leftIndex = Math.floor((cx-radius)/this.pieceWidth);
 	var rightIndex = Math.ceil((cx+radius)/this.pieceWidth);
-
-	//console.log("leftIndex " + leftIndex, "rightIndex " + rightIndex);
-	//util.drawHorizontalLine(g_ctx, leftIndex, rightIndex, g_canvas.height- cy);
 
 	for(var i = leftIndex; i<=rightIndex; i++){
 		if(cy > (g_canvas.height-this.array[i])){
@@ -170,7 +178,7 @@ Landscape.prototype.doesCollide = function (cx,cy,radius) {
 }
 
 Landscape.prototype.landable = function(leftIndex, rightIndex){
-	
+	// Check if landscape between indices is flat.
 	for(var i = leftIndex+1; i <= rightIndex; i++){
 		var prevHeight = this.array[i-1];
 		if(this.array[i] != prevHeight){
@@ -195,6 +203,7 @@ Landscape.prototype.destroy = function(cx,cy,radius){
 	for(var i = -pieceRadius+pieceCx; i < pieceRadius+pieceCx; i++){
 		var y = g_canvas.height-this.array[i];
 		var x = i*this.pieceWidth;
+		// Distance between center of collision and current piece of land.
 		var dist = Math.sqrt(util.distSq(x,y,cx,cy));
 		if(dist < radius){		
 			this.array[i] -= (radius - dist);
