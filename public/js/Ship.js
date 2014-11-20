@@ -130,13 +130,11 @@ Ship.prototype.update = function (du) {
                             scoreManager.fuel -= scoreManager.otherExplode;
                             hitEntity.kill();
 
-                            //maybe check here if its game over?
+                            // Check for game over.
                             if(scoreManager.fuel <= 0){
                                 scoreManager.currentScreen = scoreManager.finishScreen;
                             }
 
-
-                            //////
                             this.reset();
                         }
                     }
@@ -181,18 +179,9 @@ Ship.prototype.maybeLand = function(){
         this.explode(); 
         entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
 
-        //make the fuel drop and kill the dude
-
-
         var currentVel = (this.velY+this.velX)/2;
-        // TODOchange to 50 to var every where
+        // Lose fuel upon crash with landscape.
         scoreManager.fuel -= scoreManager.landScapeExplode * currentVel;
-
-
-
-
-        //maby check here if its game over?
-
 
         this.reset();
         return;
@@ -211,16 +200,8 @@ Ship.prototype.maybeLand = function(){
         this.explode();
         entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
 
-        //make the fuel drop and kill the dude
-
-
         currentVel = (this.velY+this.velX)/2;
         scoreManager.fuel -= scoreManager.landScapeExplode * currentVel;
-
-
-
-
-        //maby check here if its game over?
 
         this.reset();   
     }
@@ -229,13 +210,11 @@ Ship.prototype.maybeLand = function(){
 
 Ship.prototype.land = function(){
     this.isLanded = true;
-    //g_useGravity = !g_useGravity;
     scoreManager.score += 100+scoreManager.timeBonus();
     this.landTimer = -2000;
     this.halt();
     this._isControllable= false;
     this.thrusterSound.volume = 0;
-    
 }
 
 Ship.prototype.computeSubStep = function (du) {
@@ -267,7 +246,6 @@ Ship.prototype.computeGravity = function () {
         return NOMINAL_GRAVITY
     }
     return 0;
-    //return g_useGravity ? NOMINAL_GRAVITY : 0;
 };
 
 var NOMINAL_THRUST = +0.0045;
@@ -310,11 +288,8 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     var oldVelY = this.velY;
     
     // v = u + at
-    //if(util.square(this.maxVel)> (util.square(this.velX) + util.square(this.velY)) ){
-    //if(this.velX<this.maxVel && this.velY < this.maxVel){
-        this.velX += accelX * du;
-        this.velY += accelY * du; 
-    //}
+    this.velX += accelX * du;
+    this.velY += accelY * du; 
 
     // v_ave = (u + v) / 2
     var aveVelX = (oldVelX + this.velX) / 2;
@@ -324,8 +299,6 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     var intervalVelX = g_useAveVel ? aveVelX : this.velX;
     var intervalVelY = g_useAveVel ? aveVelY : this.velY;
 
-    //EGIJEORGHAERHGAO
-    //TODO
     g_moveBackground_x =intervalVelX/8;
     g_moveBackground_y =intervalVelY/8;
     
@@ -335,7 +308,6 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     
     // bounce
     if (g_useGravity) {
-
 
     var origScale = this.sprite.scale;
     this.sprite.scale = this._scale;
@@ -348,36 +320,11 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     	if (this.cy > maxY || this.cy < minY) {
     	    // do nothing
     	} 
-        /*else if (nextY > maxY || nextY < minY) {
-                this.velY = oldVelY * -0.9;
-                intervalVelY = this.velY;
-        }*/
     }
     
     // s = s + v_ave * t
     this.cx += du * intervalVelX;
     this.cy += du * intervalVelY;
-};
-
-Ship.prototype.maybeFireBullet = function () {
-
-    if (keys[this.KEY_FIRE]) {
-    
-        var dX = +Math.sin(this.rotation);
-        var dY = -Math.cos(this.rotation);
-        var launchDist = this.getRadius() * 1.2;
-        
-        var relVel = this.launchVel;
-        var relVelX = dX * relVel;
-        var relVelY = dY * relVel;
-
-        entityManager.fireBullet(
-           this.cx + dX * launchDist, this.cy + dY * launchDist,
-           this.velX + relVelX, this.velY + relVelY,
-           this.rotation);
-           
-    }
-    
 };
 
 Ship.prototype.getRadius = function () {
@@ -403,12 +350,9 @@ Ship.prototype.reset = function () {
     this.rotation = this.reset_rotation;
     this._isControllable = true;
     this.isLanded = false;
-    /*if(!g_useGravity){
-        g_useGravity = !g_useGravity;
-    }*/
+    
     this.velX = 0.4;
     this.velY = 0.1;
-    //this.halt();
 
 };
 
@@ -458,14 +402,5 @@ Ship.prototype.render = function (ctx) {
         ctx.fillStyle = oldStyle;
         ctx.globalAlpha = 1.0;
     }
-
-
-    // pass my scale into the sprite, for drawing
-    /*this.sprite.scale = this._scale;
-    this.sprite.drawWrappedCentredAt(
-	ctx, this.cx, this.cy, this.rotation
-    );
-    this.sprite.scale = origScale;
-    */
     this.particles.render(ctx);
 };
