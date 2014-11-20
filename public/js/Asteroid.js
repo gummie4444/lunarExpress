@@ -23,8 +23,15 @@ Asteroid.prototype.randomiseVelocity = function () {
 	var xSpeed = util.randRange(MIN_SPEED, MAX_SPEED) / SECS_TO_NOMINALS;
 	var ySpeed = util.randRange(MIN_SPEED - MIN_SPEED/2/*/ 2*/, MAX_SPEED /*/ 2*/) / SECS_TO_NOMINALS;
 
-	this.velX = xSpeed;
-	this.velY = ySpeed;
+    if(Math.random() > 0.5){
+        this.velX = xSpeed;
+        this.velY = ySpeed;
+    }
+    else{
+        this.velX = -xSpeed;
+        this.velY = ySpeed;
+    }
+	
 
 	var MIN_ROT_SPEED = 1,
         MAX_ROT_SPEED = 3;

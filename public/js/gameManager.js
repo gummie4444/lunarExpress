@@ -591,7 +591,7 @@ var gameManager = {
 		g_sprites.galaxy.scale = 1.01;
 		g_sprites.galaxy.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
 		g_sprites.earth.scale = 1.01;
-		g_sprites.earth.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/10 -250,g_canvas.height/2-this.moveTemp_y/10 +200,0);
+		g_sprites.earth.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -250,g_canvas.height/2-this.moveTemp_y/5 +200,0);
 	},
 
 
