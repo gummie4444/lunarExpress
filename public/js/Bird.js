@@ -51,6 +51,7 @@ Bird.prototype.update = function (du) {
 
     }
 
+    // Make the wings flap
     this.wingFlapTime = this.wingFlapTime + NOMINAL_UPDATE_INTERVAL;
 
     if (this.wingFlapTime < this.wingFlapDelay / 2) {
@@ -79,10 +80,6 @@ Bird.prototype.update = function (du) {
 
 Bird.prototype.getRadius = function () {
 	return this.scale * (this.sprite.width / 2) * 0.9;
-};
-
-Bird.prototype.takeBulletHit = function () {
-	this.kill();
 };
 
 Bird.prototype.render = function (ctx) {

@@ -101,10 +101,6 @@ Asteroid.prototype.getRadius = function () {
 	return this.scale * (this.sprite.width / 2) * 0.9;
 };
 
-Asteroid.prototype.takeBulletHit = function () {
-	this.kill();
-};
-
 Asteroid.prototype.spawnFragment = function () {
     entityManager.generateAsteroid({
         cx : this.cx,
