@@ -188,10 +188,7 @@ Ship.prototype.update = function (du) {
     if(this.landTimer >0 && this.isLanded) this.reset();
 
     if(gameManager.currentScreen === 0){
-        //IS IT GAME OVER BRAH
-            if(scoreManager.fuel <= 0){
-               gameManager.currentScreen = gameManager.finishScreen;
-            }
+        
             
             this.maxVel = 1.0*du;
             this.sound();
@@ -489,6 +486,10 @@ Ship.prototype.takeBulletHit = function () {
 };
 
 Ship.prototype.reset = function () {
+    if(scoreManager.fuel <= 0){
+            scoreManager.fuel = 200;
+            gameManager.currentScreen = gameManager.finishScreen;
+    }
     this.invulnTimer = 0;
     this.invulnerable = true;
     this.setPos(this.reset_cx, this.reset_cy);
