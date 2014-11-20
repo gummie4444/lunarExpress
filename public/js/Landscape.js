@@ -45,6 +45,9 @@ Landscape.prototype.setup = function () {
 
 	resizeGame();
 	var pieceCount = Math.ceil(g_canvas.width / this.pieceWidth);
+
+
+
 	var initialHeight = util.randRange(30,200);
 	this.array[0] = initialHeight;
 	var counter=0;

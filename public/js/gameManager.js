@@ -30,8 +30,11 @@ var gameManager = {
 	currentScreen :3,
 
 
+
+
 	renderScreen: function(screenIndex,ctx){
 		this._drawCurrentLevelBackground(ctx);
+
 	
 		if(screenIndex === this.startingScreen){
 			entityManager.render(ctx);
@@ -65,7 +68,10 @@ var gameManager = {
 
 	},
 
+
 	updateScreen: function(screenIndex,du){
+
+
 		if(screenIndex === this.startingScreen){
 			this._updateStartingScreen(du);
 			entityManager.update(du);
@@ -80,6 +86,7 @@ var gameManager = {
 		}
 		else if (screenIndex === this.gameScreen){
 			this._updateGameScreen(du);
+
 		}
 
 		else if (screenIndex === this.nameInputScreen){
@@ -564,18 +571,41 @@ var gameManager = {
 
 
 	//GAME SCREEN -----------
-	moveTemp_x :0,
-	moveTemp_y :0,
+	moveTemp_y : 0,
+	moveTemp_x : 0,
+
+
+	tempPiceCount : 0,
+	tempPiceWidth : 0,
+	counter : 0,
+	counter2 : 0,
+	x_speed : 0,
+	y_speed : 0,
+
+	rover_x :0,
+	rover_y :0,
+	rover_angle:0,
 	_renderGameScreen :function(ctx){
 
 
 		//this._drawCurrentLevelBackground(ctx);
 		entityManager.render(ctx);
     	if (g_renderSpatialDebug) spatialManager.render(ctx);
+
+    	//ROVER-----------------
+    	g_sprites.ship.scale = 0.2;
+
+    	//TODO DRAW THIS FROM RIGHT CORNEr
+    	g_sprites.ship.drawCentredAt(ctx,this.rover_x, this.rover_y-g_sprites.ship.height/10,this.rover_angle);
+
 		
 		scoreManager.render(ctx);
 	},
+
+	_rover_bound :false,
 	_updateGameScreen: function(du){
+
+
 
 		this.moveTemp_x += g_moveBackground_x;
 		this.moveTemp_y += g_moveBackground_y;
@@ -587,6 +617,50 @@ var gameManager = {
 	    
 	    entityManager.update(du);
 	    scoreManager.update(du);
+
+	    //ROVER-------------
+	    //MOVE THIS SOMWHERE 
+	    if(g_currentLevel === 1){
+			if(this.counter+1 === entityManager.landscape.array-1){
+				this._rover_bound = true;
+
+			}
+			else if(this.counter -1 === 0){
+				this._rover_bound = false;
+			}
+
+		    if (this.counter2 === 0){
+		    	this.rover_y =g_canvas.height - entityManager.landscape.array[this.counter];
+		    }
+
+		    this.rover_angle = (entityManager.landscape.array[this.counter]-entityManager.landscape.array[this.counter+1])/entityManager.landscape.pieceWidth;
+		    this.x_speed = entityManager.landscape.pieceWidth/100;
+			this.y_speed =(entityManager.landscape.array[this.counter] -entityManager.landscape.array[this.counter+1])/100;
+			this.counter2 += this.x_speed;
+			this.rover_x += this.x_speed;
+			this.rover_y += this.y_speed;
+
+
+
+		
+
+			if(this.counter2 >= entityManager.landscape.pieceWidth){
+
+				if(this._rover_bound){
+
+					this.counter--;
+
+				}
+				else{
+					this.counter++;
+				}
+
+				this.counter2 = 0;
+
+			}
+		 }
+
+		//ROOOOOOOOOOOOVEEERR---------------
 
 	    // Prevent perpetual firing!
 	    eatKey(Ship.prototype.KEY_FIRE);

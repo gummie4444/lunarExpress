@@ -524,7 +524,7 @@ Ship.prototype.render = function (ctx) {
         this.sprite.scale = origScale;
     }
 
-    console.log(this.cx, this.cy);
+
     // pass my scale into the sprite, for drawing
     /*this.sprite.scale = this._scale;
     this.sprite.drawWrappedCentredAt(
