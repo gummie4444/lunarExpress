@@ -13,6 +13,9 @@ var g_theme = new Audio("sounds/Deeper.ogg");
 	g_theme.volume = 0.8;
 var moonEarthX, moonEarthY;
 var explosion1,explosion2;
+
+// Zoom enabled.
+var g_zoomed = false;
 	
 // Background movement
 var g_moveBackground_x = 0;
@@ -650,27 +653,56 @@ var gameManager = {
 	rover_y :0,
 	rover_angle:0,
 	_renderGameScreen :function(ctx){
+		// Ship's coordinates
+		var shipX = entityManager._ships[0].cx;
+		var shipY = entityManager._ships[0].cy;
+		var shipR = entityManager._ships[0].getRadius();
 
+		// Check if ship is getting close to landscape, if so then zoom.
+		if(entityManager.landscape.doesCollide(shipX, shipY+150, shipR).collide){g_zoomed = true;}
+		else g_zoomed =false
+		if(g_zoomed){
+			ctx.save();
+			
+			// Translate coordinates to follow ship when zoomed.
+			var translateX = shipX - g_canvas.width/4;
+			var translateY = shipY - g_canvas.height/4;
+			//Don't follow the ship so far down that you can see beneath the landscape.
+			if(translateY > g_canvas.height/2){
+				translateY = g_canvas.height/2;
+			}
+			// Zoom in on the ship.
+			ctx.scale(2,2);
+			//Don't follow the ship so far left/right that you can see the edges of the landscape.
+			if(!util.isBetween(shipX, g_canvas.width/4, 3*g_canvas.width/4)){
+				if(shipX > g_canvas.width/2){ctx.translate(-g_canvas.width/2,-translateY);}
+				else ctx.translate(0,-translateY);
+			} // else just translate normally.
+			else{
+				ctx.translate(-translateX,-translateY);
+			}    
+	    }
 
-		//this._drawCurrentLevelBackground(ctx);
+		//Render entities and landscape.
 		entityManager.render(ctx);
-    	if (g_renderSpatialDebug) spatialManager.render(ctx);
-
-
-
-
-    	//only draw the rover on mars
-    	if(g_currentLevel === 1){
+		//If this is mars, draw rover.
+		if(g_currentLevel === 1){
 
     		//ROVER-----------------
     		g_sprites.rover.scale = 0.7;
     		g_sprites.rover.drawCentredAt(ctx,this.rover_x, this.rover_y-g_sprites.ship.height / 5 + 3,this.rover_angle);
     	}
+		if(g_zoomed){
+        	ctx.restore();
+
+        }
+    	if (g_renderSpatialDebug) spatialManager.render(ctx);
 		
+		// Render score and stats.
 		scoreManager.render(ctx);
 	},
 
-	//is rover out of bounce
+	//is rover out of bounds
 	_rover_bound :false,
 	_updateGameScreen: function(du){
 		//move the current background
