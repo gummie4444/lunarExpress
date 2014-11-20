@@ -188,10 +188,7 @@ Ship.prototype.update = function (du) {
     if(this.landTimer >0 && this.isLanded) this.reset();
 
     if(gameManager.currentScreen === 0){
-        //IS IT GAME OVER BRAH
-            if(scoreManager.fuel <= 0){
-               gameManager.currentScreen = gameManager.finishScreen;
-            }
+        
             
             this.maxVel = 1.0*du;
             this.sound();
@@ -237,10 +234,6 @@ Ship.prototype.update = function (du) {
                 for (var i = 0; i < steps; ++i) {
                     this.computeSubStep(dStep);
                 }
-
-                // Handle firing
-                this.maybeFireBullet();
-
                
                 if (this._isDeadNow){
                     spatialManager.unregister(this);
@@ -370,7 +363,7 @@ Ship.prototype.computeThrustMag = function () {
     
     var thrust = 0;
 
-     if(scoreManager.fuel >= 0){
+     if(scoreManager.fuel > 0){
         if (keys[this.KEY_THRUST]) {
             thrust += NOMINAL_THRUST;
             scoreManager.fuel -= 0.1;
@@ -484,11 +477,11 @@ Ship.prototype.getVel = function() {
     return {velX : this.velX, velY : this.velY};
 };
 
-Ship.prototype.takeBulletHit = function () {
-    this.warp();
-};
-
 Ship.prototype.reset = function () {
+    if(scoreManager.fuel <= 0){
+            scoreManager.fuel = 200;
+            gameManager.currentScreen = gameManager.finishScreen;
+    }
     this.invulnTimer = 0;
     this.invulnerable = true;
     this.setPos(this.reset_cx, this.reset_cy);

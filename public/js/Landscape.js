@@ -2,10 +2,10 @@
 // LANDSCAPE
 // ==========
 
-// Landscape objects are the pieces of which the landscape in the game is
-// compromised. 
-
-// Generates a new piece of land based on existing land to the left.
+// Landscape is an object that contains an array with height info.
+// Platforms are then created with these heights and lines drawn between them
+// The initial height is first randomly generated and landscape to 
+// the right is generated from previous height values.
 
 var g_currentLevel = 0;
 
@@ -34,7 +34,6 @@ function Landscape() {
 		this.fillStyle = "#999999";
 	}
 
-
 	this.platformLength = 64 / this.pieceWidth;
 	this.minHeight = 50;
 	this.maxHeight = 500;
@@ -43,34 +42,41 @@ function Landscape() {
 }
 
 Landscape.prototype.setup = function () {
-
+	//Check if window size has changed
 	resizeGame();
-
+	//Create landscape with width equal to window width.
 	g_gameWidth = g_canvas.width;
 	var pieceCount = Math.ceil(g_gameWidth / this.pieceWidth)+1;
 	var initialHeight = util.randRange(50,250);
 
 	this.array[0] = initialHeight;
+	// counter is used to create landable platforms. When a platform
+	// is randomly created, counter counts how many flat pieces are left.
+	// When counter reaches zero, landpieces are generated randomly again.
 	var counter=0;
+	// platformLimit is max number of platforms.
 	var platformLimit = 4;
 	var platformChance = 1 - ((this.pieceWidth * 0.01) / 4);
-	// var minPlatformDistance = 100 / this.pieceWidth;
+	// If distance between platforms is greater than maxPlatformDistance, a platform is forced.
 	var maxPlatformDistance = 500 / this.pieceWidth;
 	var platformDistance = 0;
 
+	// Iterate through array and intialise heights based on parameters above.
 	for(var i = 1; i < pieceCount; i++){
 		var prevHeight = this.array[i-1];
 
+		// Create new platform
 		if(((Math.random() > platformChance && counter === 0) || platformDistance > maxPlatformDistance) && platformLimit != 0){
 			counter = this.platformLength;
 			platformLimit--;
 			platformDistance = 0;
 		}
 
+		// Continue current platform.
 		if( counter > 0){
 			this.array[i] = prevHeight;
 			counter--;
-		} else {
+		} else { // Else generate a random height.
 			if (prevHeight <= this.minHeight){
 				this.array[i] = prevHeight + util.randRange(this.heightVariation/4,this.heightVariation);
 			} else if (prevHeight >= this.maxHeight){
@@ -87,9 +93,10 @@ Landscape.prototype.setup = function () {
 			}		
 		}
 
+		// Generate trees if this is earth.
 		if (g_currentLevel === 2) {
-			if (Math.random() > 0.65) {
-				this.trees[i] = this.array[i];
+			if (Math.random() > 0.75) {
+				this.trees[i] = [1, util.randRange(0.6, 1.25)];
 			}
 		}
 
@@ -115,7 +122,8 @@ Landscape.prototype.render = function (ctx) {
 			ctx.lineTo(x, y);
 
 			if (this.trees[i]) {
-				g_sprites.tree.drawCentredAt(ctx, i * this.pieceWidth, g_canvas.height - this.array[i] - g_sprites.tree.height / 2, 0);
+				g_sprites.tree.scale = this.trees[i][1];
+				g_sprites.tree.drawCentredAt(ctx, i * this.pieceWidth, g_canvas.height - this.array[i] - ((g_sprites.tree.height * this.trees[i][1]) / 2), 0);
 			}
 			
 		}

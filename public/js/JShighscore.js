@@ -10,6 +10,7 @@ function getHighScores(){
 		current_scores = current_scores.sort(function(a,b) { return parseInt(b.score) - parseInt(a.score) } );
 		gameManager._highScoreList = current_scores;
 
+<<<<<<< HEAD
 
 	}
 */	
@@ -20,6 +21,7 @@ function getHighScores(){
 		if(localStorage["highScore"]){
 			current_scores = JSON.parse(localStorage["highScore"]);
 			current_scores = current_scores.sort(function(a,b) { return parseInt(b.score) - parseInt(a.score) } );
+
 
 			gameManager._highScoreList = current_scores;
 	}
