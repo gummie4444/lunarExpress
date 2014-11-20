@@ -30,11 +30,6 @@ function Ship(descr) {
     this._isWarping = false;
     this._isControllable = true;
 
-    /*this.particles = new Particles({
-    numParticles:15,
-    particleLifetime:30,
-    colour : '255, 102, 0'}, 
-    this);*/
 };
 
 Ship.prototype = new Entity();
@@ -59,19 +54,11 @@ Ship.prototype.sound = function() {
             this.thrusterSound.pause();
         }
 }
-//Ship.prototype.particles = new Particles(this);
 
 Ship.prototype.particleSetup = function(){
     this.particles = new Particles(this);
 };
 
-/*
-Ship.prototype.particles = new Particles({
-    numParticles:15,
-    particleLifetime:30,
-    colour : '255, 102, 0'} , 
-    this);
-*/
 Ship.prototype.rememberResets = function () {
     // Remember my reset positions
     this.reset_cx = this.cx;
@@ -79,10 +66,10 @@ Ship.prototype.rememberResets = function () {
     this.reset_rotation = this.rotation;
 };
 
-Ship.prototype.KEY_THRUST = '38';//.charCodeAt(0);
-Ship.prototype.KEY_RETRO  = '40';//.charCodeAt(0);
-Ship.prototype.KEY_LEFT   = '37';//.charCodeAt(0);
-Ship.prototype.KEY_RIGHT  = '39';//.charCodeAt(0);
+Ship.prototype.KEY_THRUST = '38';
+Ship.prototype.KEY_RETRO  = '40';
+Ship.prototype.KEY_LEFT   = '37';
+Ship.prototype.KEY_RIGHT  = '39';
 
 Ship.prototype.KEY_FIRE   = ' '.charCodeAt(0);
 
@@ -100,77 +87,6 @@ Ship.prototype.invulnTimer = 0;
 Ship.prototype.landTimer = 0;
 Ship.prototype.isLanded = false;
 Ship.prototype.thrusterSound.volume = 0;
-
-// HACKED-IN AUDIO (no preloading)
-Ship.prototype.warpSound = new Audio(
-    "sounds/shipWarp.ogg");
-
-Ship.prototype.warp = function () {
-
-    this._isWarping = true;
-    this._scaleDirn = -0.5;
-    this.warpSound.play();
-    
-    // Unregister me from my old posistion
-    // ...so that I can't be collided with while warping
-    spatialManager.unregister(this);
-};
-
-Ship.prototype._updateWarp = function (du) {
-
-    var SHRINK_RATE = 3 / SECS_TO_NOMINALS;
-    this._scale += this._scaleDirn * SHRINK_RATE * du;
-    
-    if (this._scale < 0.2) {
-    
-        this._moveToASafePlace();
-        this.halt();
-        this._scaleDirn = 0.5;
-        
-    } else if (this._scale > 0.5) {
-    
-        this._scale = 0.5;
-        this._isWarping = false;
-        
-        // Reregister me from my old posistion
-        // ...so that I can be collided with again
-        spatialManager.register(this);
-        
-    }
-};
-
-Ship.prototype._moveToASafePlace = function () {
-
-    // Move to a safe place some suitable distance away
-    var origX = this.cx,
-        origY = this.cy,
-        MARGIN = 40,
-        isSafePlace = false;
-
-    for (var attempts = 0; attempts < 100; ++attempts) {
-    
-        var warpDistance = 100 + Math.random() * g_canvas.width /2;
-        var warpDirn = Math.random() * consts.FULL_CIRCLE;
-        
-        this.cx = origX + warpDistance * Math.sin(warpDirn);
-        this.cy = origY - warpDistance * Math.cos(warpDirn);
-        
-        this.wrapPosition();
-        
-        // Don't go too near the edges, and don't move into a collision!
-        if (!util.isBetween(this.cx, MARGIN, g_canvas.width - MARGIN)) {
-            isSafePlace = false;
-        } else if (!util.isBetween(this.cy, MARGIN, g_canvas.height - MARGIN)) {
-            isSafePlace = false;
-        } else {
-            isSafePlace = !this.isColliding();
-        }
-
-        // Get out as soon as we find a safe place
-        if (isSafePlace) break;
-        
-    }
-};
 
 Ship.prototype.explode = function(){
     entityManager.generateExplosion(this.cx, this.cy, "#525252"); 
@@ -371,6 +287,8 @@ Ship.prototype.computeThrustMag = function () {
         if (keys[this.KEY_THRUST]) {
             thrust += NOMINAL_THRUST;
             scoreManager.fuel -= 0.1;
+            this.cx += util.randRange(-0.5,0.5)
+            this.cy += util.randRange(-0.5,0.5)
             
             if (this.thrusterSound.volume < 0.9) {
                 this.thrusterSound.volume += thrusterSoundIncrement
@@ -383,9 +301,6 @@ Ship.prototype.computeThrustMag = function () {
             }
         }
     }
-    /*if (keys[this.KEY_RETRO]) {
-        thrust += NOMINAL_RETRO;
-    }*/
     
     
     return thrust;
