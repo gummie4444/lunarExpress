@@ -488,10 +488,11 @@ var gameManager = {
 
 		//every time we launch it for the first time get the highscores
 		if(this._firstReload){
-			getHighScores();
+			
 			this._firstReload = false;
 
 		}
+		getHighScores();
 
 
 		var oldStyle = ctx.fillStyle;

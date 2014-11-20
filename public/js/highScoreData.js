@@ -1,0 +1,1 @@
+highScoreData = '[{"name" : "ass", "score" : "123"},{"name" : "as2", "score" : "123"}]';
