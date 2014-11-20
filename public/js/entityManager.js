@@ -162,9 +162,15 @@ generateShip : function(descr) {
     this._ships.push(new Ship(descr));
 },
 
-generateExplosion : function(x , y , colour) {
-    var explosion = new Explosion(x, y , colour);
+generateExplosion : function(x , y , colour, type) {
+    var explosion = new Explosion(x, y , colour, type);
     this._explosions.push(explosion);
+},
+
+generateBigExplosion : function(){
+    this.generateExplosion(moonEarthX - g_sprites.earth.getScaledWidth()/2 , moonEarthY + g_sprites.earth.getScaledHeight()/2, "#525252" , "big");
+    this.generateExplosion(moonEarthX - g_sprites.earth.getScaledWidth()/2, moonEarthY + g_sprites.earth.getScaledHeight()/2, "#FFA318" , "big");
+    g_earthIsAlive  = ! g_earthIsAlive;
 },
 
 killNearestShip : function(xPos, yPos) {

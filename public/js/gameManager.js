@@ -10,6 +10,8 @@ To handle all the diffirent states of the game
 var g_theme = new Audio("sounds/Deeper.ogg");
 	g_theme.loop = true;
 	g_theme.volume = 0.8;
+var moonEarthX, moonEarthY;
+var explosion1,explosion2;
 	
 	//LAGA
 var g_moveBackground_x = 0;
@@ -50,9 +52,10 @@ var gameManager = {
 			if(g_soundOn){
 				g_soundOn = false;
 			}
+			this._renderFinishScreen(ctx);
 			entityManager.render(ctx);
 			entityManager.timeBetweenAst = 0;
-			this._renderFinishScreen(ctx);
+			
 			//g_soundOn
 		}
 		else if(screenIndex === this.highScoreScreen){
@@ -390,6 +393,9 @@ var gameManager = {
 
 	_updateStartingScreen: function(du){
 		//ef arrowkey upp
+		if(!g_earthIsAlive){
+			g_earthIsAlive = true;
+		}
 		if (eatKey(this.KEY_UPP)){
 			if (this._StartingScreenChoice === 0){
 				this._StartingScreenChoice = 2;
@@ -453,7 +459,7 @@ var gameManager = {
 		ctx.font = '60pt PressStart2P';
 		util.drawTextAt(ctx,"GAME OVER",g_canvas.width/2,g_canvas.height/2,"white");
 		ctx.font = '40pt PressStart2P';
-	    util.drawTextAt(ctx,"score:" + Math.floor(scoreManager.score),g_canvas.width/2,g_canvas.height/2+50,"white");
+	    util.drawTextAt(ctx,"Score:" + Math.floor(scoreManager.score),g_canvas.width/2,g_canvas.height/2+50,"white");
 
 	    ctx.fillStyle = oldStyle;
 
@@ -461,6 +467,10 @@ var gameManager = {
 		
 	},
 	_updateFinishScreen: function(du){
+			if(!g_earthIsAlive){
+				explosion1.update(du);
+				explosion2.update(du);
+			}
 			if(eatKey(this.KEY_ENTER)){
 
 				if(isInHighScore(scoreManager.score)){
@@ -559,11 +569,12 @@ var gameManager = {
 		}
 	},
 
-
+	
 	_drawEarthBackground : function(ctx) {
 		//g_sprites.sky.scale = 1.01;
 		//g_sprites.sky.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
 		
+
 		var oldStyle = ctx.fillStyle;
 		ctx.fillStyle = "#5CADFF";
 		util.fillBox(ctx, 0, 0, g_canvas.width, g_canvas.height);
@@ -587,11 +598,35 @@ var gameManager = {
 		g_sprites.earth.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -350,g_canvas.height/2-this.moveTemp_y/5 -100,0);
 	},
 
+	
 	_drawMoonBackground : function(ctx){
+		moonEarthX = g_canvas.width/2-this.moveTemp_x/15;
+		moonEarthY = g_canvas.height/2-this.moveTemp_y/15;
+		
+			
+
+
 		g_sprites.galaxy.scale = 1.01;
-		g_sprites.galaxy.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
-		g_sprites.earth.scale = 1.01;
-		g_sprites.earth.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -250,g_canvas.height/2-this.moveTemp_y/5 +200,0);
+		g_sprites.galaxy.drawCentredAt(ctx , moonEarthX , moonEarthY , 0);
+		if(this.currentScreen != 4 && g_earthIsAlive){
+
+			g_sprites.earth.scale = 1.01;
+			g_sprites.earth.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -250,g_canvas.height/2-this.moveTemp_y/5 +200,0);
+		}
+		else if(this.currentScreen === 4 && g_earthIsAlive){
+			explosion1 = new Explosion(moonEarthX - g_sprites.earth.getScaledWidth()/2 , moonEarthY + g_sprites.earth.getScaledHeight()/2, "#525252" , "big");
+			explosion2 = new Explosion(moonEarthX - g_sprites.earth.getScaledWidth()/2, moonEarthY + g_sprites.earth.getScaledHeight()/2, "#FFA318" , "big");
+			g_earthIsAlive  = false;
+			/*entityManager.generateExplosion(moonEarthX - g_sprites.earth.getScaledWidth()/2 , moonEarthY + g_sprites.earth.getScaledHeight()/2, "#525252" , "big");
+			entityManager.generateExplosion(moonEarthX - g_sprites.earth.getScaledWidth()/2, moonEarthY + g_sprites.earth.getScaledHeight()/2, "#FFA318" , "big");
+			g_earthIsAlive  = ! g_earthIsAlive;*/
+			//entityManager.generateBigExplosion();
+		}
+		if(!g_earthIsAlive){
+			explosion1.render(ctx);
+			explosion2.render(ctx);
+		}
+		
 	},
 
 
@@ -706,7 +741,8 @@ var gameManager = {
 		util.drawTextAt(ctx, "Up: Thrust", textWidth, textHeight - 85,"white");
 		util.drawTextAt(ctx, "Left: Rotate left", textWidth, textHeight - 15,"white");
 		util.drawTextAt(ctx, "Right: Rotate right", textWidth, textHeight + 55,"white");
-		util.drawTextAt(ctx, "T: mute", textWidth, textHeight + 125,"white");
+		util.drawTextAt(ctx, "T: Mute sound", textWidth, textHeight + 125,"white");
+		util.drawTextAt(ctx, "L: Mute music", textWidth, textHeight + 195,"white");
 
 
 	},

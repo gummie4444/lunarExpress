@@ -41,14 +41,14 @@ var scoreManager ={
 	var oldStyle = ctx.fillStyle;
 	ctx.font = '10pt PressStart2P';
 	ctx.textAlign = "left";
-	util.drawTextAt(ctx,"Horizontal: " + Math.floor(this.horS*100),g_canvas.width-200,50,"white");
+	util.drawTextAt(ctx,"Horizontal Speed: " + Math.floor(this.horS*100),g_canvas.width-300,50,"white");
 	ctx.fillStyle = oldStyle;
 
 	//vertical speed:
 	var oldStyle = ctx.fillStyle;
 	ctx.font = '10pt PressStart2P';
 	ctx.textAlign = "left";
-	util.drawTextAt(ctx,"Vertical: " + Math.floor(this.verS*100),g_canvas.width-200,70,"white");
+	util.drawTextAt(ctx,"Vertical Speed: " + Math.floor(this.verS*100),g_canvas.width-300,70,"white");
 	ctx.fillStyle = oldStyle;
 
 
