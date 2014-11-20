@@ -137,6 +137,7 @@ var gameManager = {
 		var letter3Color = "white";
 
 		//text
+		ctx.font = '40pt PressStart2P';
 		util.drawTextAt(ctx,"YOU MADE IT TO THE HIGHSCORE",g_canvas.width/2,g_canvas.height/2-150,letter2Color);
 		util.drawTextAt(ctx,"WRITE YOUR INITIALS",g_canvas.width/2,g_canvas.height/2-50,letter2Color)
 	 
