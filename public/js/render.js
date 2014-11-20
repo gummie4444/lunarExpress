@@ -6,6 +6,7 @@ var g_undoBox = false;
 var g_doFlipFlop = false;
 var g_doRender = true;
 var g_soundOn = true;
+var g_musicOn = true;
 
 var g_frameCounter = 1;
 
@@ -16,6 +17,7 @@ var TOGGLE_FLIPFLOP = 'F'.charCodeAt(0);
 var TOGGLE_RENDER = 'R'.charCodeAt(0);
 
 var TOGGLE_SOUND = 'T'.charCodeAt(0);
+var TOGGLE_MUSIC = 'L'.charCodeAt(0);
 
 var PRINT_SPATIAL_ENTITIES = 'Z'.charCodeAt(0);
 
@@ -29,6 +31,7 @@ function render(ctx) {
     if (eatKey(TOGGLE_FLIPFLOP)) g_doFlipFlop = !g_doFlipFlop;
     if (eatKey(TOGGLE_RENDER)) g_doRender = !g_doRender;
     if (eatKey(TOGGLE_SOUND)) g_soundOn =!g_soundOn;
+    if (eatKey(TOGGLE_MUSIC)) g_musicOn = !g_musicOn;
 
     if(eatKey(PRINT_SPATIAL_ENTITIES)){console.log(spatialManager._entities);}
     

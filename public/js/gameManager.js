@@ -44,9 +44,13 @@ var gameManager = {
 			
 		}
 		else if(screenIndex === this.finishScreen){
+			if(g_soundOn){
+				g_soundOn = false;
+			}
 			entityManager.render(ctx);
 			entityManager.timeBetweenAst = 0;
 			this._renderFinishScreen(ctx);
+			//g_soundOn
 		}
 		else if(screenIndex === this.highScoreScreen){
 			//entityManager.render(ctx);
@@ -550,11 +554,18 @@ var gameManager = {
 
 
 	_drawEarthBackground : function(ctx) {
-		g_sprites.sky.scale = 1.01;
-		g_sprites.sky.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		//g_sprites.sky.scale = 1.01;
+		//g_sprites.sky.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		
+		var oldStyle = ctx.fillStyle;
+		ctx.fillStyle = "#5CADFF";
+		util.fillBox(ctx, 0, 0, g_canvas.width, g_canvas.height);
+		ctx.fillStyle = oldStyle;
+
+
 		g_sprites.cloud1.scale = 0.5;
 		g_sprites.cloud1.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -350,g_canvas.height/2-this.moveTemp_y/5 -100,0);
-		var oldStyle = ctx.fillStyle;
+		oldStyle = ctx.fillStyle;
 		ctx.fillStyle = "#FFD000";
 		util.fillCircle(ctx, g_canvas.width - 200, g_canvas.height - 500, 80);
 		ctx.fillStyle = oldStyle;
