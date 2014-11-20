@@ -51,6 +51,13 @@ reset : function() {
     this._bShowRocks = true;
     this.deferredSetup();
     this.init();
+
+    //move this maby
+    gameManager.rover_x = 0;
+    gameManager.rover_y = 0;
+    gameManager.rover_angle = 0;
+    gameManager.counter = 0;
+    gameManager.counter2 = 0;
 },
 
 _generateBirds : function() {   
