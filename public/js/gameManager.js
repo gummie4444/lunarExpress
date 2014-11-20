@@ -618,10 +618,10 @@ var gameManager = {
     	if (g_renderSpatialDebug) spatialManager.render(ctx);
 
     	//ROVER-----------------
-    	g_sprites.ship.scale = 0.2;
+    	g_sprites.rover.scale = 0.7;
 
     	//TODO DRAW THIS FROM RIGHT CORNEr
-    	g_sprites.ship.drawCentredAt(ctx,this.rover_x, this.rover_y-g_sprites.ship.height/10,this.rover_angle);
+    	g_sprites.rover.drawCentredAt(ctx,this.rover_x, this.rover_y-g_sprites.rover.height / 4,this.rover_angle);
 
 		
 		scoreManager.render(ctx);

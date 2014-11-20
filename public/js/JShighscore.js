@@ -4,13 +4,14 @@ function getHighScores(){
 	if(typeof(Storage)!== "undefined"){
 
 		// there is somthing stored in the local storage
+		if(localStorage["highScore"]) {	
+			current_scores = JSON.parse(localStorage["highScore"]);
+			current_scores = current_scores.sort(function(a,b) { return parseInt(b.score) - parseInt(a.score) } );
 
-		current_scores = JSON.parse(localStorage["highScore"]);
-		current_scores = current_scores.sort(function(a,b) { return parseInt(b.score) - parseInt(a.score) } );
+			gameManager._highScoreList = current_scores;
 
-		gameManager._highScoreList = current_scores;
-
-		console.log(current_scores);
+			console.log(current_scores);
+		}
 
 		//for loopa i gegnum gögn eða updatea breytu !!!!!!1
 
