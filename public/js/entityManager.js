@@ -65,8 +65,11 @@ _generateBirds : function() {
 _generateAsteroids : function() {
     this.asteroidsTime += NOMINAL_UPDATE_INTERVAL;
 
-    if (this.asteroidsTime > 2000) {
-        if (Math.random() < 0.4) {
+    if (this.asteroidsTime > this.timeBetweenAst) {
+        if (Math.random() < 0.4 && this.timeBetweenAst != 0) {
+            this.generateAsteroid();
+        }
+        else{
             this.generateAsteroid();
         }
         this.asteroidsTime = 0;
@@ -122,7 +125,7 @@ deferredSetup : function () {
 },
 
 init: function() {
-    if (currentLevel === 2) this._generateBirds();
+    if (g_currentLevel === 2) this._generateBirds();
 },
 
 fireBullet: function(cx, cy, velX, velY, rotation) {
@@ -189,6 +192,7 @@ toggleRocks: function() {
 },
 
 asteroidsTime : 0,
+timeBetweenAst : 2000,
 
 update: function(du) {
 
@@ -223,7 +227,7 @@ update: function(du) {
         }
     }
 
-    if (currentLevel != 0) this._generateAsteroids();
+    if (g_currentLevel != 0) this._generateAsteroids();
 
 
 },

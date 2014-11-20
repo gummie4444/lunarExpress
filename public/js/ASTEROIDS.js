@@ -163,13 +163,21 @@ var g_sounds = {};
 function requestPreloads() {
 
     var requiredImages = {
-        ship   : "https://notendur.hi.is/~ahh19/mkdir/fin/skip.png" ,
-        ship2  : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        rock   : "https://notendur.hi.is/~ahh19/mkdir/fin/Asteroid_01_Mb.GIF",
-        bird_down : "https://notendur.hi.is/~ffk3/lunarlander/fuglnidur.png",
-        bird_up : "https://notendur.hi.is/~ffk3/lunarlander/fuglupp.png",
-        logo : "https://notendur.hi.is/~ffk3/lunarlander/logo.png",
-        moonTest : "https://www.komar.de/fileadmin/media/Fototapeten_Bilder/8-019_Earth_Moon_hd.jpg"
+
+        ship   : "sprites/skip.png" /*"https://notendur.hi.is/~pk/308G/images/ship.png"*/,
+        ship2  : "sprites/skip.png",
+        rock   : "sprites/patrock.png",//"https://notendur.hi.is/~pk/308G/images/rock.png"
+        bird_down : "sprites/fuglnidur.png",
+        bird_up : "sprites/fuglupp.png",
+        logo : "sprites/logo.png",
+        galaxy :"sprites/starbackground.png" /*"sprites/stars.jpg"*/,
+        earth: "sprites/earth.png",
+        sky : "sprites/earthbackground.png",
+        flag: "merica.gif",
+        tree: "sprites/tree.png",
+        cloud1: "sprites/cloud1.png",
+        cloud2: "sprites/cloud2.png"
+
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -186,8 +194,15 @@ function preloadDone() {
     g_sprites.bird_up = new Sprite(g_images.bird_up);
     g_sprites.logo = new Sprite(g_images.logo);
 
-    g_sprites.moon = new Sprite(g_images.moonTest);
-    if (g_canvas.height < 1000) g_sprites.logo.scale = 0.85;
+    g_sprites.galaxy = new Sprite(g_images.galaxy);
+    g_sprites.earth = new Sprite(g_images.earth);
+    g_sprites.sky = new Sprite(g_images.sky);
+    g_sprites.flag = new Sprite(g_images.flag);
+    g_sprites.tree = new Sprite (g_images.tree);
+    g_sprites.cloud1 = new Sprite (g_images.cloud1);
+    g_sprites.cloud2 = new Sprite (g_images.cloud2);
+
+
 
     if (g_canvas.height < 850) {
         g_sprites.logo.scale = 0.85;
@@ -197,7 +212,6 @@ function preloadDone() {
     g_sprites.bullet = new Sprite(g_images.ship);
     g_sprites.bullet.scale = 0.25;
 
-    //movethis
 
     entityManager.init();
     createInitialShips();

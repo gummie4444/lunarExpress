@@ -39,10 +39,21 @@ function Ship(descr) {
 
 Ship.prototype = new Entity();
 
-Ship.prototype.isLanded = false;
 
-Ship.prototype.hover1 = new Audio(
-    "sounds/export.wav");
+
+Ship.prototype.hover1 = new Audio("sounds/rocketthruster.wav");
+
+Ship.prototype.hover1.addEventListener('timeupdate', function() {
+
+    var buffer = .64;
+    if(this.currentTime > this.duration - buffer){
+        this.currentTime = 0
+        this.play()
+    }
+
+}, false);
+
+Ship.prototype.hover1.volume = 0;
 
 Ship.prototype.hover2 = new Audio(
     "sounds/export.wav");
@@ -55,8 +66,8 @@ Ship.prototype.sound = function() {
     /*else{
         this.hover1.play();
     }*/
-    //this.hover1.loop = true;
-    //this.hover1.play();
+    this.hover1.loop = true;
+    this.hover1.play();
 }
 //Ship.prototype.particles = new Particles(this);
 
@@ -94,6 +105,10 @@ Ship.prototype.velY = 0.1;
 Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.maxVel = 1.0;
+Ship.prototype.invulnerable = true;
+Ship.prototype.invulnTimer = 0;
+Ship.prototype.landTimer = 0;
+Ship.prototype.isLanded = false;
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -173,7 +188,20 @@ Ship.prototype.explode = function(){
 
 Ship.prototype.update = function (du) {
 
+    if(gameManager.currentScreen === 0 ){
+        this.invulnTimer += du*NOMINAL_UPDATE_INTERVAL;
+    }
+    if(this.invulnTimer > 3000) this.invulnerable = false;
+
+    this.landTimer += du*NOMINAL_UPDATE_INTERVAL;
+    if(this.landTimer >0 && this.isLanded) this.reset();
+
     if(gameManager.currentScreen === 0){
+        //IS IT GAME OVER BRAH
+            if(scoreManager.fuel <= 0){
+               gameManager.currentScreen = gameManager.finishScreen;
+            }
+            
             this.maxVel = 1.0*du;
             this.sound();
             
@@ -183,26 +211,30 @@ Ship.prototype.update = function (du) {
             }
 
             if(this._isControllable){
-
                 spatialManager.unregister(this);
                 var hitEntity = this.findHitEntity();
 
 
                 if(hitEntity)
                 {
-                    if(hitEntity instanceof Ship)
+
+                    if(hitEntity instanceof Bird || hitEntity instanceof Asteroid)
                     {
-                        this.explode();
-                    }
-                    else if (hitEntity instanceof Bullet)
-                    {
-                        this.takeBulletHit();
-                        hitEntity.kill();
-                    }
-                    else if(hitEntity instanceof Bird || hitEntity instanceof Asteroid)
-                    {
-                        this.explode();
-                        this.reset();
+                        if(!this.invulnerable){
+                            this.explode();
+                            this.invulnTimer = 0;
+                            scoreManager.fuel -= scoreManager.otherExplode;
+                            hitEntity.kill();
+
+                            //maybe check here if its game over?
+                            if(scoreManager.fuel <= 0){
+                                scoreManager.currentScreen = scoreManager.finishScreen;
+                            }
+
+
+                            //////
+                            this.reset();
+                        }
                     }
                 }
                 
@@ -248,6 +280,20 @@ Ship.prototype.maybeLand = function(){
     if(!landable){
         this.explode(); 
         entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
+
+        //make the fuel drop and kill the dude
+
+
+        var currentVel = (this.velY+this.velX)/2;
+        // TODOchange to 50 to var every where
+        scoreManager.fuel -= scoreManager.landScapeExplode * currentVel;
+
+
+
+
+        //maby check here if its game over?
+
+
         this.reset();
         return;
     }
@@ -264,6 +310,18 @@ Ship.prototype.maybeLand = function(){
     else{
         this.explode();
         entityManager.landscape.destroy(this.cx,this.cy,this.getRadius());
+
+        //make the fuel drop and kill the dude
+
+
+        currentVel = (this.velY+this.velX)/2;
+        scoreManager.fuel -= scoreManager.landScapeExplode * currentVel;
+
+
+
+
+        //maby check here if its game over?
+
         this.reset();   
     }
 
@@ -272,8 +330,10 @@ Ship.prototype.maybeLand = function(){
 Ship.prototype.land = function(){
     this.isLanded = true;
     //g_useGravity = !g_useGravity;
+    scoreManager.score += 100+scoreManager.timeBonus();
+    this.landTimer = -2000;
     this.halt();
-    this._isControllable = false;
+    this._isControllable= false;
     
 }
 
@@ -311,18 +371,30 @@ Ship.prototype.computeGravity = function () {
 
 var NOMINAL_THRUST = +0.0045;
 var NOMINAL_RETRO  = -0.0005;
+var thrusterSoundIncrement = 0.025;
+var thrusterSoundDecrement = 0.07
 
 Ship.prototype.computeThrustMag = function () {
     
     var thrust = 0;
-    
+
      if(scoreManager.fuel >= 0){
         if (keys[this.KEY_THRUST]) {
             thrust += NOMINAL_THRUST;
-           
+            
+            if (this.hover1.volume < 0.9) {
+                this.hover1.volume += thrusterSoundIncrement
+            }
+            
                scoreManager.fuel -= 0.1;
              
             
+        } else {
+            if (this.hover1.volume > 0.11) {
+                this.hover1.volume -= thrusterSoundDecrement;
+            } else {
+                this.hover1.volume = 0;
+            }
         }
     }
     /*if (keys[this.KEY_RETRO]) {
@@ -357,8 +429,8 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
 
     //EGIJEORGHAERHGAO
     //TODO
-    g_moveBackground_x =intervalVelX/4;
-    g_moveBackground_y =intervalVelY/4;
+    g_moveBackground_x =intervalVelX/8;
+    g_moveBackground_y =intervalVelY/8;
     
     // s = s + v_ave * t
     var nextX = this.cx + intervalVelX * du;
@@ -379,10 +451,10 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     	if (this.cy > maxY || this.cy < minY) {
     	    // do nothing
     	} 
-        else if (nextY > maxY || nextY < minY) {
+        /*else if (nextY > maxY || nextY < minY) {
                 this.velY = oldVelY * -0.9;
                 intervalVelY = this.velY;
-        }
+        }*/
     }
     
     // s = s + v_ave * t
@@ -414,7 +486,7 @@ Ship.prototype.maybeFireBullet = function () {
 Ship.prototype.getRadius = function () {
     var origScale = this.sprite.scale;
     this.sprite.scale = this._scale;
-    var x = (this.sprite.getScaledWidth() / 2) * 1.3;
+    var x = (this.sprite.getScaledWidth() / 2) * 0.9;
     this.sprite.scale = origScale;
     return x;
 };
@@ -428,6 +500,8 @@ Ship.prototype.takeBulletHit = function () {
 };
 
 Ship.prototype.reset = function () {
+    this.invulnTimer = 0;
+    this.invulnerable = true;
     this.setPos(this.reset_cx, this.reset_cy);
     this.rotation = this.reset_rotation;
     this._isControllable = true;
@@ -438,6 +512,7 @@ Ship.prototype.reset = function () {
     this.velX = 0.4;
     this.velY = 0.1;
     //this.halt();
+
 };
 
 Ship.prototype.halt = function () {
@@ -459,12 +534,41 @@ Ship.prototype.updateRotation = function (du) {
 Ship.prototype.render = function (ctx) {
     
     var origScale = this.sprite.scale;
+    var over = this.cy - this.getRadius();
+    var drawy;
+    if(over < 0){
+        this.sprite.scale = this._scale;
+        this.sprite.drawCentredAt(
+        ctx, this.cx, this.cy, this.rotation
+        );
+        this.sprite.scale = origScale; 
+    }
+    else{
+        this.sprite.scale = this._scale;
+        this.sprite.drawWrappedCentredAt(
+        ctx, this.cx, this.cy, this.rotation
+        );
+        this.sprite.scale = origScale;
+    }
+    if(this.invulnerable){
+        var oldStyle = ctx.fillStyle;
+        ctx.globalAlpha = 0.5;
+        var grd = ctx.createRadialGradient(this.cx, this.cy, 5, this.cx, this.cy, this.getRadius()*2);
+        grd.addColorStop(0, "cyan");
+        grd.addColorStop(1, "blue");
+        ctx.fillStyle = grd;
+        util.fillCircle(ctx, this.cx, this.cy, 2*this.getRadius());
+        ctx.fillStyle = oldStyle;
+        ctx.globalAlpha = 1.0;
+    }
+
+    
     // pass my scale into the sprite, for drawing
-    this.sprite.scale = this._scale;
+    /*this.sprite.scale = this._scale;
     this.sprite.drawWrappedCentredAt(
 	ctx, this.cx, this.cy, this.rotation
     );
     this.sprite.scale = origScale;
-
+    */
     this.particles.render(ctx);
 };

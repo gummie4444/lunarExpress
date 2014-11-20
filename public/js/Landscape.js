@@ -7,45 +7,47 @@
 
 // Generates a new piece of land based on existing land to the left.
 
-var currentLevel = 0;
+var g_currentLevel = 0;
 
 function Landscape() {
 	// landscape is comprised of an array of heights.
 	this.array = [];
 
 	// Earth
-	if (currentLevel === 2) {
+	if (g_currentLevel === 2) {
 		this.pieceWidth = 8;
 		this.heightVariation = 40;
-		this.color = "#5FD102";
+		this.fillStyle = "#5FD102";
 	} 
 
 	// Mars
-	if (currentLevel === 1) {
+	if (g_currentLevel === 1) {
 		this.pieceWidth = 16;
 		this.heightVariation = 30;
-		this.color = "#FF1E00";
+		this.fillStyle = "#FF1E00";
 	}
 
 	// Moon
-	if (currentLevel === 0) {
+	if (g_currentLevel === 0) {
 		this.pieceWidth = 16;
 		this.heightVariation = 20;
-		this.color = "#999999";
+		this.fillStyle = "#999999";
 	}
 
 
 	this.platformLength = 64 / this.pieceWidth;
 	this.minHeight = 50;
 	this.maxHeight = 500;
+	this.trees = [];
 	this.setup();
 }
 
 Landscape.prototype.setup = function () {
 
 	resizeGame();
-	var pieceCount = Math.ceil(g_canvas.width / this.pieceWidth);
-	var initialHeight = util.randRange(30,200);
+	g_gameWidth = g_canvas.width;
+	var pieceCount = Math.ceil(g_gameWidth / this.pieceWidth)+1;
+	var initialHeight = util.randRange(50,250);
 	this.array[0] = initialHeight;
 	var counter=0;
 	var platformLimit = 4;
@@ -82,24 +84,37 @@ Landscape.prototype.setup = function () {
 				
 			}		
 		}
+
+		if (g_currentLevel === 2) {
+			if (Math.random() > 0.65) {
+				this.trees[i] = this.array[i];
+			}
+		}
+
 		platformDistance++;
 	}
 }
 
 Landscape.prototype.render = function (ctx) {
 	var oldStyle = ctx.fillStyle;
-	ctx.fillStyle = this.color;
+	ctx.fillStyle = this.fillStyle;
+	var x = 0;
+	var y = g_canvas.height - this.array[0];
 	ctx.beginPath();
-	ctx.moveTo(0,g_canvas.height - this.array[0]);
+	ctx.moveTo(x,y);
 
 	var xOffset = 0;
 	while(xOffset < g_canvas.width){
 		for(var i = 1; i<this.array.length; i++){
 
-			var x = i*this.pieceWidth+xOffset;
-			var y = g_canvas.height - this.array[i];
+			x = i*this.pieceWidth+xOffset;
+			y = g_canvas.height - this.array[i];
 			
 			ctx.lineTo(x, y);
+
+			if (this.trees[i]) {
+				g_sprites.tree.drawCentredAt(ctx, i * this.pieceWidth, g_canvas.height - this.array[i] - g_sprites.tree.height / 2, 0);
+			}
 			
 		}
 		xOffset += g_gameWidth;
@@ -108,9 +123,15 @@ Landscape.prototype.render = function (ctx) {
 	ctx.lineTo(g_canvas.width, g_canvas.height);
 	ctx.lineTo(0, g_canvas.height);
 	ctx.fill();
+
+	if (g_currentLevel === 0) {
+		g_sprites.flag.scale = 0.3;
+		g_sprites.flag.drawCentredAt(ctx, 10 * this.pieceWidth, g_canvas.height - this.array[10] - g_sprites.flag.height / 2 * g_sprites.flag.scale + 5, 0);
+	} 
 	
 	ctx.fillStyle = oldStyle;
 }
+
 
 Landscape.prototype.doesCollide = function (cx,cy,radius) {
 	while(cx > g_gameWidth){
@@ -120,8 +141,11 @@ Landscape.prototype.doesCollide = function (cx,cy,radius) {
 	var leftIndex = Math.floor((cx-radius)/this.pieceWidth);
 	var rightIndex = Math.ceil((cx+radius)/this.pieceWidth);
 
+	//console.log("leftIndex " + leftIndex, "rightIndex " + rightIndex);
+	//util.drawHorizontalLine(g_ctx, leftIndex, rightIndex, g_canvas.height- cy);
+
 	for(var i = leftIndex; i<=rightIndex; i++){
-		if(cy > g_canvas.height-this.array[i]){
+		if(cy > (g_canvas.height-this.array[i])){
 			return {
 				collide: true,
 				leftIndex: leftIndex,

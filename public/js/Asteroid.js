@@ -11,7 +11,7 @@ function Asteroid(descr) {
 Asteroid.prototype = new Entity();
 
 Asteroid.prototype.randomisePosition = function () {
-	this.cx = this.cx || util.randRange(300, g_canvas.width + 1100);
+	this.cx = this.cx || util.randRange(150, g_canvas.width + 1100);
 	this.cy = this.cy || -10;
 	this.rotation = this.rotation || 0;
 };
@@ -21,7 +21,7 @@ Asteroid.prototype.randomiseVelocity = function () {
 	var MAX_SPEED = 370;
 
 	var xSpeed = util.randRange(MIN_SPEED, MAX_SPEED) / SECS_TO_NOMINALS;
-	var ySpeed = util.randRange(MIN_SPEED / 2, MAX_SPEED / 2) / SECS_TO_NOMINALS;
+	var ySpeed = util.randRange(MIN_SPEED - MIN_SPEED/2/*/ 2*/, MAX_SPEED /*/ 2*/) / SECS_TO_NOMINALS;
 
 	this.velX = xSpeed;
 	this.velY = ySpeed;
@@ -51,15 +51,20 @@ Asteroid.prototype.update = function (du) {
             hitEntity.explode();
             //hitEntity.reset();
             //this.spawnFragment();
+            this.explode();
+
+            scoreManager.fuel -= scoreManager.otherExplode;
+
+            //maby check here if its game over?
+
+            //////
             this.kill();
 
         }
-        else if (hitEntity instanceof Bullet) {
-            this.takeBulletHit();
-            hitEntity.kill();
-        } 
+
         else if (hitEntity instanceof Bird) {
         	hitEntity.kill();
+            
         }
     }
 

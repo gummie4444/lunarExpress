@@ -24,26 +24,48 @@ var gameManager = {
 	controlsScreen : 2,
 	startingScreen : 3,
 	finishScreen : 4,
+	nameInputScreen :5,
 	level_array :["Moon","Mars","Earth"],
 
 	currentScreen :3,
 
 
 	renderScreen: function(screenIndex,ctx){
+		this._drawCurrentLevelBackground(ctx);
+	
 		if(screenIndex === this.startingScreen){
+			if(entityManager.timeBetweenAst === 0){
+				entityManager.reset();
+				spatialManager.reset();
+				entityManager.timeBetweenAst = 2000;
+			}
 			entityManager.render(ctx);
 			this._renderStartingScreen(ctx);
 			
 		}
 		else if(screenIndex === this.finishScreen){
+			entityManager.render(ctx);
+			entityManager.timeBetweenAst = 0;
 			this._renderFinishScreen(ctx);
 		}
 		else if(screenIndex === this.highScoreScreen){
-			entityManager.render(ctx);
+			//entityManager.render(ctx);
 			this._renderHighscoreScreen(ctx);
 		}
 		else if (screenIndex === this.gameScreen){
+			//entityManager.timeBetweenAst = 2000;
 			this._renderGameScreen(ctx);
+		}
+
+		else if (screenIndex === this.nameInputScreen){
+
+			this._renderNameInputScreen(ctx);
+
+		}
+
+		else if (screenIndex === this.controlsScreen) {
+			this._renderControlsScreen(ctx);
+
 		}
 
 
@@ -56,12 +78,23 @@ var gameManager = {
 		}
 		else if(screenIndex === this.finishScreen){
 			this._updateFinishScreen(du);
+			entityManager.update(du);
 		}
 		else if(screenIndex === this.highScoreScreen){
 			this._updateHighscoreScreen(du);
+			entityManager.update(du);
 		}
 		else if (screenIndex === this.gameScreen){
 			this._updateGameScreen(du);
+		}
+
+		else if (screenIndex === this.nameInputScreen){
+			this._updateNameInputScreen(du);
+
+		}	
+		else if (screenIndex === this.controlsScreen) {
+			this._updateControlsScreen(du);
+
 		}
 	},
 
@@ -73,12 +106,221 @@ var gameManager = {
 	KEY_RIGHT : 39,
 	KEY_DOWN : 40,
 	KEY_ENTER: 13,
+
+
+	_letter1 : alphabet[0],
+	_letter2 : alphabet[0],
+	_letter3 : alphabet[0],
+	_currentLetter : 0,
+	_arrowMove : 0,
+	_arrowColor :true,
+
+	_renderNameInputScreen:function(ctx){
+
+			var letter1Color = "white";
+			var letter2Color = "white";
+			var letter3Color = "white";
+
+			util.drawTextAt(ctx,"YOU MADE IT TO THE HIGHSCORE",g_canvas.width/2,g_canvas.height/2-150,letter2Color);
+			util.drawTextAt(ctx,"WRITE YOUR INITIALS",g_canvas.width/2,g_canvas.height/2-50,letter2Color)
+		 
+
+		   	    if(this._currentLetter === 0){
+			    	letter1Color = "purple";
+			    }
+			    else if (this._currentLetter=== 1){
+			    	letter2Color = "purple";
+
+			    }
+			    else if (this._currentLetter === 2){
+			    	letter3Color = "purple";
+
+			    }
+
+			    //triangle
+
+			    var point1_x = g_canvas.width/2 -57 + this._arrowMove;
+			    var point1_y = g_canvas.height/2 -20;
+			    var point2_x = g_canvas.width/2 -47 + this._arrowMove;
+			    var point2_y = g_canvas.height/2 -20;
+			    var point3_x = g_canvas.width/2 -52 +this._arrowMove;
+			    var point3_y = g_canvas.height/2 -30;
+			    ctx.beginPath();
+				ctx.moveTo(point1_x,point1_y);
+				ctx.lineTo(point2_x,point2_y);
+				ctx.lineTo(point3_x,point3_y);
+				if(!this._arrowColor){
+					ctx.fillStyle= "purple";
+				}
+				else{
+					ctx.fillStyle= "white";
+				}
+				ctx.fill();
+
+
+			    var point1_x = g_canvas.width/2 -57 +this._arrowMove;
+			    var point1_y = g_canvas.height/2 +60;
+			    var point2_x = g_canvas.width/2 -47 + this._arrowMove;
+			    var point2_y = g_canvas.height/2 +60;
+			    var point3_x = g_canvas.width/2 -52+ this._arrowMove;
+			    var point3_y = g_canvas.height/2 +70;
+			    ctx.beginPath();
+				ctx.moveTo(point1_x,point1_y);
+				ctx.lineTo(point2_x,point2_y);
+				ctx.lineTo(point3_x,point3_y);
+
+				if(this._arrowColor){
+					ctx.fillStyle= "purple";
+				}
+				else{
+					ctx.fillStyle= "white";
+				}
+				ctx.fill();
+
+
+
+
+
+
+		   util.drawTextAt(ctx,this._letter1,g_canvas.width/2-50,g_canvas.height/2+50,letter1Color);
+		   util.drawTextAt(ctx,this._letter2,g_canvas.width/2,g_canvas.height/2+50,letter2Color);
+		   util.drawTextAt(ctx,this._letter3,g_canvas.width/2+50,g_canvas.height/2+50,letter3Color);
+
+
+	},
+
+	_updateNameInputScreen :function(du){
+		//SETJA ÞENNAN SKÍT Í EITTHVAÐ FALL
+		///--------------------
+		if(eatKey(this.KEY_DOWN)){
+			this._arrowColor = true;
+
+			if(this._currentLetter === 0){
+				var tempIndex = alphabet.indexOf(this._letter1);
+
+				if(tempIndex != 25){
+					this._letter1 = alphabet[++tempIndex];
+				}
+				else{
+					this._letter1 = alphabet[0];
+				}
+			}
+
+			else if(this._currentLetter === 1){
+				var tempIndex = alphabet.indexOf(this._letter2);
+
+				if(tempIndex != 25){
+					this._letter2 = alphabet[++tempIndex];
+				}
+				else{
+					this._letter2 = alphabet[0];
+				}
+			}
+
+			else if(this._currentLetter === 2){
+				var tempIndex = alphabet.indexOf(this._letter3);
+
+				if(tempIndex != 25){
+					this._letter3 = alphabet[++tempIndex];
+				}
+				else{
+					this._letter3 = alphabet[0];
+				}
+			}
+
+		}
+		///------------------------------
+
+		if(eatKey(this.KEY_UPP)){
+
+			this._arrowColor = false;
+
+			if(this._currentLetter === 0){
+				var tempIndex = alphabet.indexOf(this._letter1);
+
+				if(tempIndex != 0){
+					this._letter1 = alphabet[--tempIndex];
+				}
+				else{
+					this._letter1 = alphabet[25];
+				}
+			}
+
+			else if(this._currentLetter === 1){
+				var tempIndex = alphabet.indexOf(this._letter2);
+
+				if(tempIndex != 0){
+					this._letter2 = alphabet[--tempIndex];
+				}
+				else{
+					this._letter2 = alphabet[25];
+				}
+			}
+
+			else if(this._currentLetter === 2){
+				var tempIndex = alphabet.indexOf(this._letter3);
+
+				if(tempIndex != 0){
+					this._letter3 = alphabet[--tempIndex];
+				}
+				else{
+					this._letter3 = alphabet[25];
+				}
+			}
+
+		}
+		///------------------------------
+
+
+		///------------------------------
+		if(eatKey(this.KEY_LEFT)){
+			if(this._currentLetter === 0){
+				this._currentLetter = 2;
+			}
+			else{
+				this._currentLetter --;
+
+			}
+			this._arrowMove = this._currentLetter * 48;
+			
+		}
+		///------------------------------
+		///------------------------------
+
+		if(eatKey(this.KEY_RIGHT)){
+			if(this._currentLetter === 2){
+				this._currentLetter = 0;
+			}
+			else{
+				this._currentLetter ++;
+			}
+			this._arrowMove = this._currentLetter * 48;
+		}
+		///------------------------------
+
+		if(eatKey(this.KEY_ENTER)){
+			console.log(scoreManager.score);
+			updateHighScore({name:this._letter1 + this._letter2 + this._letter3,score : scoreManager.score});
+
+			this.currentScreen = this.highScoreScreen;
+			//scoreManager.reset();
+
+		}
+
+
+
+	},
+
+
+	
 	//STARTING SCREEN -----------
 	_renderStartingScreen :function(ctx){
 
 
 		//formula to let the letters be in the midle
-	
+
+		//this._drawCurrentLevelBackground(ctx);
+
 		var oldStyle = ctx.fillStyle;
 		ctx.textAlign = "center";
 
@@ -94,18 +336,19 @@ var gameManager = {
 		var PlayColor = "white";
 		var HighscoreColor = "white";
 		var ControlsColor = "white";
+		var selectedColor = "purple";
 
 
 	    ctx.font = '40pt PressStart2P';
 	    if(this._StartingScreenChoice === 0){
-	    	PlayColor = "blue";
+	    	PlayColor = selectedColor;
 	    }
 	    else if (this._StartingScreenChoice === 1){
-	    	HighscoreColor = "blue";
+	    	HighscoreColor = selectedColor;
 
 	    }
 	    else if (this._StartingScreenChoice === 2){
-	    	ControlsColor = "blue";
+	    	ControlsColor = selectedColor;
 
 	    }
 
@@ -119,10 +362,10 @@ var gameManager = {
 	    var ArrowLeftColor ="white";
 	    var ArrowRightColor = "white";
 	    if(this._StartingScreenLevel === "left"){
-	    	ArrowLeftColor = "blue";
+	    	ArrowLeftColor = selectedColor;
 	    }
 	    else if(this._StartingScreenLevel === "right"){
-	    	ArrowRightColor = "blue";
+	    	ArrowRightColor = selectedColor;
 	    }
 	    ctx.textAlign = "left";
 	    util.drawTextAt(ctx,ArrowLeft,0+50,g_canvas.height/2,ArrowLeftColor);
@@ -158,10 +401,10 @@ var gameManager = {
 			//settu background til vinstri
 			this._StartingScreenLevel = "left";
 			
-			if (currentLevel > 0) {
-				currentLevel--;
+			if (g_currentLevel > 0) {
+				g_currentLevel--;
 			} else {
-				currentLevel = 2;
+				g_currentLevel = 2;
 			}
 
 			 entityManager.reset();
@@ -171,10 +414,10 @@ var gameManager = {
 			//settu background til hægri
 			this._StartingScreenLevel = "right";
 
-			if (currentLevel < 2) {
-				currentLevel++;
+			if (g_currentLevel < 2) {
+				g_currentLevel++;
 			} else {
-				currentLevel = 0;
+				g_currentLevel = 0;
 			}
 
 			 entityManager.reset();
@@ -182,9 +425,10 @@ var gameManager = {
 		}
  
 		if(eatKey(this.KEY_ENTER)){
+			console.log("hallo")
 			this.currentScreen = this._StartingScreenChoice;
 			scoreManager.reset();
-			scoreManager.level = this.level_array[currentLevel];
+			scoreManager.level = this.level_array[g_currentLevel];
 		}
 
 
@@ -192,9 +436,35 @@ var gameManager = {
 
 	//FINISH SCREEN -----------
 	_renderFinishScreen :function(ctx){
+		var oldStyle = ctx.fillStyle;
+
+		ctx.textAlign = "center";
+		ctx.font = '60pt PressStart2P';
+		util.drawTextAt(ctx,"GAME OVER",g_canvas.width/2,g_canvas.height/2,"white");
+		ctx.font = '40pt PressStart2P';
+	    util.drawTextAt(ctx,"score:" + Math.floor(scoreManager.score),g_canvas.width/2,g_canvas.height/2+50,"white");
+
+	    ctx.fillStyle = oldStyle;
+
+
 		
 	},
 	_updateFinishScreen: function(du){
+			if(eatKey(this.KEY_ENTER)){
+
+				if(isInHighScore(scoreManager.score)){
+					this.currentScreen = this.nameInputScreen;
+				}
+				else{
+
+
+				this.currentScreen = this.highScoreScreen;
+				entityManager.reset();
+				//scoreManager.reset();
+
+				}
+
+		}
 
 	},
 	//TODOOOOOOOOO
@@ -207,7 +477,7 @@ var gameManager = {
 
 		//every time we lounch it for the first time get the highscores
 		if(this._firstReload){
-			fetchHighScore();
+			getHighScores();
 			this._firstReload = false;
 
 		}
@@ -233,21 +503,21 @@ var gameManager = {
 		for(var i = 0;i<this._highScoreList.length;i++){
 			if(i === 0){
 			util.drawTextAt(ctx,this._highScoreList[i].name,g_canvas.width/2 ,290,"white");
-			util.drawTextAt(ctx,this._highScoreList[i].Totalscore,g_canvas.width/2,330,"white");
+			util.drawTextAt(ctx,this._highScoreList[i].score,g_canvas.width/2,330,"white");
 			}
 			else if (i === 1){
 			util.drawTextAt(ctx,this._highScoreList[i].name,g_canvas.width/2-179,320,"white");
-			util.drawTextAt(ctx,this._highScoreList[i].Totalscore,g_canvas.width/2-179,360,"white");
+			util.drawTextAt(ctx,this._highScoreList[i].score,g_canvas.width/2-179,360,"white");
 
 			}
 			else if (i === 2){
 			util.drawTextAt(ctx,this._highScoreList[i].name,g_canvas.width/2+179,340,"white");
-			util.drawTextAt(ctx,this._highScoreList[i].Totalscore,g_canvas.width/2+179,380,"white");
+			util.drawTextAt(ctx,this._highScoreList[i].score,g_canvas.width/2+179,380,"white");
 
 			}
 			else{
 			ctx.textAlign = "left";
-			util.drawTextAt(ctx,i+1 + " " + this._highScoreList[i].name + " " +this._highScoreList[i].Totalscore,g_canvas.width/2-120 ,400+(i*40),"white");
+			util.drawTextAt(ctx,i+1 + " " + this._highScoreList[i].name + " " +this._highScoreList[i].score,g_canvas.width/2-120 ,400+(i*40),"white");
 			}
 		}
 
@@ -263,22 +533,63 @@ var gameManager = {
 		}
 
 	},
+
+	_drawCurrentLevelBackground : function(ctx){
+		switch(g_currentLevel){
+			case 0:
+				this._drawMoonBackground(ctx);
+				break;
+			case 1:
+				this._drawMarsBackground(ctx);
+				break;
+			case 2:
+				this._drawEarthBackground(ctx);
+				break;
+		}
+	},
+
+
+	_drawEarthBackground : function(ctx) {
+		g_sprites.sky.scale = 1.01;
+		g_sprites.sky.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		g_sprites.cloud1.scale = 0.5;
+		g_sprites.cloud1.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -350,g_canvas.height/2-this.moveTemp_y/5 -100,0);
+		var oldStyle = ctx.fillStyle;
+		ctx.fillStyle = "#FFD000";
+		util.fillCircle(ctx, g_canvas.width - 200, g_canvas.height - 500, 80);
+		ctx.fillStyle = oldStyle;
+		g_sprites.cloud2.scale = 0.5;
+		g_sprites.cloud2.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 +150,g_canvas.height/2-this.moveTemp_y/5 -50,0);
+	},
+
+	_drawMarsBackground : function(ctx){
+		g_sprites.galaxy.scale = 1.01;
+		g_sprites.galaxy.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		g_sprites.earth.scale = 0.12;
+		g_sprites.earth.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/5 -350,g_canvas.height/2-this.moveTemp_y/5 -100,0);
+	},
+
+	_drawMoonBackground : function(ctx){
+		g_sprites.galaxy.scale = 1.01;
+		g_sprites.galaxy.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/15,g_canvas.height/2-this.moveTemp_y/15,0);
+		g_sprites.earth.scale = 1.01;
+		g_sprites.earth.drawCentredAt(ctx,g_canvas.width/2-this.moveTemp_x/10 -250,g_canvas.height/2-this.moveTemp_y/10 +200,0);
+	},
+
+
 	//GAME SCREEN -----------
 	moveTemp_x :0,
 	moveTemp_y :0,
 	_renderGameScreen :function(ctx){
-		
-		g_sprites.moon.scale = 1.5;
-		g_sprites.moon.drawCentredAt(ctx,g_canvas.height/2+this.moveTemp_x,g_canvas.width/2+this.moveTemp_y,0);
 
 
+		//this._drawCurrentLevelBackground(ctx);
 		entityManager.render(ctx);
     	if (g_renderSpatialDebug) spatialManager.render(ctx);
 		
 		scoreManager.render(ctx);
 	},
 	_updateGameScreen: function(du){
-		//g_theme.src = "audio/Deeper.ogg";
 
 		this.moveTemp_x += g_moveBackground_x;
 		this.moveTemp_y += g_moveBackground_y;
@@ -294,6 +605,32 @@ var gameManager = {
 	    // Prevent perpetual firing!
 	    eatKey(Ship.prototype.KEY_FIRE);
 
+	},
+
+	// controlMenuShip : new Ship({
+	// 	cx : 400,
+	// 	cy : 400,
+ //    	sprite : g_sprites.ship}),
+
+	_renderControlsScreen : function(ctx) {
+		
+		var textWidth = g_canvas.width / 2;
+		var textHeight = g_canvas.height / 2;
+		ctx.textAlign = "center";
+		ctx.font = '40pt PressStart2P';
+		util.drawTextAt(ctx, "Up: Thrust", textWidth, textHeight - 85,"white");
+		util.drawTextAt(ctx, "Left: Rotate left", textWidth, textHeight - 15,"white");
+		util.drawTextAt(ctx, "Right: Rotate right", textWidth, textHeight + 55,"white");
+		util.drawTextAt(ctx, "T: mute", textWidth, textHeight + 125,"white");
+
+
+	},
+
+	_updateControlsScreen : function (du) {
+
+		if(eatKey(this.KEY_ENTER)){
+			this.currentScreen = this.startingScreen;
+		}
 	},
 
 
