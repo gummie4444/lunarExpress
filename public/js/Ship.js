@@ -363,7 +363,7 @@ Ship.prototype.computeThrustMag = function () {
     
     var thrust = 0;
 
-     if(scoreManager.fuel >= 0){
+     if(scoreManager.fuel > 0){
         if (keys[this.KEY_THRUST]) {
             thrust += NOMINAL_THRUST;
             scoreManager.fuel -= 0.1;
