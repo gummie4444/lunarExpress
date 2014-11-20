@@ -24,13 +24,13 @@ Particle.prototype.respawn = function(life)
 
   var relVelX,relVelY;
 
-  if(keys[this.owner.KEY_THRUST]/* && relVel <= maxVel*/){
+  if(keys[this.owner.KEY_THRUST]){
     relVelX = dX;
     relVelY = dY;
   }
   else{
-    relVelX = 0;//dX;
-    relVelY = 0;//dY;
+    relVelX = 0;
+    relVelY = 0;
   }
 
   var random = util.randRange(1, 2);
@@ -72,7 +72,6 @@ Particle.prototype.update = function(particleLifetime, du)
     this.cy += this.vy;
     this.radius *= 0.95;
 
-    //skoða þetta :
     this.life -= 1;
     if (this.life <= 0) this.respawn(particleLifetime);
 

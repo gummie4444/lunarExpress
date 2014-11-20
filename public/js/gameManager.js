@@ -617,11 +617,13 @@ var gameManager = {
 
 
 
+
     	//only draw the rover on mars
     	if(g_currentLevel === 1){
+
     		//ROVER-----------------
-    		g_sprites.ship.scale = 0.2;
-    		g_sprites.ship.drawCentredAt(ctx,this.rover_x, this.rover_y-g_sprites.ship.height/10,this.rover_angle);
+    		g_sprites.rover.scale = 0.7;
+    		g_sprites.rover.drawCentredAt(ctx,this.rover_x, this.rover_y-g_sprites.ship.height / 5 + 3,this.rover_angle);
     	}
 		
 		scoreManager.render(ctx);
