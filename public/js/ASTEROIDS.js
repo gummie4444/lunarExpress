@@ -176,7 +176,8 @@ function requestPreloads() {
         flag: "merica.gif",
         tree: "sprites/tree.png",
         cloud1: "sprites/cloud1.png",
-        cloud2: "sprites/cloud2.png"
+        cloud2: "sprites/cloud2.png",
+        rover: "sprites/rover.png"
 
     };
 
@@ -201,6 +202,7 @@ function preloadDone() {
     g_sprites.tree = new Sprite (g_images.tree);
     g_sprites.cloud1 = new Sprite (g_images.cloud1);
     g_sprites.cloud2 = new Sprite (g_images.cloud2);
+    g_sprites.rover = new Sprite (g_images.rover);
 
 
 
