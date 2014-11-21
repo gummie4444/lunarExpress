@@ -126,6 +126,8 @@ var gameManager = {
 	KEY_RIGHT : 39,
 	KEY_DOWN : 40,
 	KEY_ENTER: 13,
+	KEY_ESC :  27,
+	KEY_SPACE : 32,
 
 
 	//vars for the Highscoreinput name
@@ -318,7 +320,7 @@ var gameManager = {
 		/////////////////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////
 
-		if(eatKey(this.KEY_ENTER)){
+		if(eatKey(this.KEY_ENTER) || eatKey(this.KEY_SPACE) ){
 			if(g_developerMode) console.log(scoreManager.score);
 			updateHighScore({name:this._letter1 + this._letter2 + this._letter3,score : scoreManager.score});
 
@@ -449,7 +451,7 @@ var gameManager = {
 		}
 
  		//go to the selected screen
-		if(eatKey(this.KEY_ENTER)){
+		if(eatKey(this.KEY_ENTER) || eatKey(this.KEY_SPACE)){
 			this.currentScreen = this._StartingScreenChoice;
 			scoreManager.reset();
 			scoreManager.level = this.level_array[g_currentLevel];
@@ -476,7 +478,7 @@ var gameManager = {
 				explosion1.update(du);
 				explosion2.update(du);
 			}
-			if(eatKey(this.KEY_ENTER)){
+			if(eatKey(this.KEY_ENTER) || eatKey(this.KEY_SPACE)){
 
 				if(isInHighScore(scoreManager.score)){
 					this.currentScreen = this.nameInputScreen;
@@ -550,7 +552,7 @@ var gameManager = {
 	},
 	_updateHighscoreScreen: function(du){
 
-		if(eatKey(this.KEY_ENTER)){
+		if(eatKey(this.KEY_ENTER) || eatKey(this.KEY_SPACE)){
 			this.currentScreen = this.startingScreen;
 		}
 
@@ -705,6 +707,12 @@ var gameManager = {
 	//is rover out of bounds
 	_rover_bound :false,
 	_updateGameScreen: function(du){
+
+		if(eatKey(this.KEY_ESC)){
+			entityManager.reset();
+			scoreManager.reset();
+			this.currentScreen = 3;
+		}
 		//move the current background
 		this.moveTemp_x += g_moveBackground_x;
 		this.moveTemp_y += g_moveBackground_y;
@@ -780,13 +788,14 @@ var gameManager = {
 		util.drawTextAt(ctx, "Right: Rotate right", textWidth, textHeight + 55,"white");
 		util.drawTextAt(ctx, "T: Mute sound", textWidth, textHeight + 125,"white");
 		util.drawTextAt(ctx, "L: Mute music", textWidth, textHeight + 195,"white");
+		util.drawTextAt(ctx, "ESC: Exit current lvl", textWidth, textHeight + 265,"white");
 
 
 	},
 
 	_updateControlsScreen : function (du) {
 
-		if(eatKey(this.KEY_ENTER)){
+		if(eatKey(this.KEY_ENTER) || eatKey(this.KEY_SPACE) ){
 			this.currentScreen = this.startingScreen;
 		}
 	},
