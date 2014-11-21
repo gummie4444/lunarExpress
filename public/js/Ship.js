@@ -89,6 +89,7 @@ Ship.prototype.isLanded = false;
 Ship.prototype.thrusterSound.volume = 0;
 
 Ship.prototype.explode = function(){
+    this.thrusterSound.pause();
     entityManager.generateExplosion(this.cx, this.cy, "#525252"); 
     entityManager.generateExplosion(this.cx, this.cy, "#FFA318");
 };
@@ -212,6 +213,7 @@ Ship.prototype.maybeLand = function(){
 
 Ship.prototype.land = function(){
     this.isLanded = true;
+
     scoreManager.score += 100+scoreManager.timeBonus();
     this.landTimer = -2000;
     this.halt();
