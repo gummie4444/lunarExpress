@@ -40,7 +40,7 @@ Particle.prototype.respawn = function(life)
   this.vx = (oVelX + relVelX)*random;
   this.vy = (oVelY + relVelY)*random;
 
-  //console.log("x: "+this.cx,"y: "+this.cy);
+  
   this.life = life;
 
   this.radius = 5;

@@ -3,14 +3,13 @@ function getHighScores(){
 	
 	var current_scores;
 /*
+This will maybe be used in the future, if we choose to revise the game after the course is over
 	var global_scores = JSON.parse(highScoreData)
 	if(global_scores !== "undefined"){
 
 		current_scores = JSON.parse(highScoreData);
 		current_scores = current_scores.sort(function(a,b) { return parseInt(b.score) - parseInt(a.score) } );
 		gameManager._highScoreList = current_scores;
-
-<<<<<<< HEAD
 
 	}
 */	
@@ -36,13 +35,15 @@ function getHighScores(){
 
 
 function updateHighScore(thisScore){
-	/*var global_scores = JSON.parse(highScoreData) !== "undefined";
+	/*
+	This will maybe be used in the future, if we choose to revise the game after the course is over
+	var global_scores = JSON.parse(highScoreData) !== "undefined";
 	if(global_scores !== "undefined"){
 		global_scores.push(thisScore);
 
 		global_scores = global_scores.sort(function(a,b){ return parseInt(b.score)-parseInt(a.score)});
 
-		//find out how to save  to database with pure javascript
+		
 
 		////////////////////////////////////77
 
@@ -89,7 +90,7 @@ function isInHighScore(score){
 				
 				local_scores = local_scores.sort(function(a,b) { return parseInt(b.score) - parseInt(a.score) } );
 
-				console.log(score);
+				if(g_developerMode) console.log(score);
 				if(typeof local_scores[9] === 'undefined' || parseInt(local_scores[9].score)<score){
 					return true;
 				}

@@ -75,6 +75,7 @@ var g_allowMixedActions = true;
 var g_useGravity = true;
 var g_useAveVel = true;
 var g_renderSpatialDebug = false; 
+var g_developerMode = false;
 
 var KEY_MIXED   = keyCode('M');
 var KEY_GRAVITY = keyCode('G');
@@ -83,28 +84,27 @@ var KEY_SPATIAL = keyCode('X');
 
 var KEY_HALT  = keyCode('H');
 var KEY_RESET = keyCode('R');
+var KEY_DEVMODE = keyCode('I');
 
-//var KEY_0 = keyCode('0');
 
-//var KEY_1 = keyCode('1');
-//var KEY_2 = keyCode('2');
 
 var KEY_K = keyCode('K');
 
 function processDiagnostics() {
+    if(eatKey(KEY_DEVMODE)){
+        g_developerMode = !g_developerMode;
+    }
 
-    if (eatKey(KEY_MIXED))
+    if (eatKey(KEY_MIXED) && g_developerMode)
         g_allowMixedActions = !g_allowMixedActions;
 
-    if (eatKey(KEY_GRAVITY)) g_useGravity = !g_useGravity;
+    if (eatKey(KEY_GRAVITY) && g_developerMode) g_useGravity = !g_useGravity;
 
-    //if (eatKey(KEY_AVE_VEL)) g_useAveVel = !g_useAveVel;
+    if (eatKey(KEY_SPATIAL) && g_developerMode) g_renderSpatialDebug = !g_renderSpatialDebug;
 
-    if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
+    if (eatKey(KEY_HALT) && g_developerMode) entityManager.haltShips();
 
-    if (eatKey(KEY_HALT)) entityManager.haltShips();
-
-    if (eatKey(KEY_RESET)) entityManager.resetShips();
+    if (eatKey(KEY_RESET) && g_developerMode) entityManager.resetShips();
     
 }
 

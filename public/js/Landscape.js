@@ -178,14 +178,15 @@ Landscape.prototype.doesCollide = function (cx,cy,radius) {
 }
 
 Landscape.prototype.landable = function(leftIndex, rightIndex){
-	// Check if landscape between indices is flat.
+	// Check if landscape between indices is flat enough.
+	var delta = 7;
 	for(var i = leftIndex+1; i <= rightIndex; i++){
 		var prevHeight = this.array[i-1];
-		if(this.array[i] != prevHeight){
+		if(!util.isBetween(this.array[i], prevHeight -delta, prevHeight +delta) /*this.array[i] != prevHeight+5*/){
 			return false;
 		}
 	}
-	console.log("is landable");
+	if(g_developerMode) console.log("is landable");
 	return true;
 };
 

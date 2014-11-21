@@ -10,7 +10,7 @@ function saveScore(scoreObj){
 	score.save(null, {
   success: function(score) {
     // náiði að savea
-    console.log("yolo")
+
     
   },
   error: function(score, error) {
@@ -21,7 +21,7 @@ function saveScore(scoreObj){
 }
 
 
-//DO THIS BETTER
+//Up for revisement
 function fetchHighScore(){
 
   var query = new Parse.Query(Highscore);
@@ -31,7 +31,7 @@ function fetchHighScore(){
   query.find({
   success: function(results) {
     //return the top 10 scores in the right order
-    console.log(results);
+    if(g_developerMode) console.log(results);
     var tempArray = [];
     for(var i = 0; i<results.length;i++){
       var object = results[i];
@@ -45,7 +45,7 @@ function fetchHighScore(){
 
   },
   error: function(error) {
-    console.log("villa");
+    if(g_developerMode) console.log("villa");
     return false;
   }
 });

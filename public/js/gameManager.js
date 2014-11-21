@@ -319,7 +319,7 @@ var gameManager = {
 		/////////////////////////////////////////////////////////////////////////
 
 		if(eatKey(this.KEY_ENTER)){
-			console.log(scoreManager.score);
+			if(g_developerMode) console.log(scoreManager.score);
 			updateHighScore({name:this._letter1 + this._letter2 + this._letter3,score : scoreManager.score});
 
 			this.currentScreen = this.highScoreScreen;

@@ -42,7 +42,7 @@ ExplosionParticle.prototype.update = function(du)
 };
 
 ExplosionParticle.prototype.render = function(ctx)
-{	//console.log("render");
+{	
 	// translating the context to the particle coordinates
 	ctx.save();
 	ctx.translate(this.x, this.y);
@@ -98,7 +98,7 @@ Explosion.prototype.createExplosion = function(x, y, colour, type)
 		this.maxSpeed = 200.0;
 		this.minScaleSpeed = 1.0;
 		this.maxScaleSpeed = 4.0;
-		console.log("lollololo");
+		
 		
 	}
 	else if(type === "big"){
