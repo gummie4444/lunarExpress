@@ -29,8 +29,3 @@ Skoðið leikinn á
 WE HAVE OURSELF LIVERELOAD
 =========
 
-
-TODO
-=========
-BYRJA VERKEFNIÐ
-
