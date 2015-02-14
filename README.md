@@ -1,5 +1,6 @@
 lunarExpress
 ============
+Is a game based on the Atari Lunar lander written in javascript(canvas)
 
 ###To start:###
 
@@ -27,7 +28,7 @@ See da game
 WE HAVE OURSELF LIVERELOAD
 =========
 DEMO OF THE GAME
-`http.//localhost:8080`
+`https://notendur.hi.is/~geb12/game/`
 
 INTRO VIDEO OF THE GAME
 `https://www.youtube.com/watch?v=tlPEDN2VSfA`
