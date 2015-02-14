@@ -3,29 +3,33 @@ lunarExpress
 
 ###To start:###
 
-Vera viss um að þið séuð með git, livereload, npm og node installað á tölvunni.
+Make sure you have git, livereload, npm og node installed
 
 npm og node = nodejs.org
 
-livereload efsta = https://chrome.google.com/webstore/search-extensions/livereload
-
-Muna windows menn að setja í ENV PATH
+livereload top = https://chrome.google.com/webstore/search-extensions/livereload
 
 Clone repo:
 `git clone https://github.com/gummie4444/lunarExpress.git`
 
-Gera:
+Do:
 `npm install`
 
-Gera:
-`npm install --global gulp`
+Do:
+`npm install --g gulp`
 
 RUN DA GAME:
 `gulp`
 
-Skoðið leikinn á
+See da game
 `http.//localhost:8080`
 
 WE HAVE OURSELF LIVERELOAD
 =========
+DEMO OF THE GAME
+`http.//localhost:8080`
+
+INTRO VIDEO OF THE GAME
+`https://www.youtube.com/watch?v=tlPEDN2VSfA`
+
 
